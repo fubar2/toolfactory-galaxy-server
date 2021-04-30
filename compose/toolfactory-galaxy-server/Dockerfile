@@ -1,10 +1,10 @@
 ARG DOCKER_REGISTRY=quay.io
-ARG DOCKER_REGISTRY_USERNAME=bgruening
+ARG DOCKER_REGISTRY_USERNAME=fubar2
 ARG IMAGE_TAG=latest
 
 FROM quay.io/cybozu/ubuntu-minimal:focal-20210217 as build_base
 # buildpack-deps:20.04 was rate limited by docker for me :(
-
+ENV DEBIAN_FRONTEND=noninteractive
 ENV EXPORT_DIR=/export \
     GALAXY_ROOT=/galaxy \
     HTCONDOR_ROOT=/opt/htcondor
@@ -24,21 +24,21 @@ ENV GALAXY_USER=galaxy \
     GALAXY_GID=1450 \
     GALAXY_HOME=/home/galaxy
 
-ENV GALAXY_CONDA_PREFIX=$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR/_conda \
-    MINICONDA_VERSION=py38_4.9.2
+ENV GALAXY_CONDA_PREFIX=$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR/_conda
+ENV MINICONDA_VERSION=py38_4.9.2
 
 RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && useradd -u $GALAXY_UID -r -g $GALAXY_USER -d $GALAXY_HOME -c "Galaxy user" --shell /bin/bash $GALAXY_USER \
     && mkdir $GALAXY_HOME \
     && chown -R $GALAXY_USER:$GALAXY_USER $GALAXY_HOME
 
+
+FROM build_base as build_miniconda
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
-# Install Miniconda
-RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip git curl wget nano -y \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
-    && curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" > ~/miniconda.sh \
-    && /bin/bash ~/miniconda.sh -b -p $GALAXY_CONDA_PREFIX \
-    && rm ~/miniconda.sh \
+RUN apt update && apt install --no-install-recommends curl libcurl4-openssl-dev libssl-dev python3-dev python3-pip wget nano git -y \
+&&  curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" > /home/$GALAXY_USER/miniconda.sh
+RUN /bin/bash  /home/$GALAXY_USER/miniconda.sh -b -p $GALAXY_CONDA_PREFIX \
+    && rm  /home/$GALAXY_USER/miniconda.sh \
     && ln -s $GALAXY_CONDA_PREFIX/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     && echo ". $GALAXY_CONDA_PREFIX/etc/profile.d/conda.sh" >> $GALAXY_HOME/.bashrc \
     && echo "conda activate base" >> $GALAXY_HOME/.bashrc \
@@ -57,7 +57,9 @@ ARG GALAXY_REPO=https://github.com/galaxyproject/galaxy
 
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 # Install Galaxy
-RUN mkdir "${GALAXY_ROOT}" \
+RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip git wget nano curl -y \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
+    && mkdir "${GALAXY_ROOT}" \
     && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT \
     && cd $GALAXY_ROOT \
     && ./scripts/common_startup.sh \
@@ -113,7 +115,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
 RUN apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 liblzma-dev libbz2-dev libpq-dev \
                                                       libcurl4-openssl-dev libssl-dev \
                                                       mercurial make netcat python3-dev python3-setuptools python3-pip \
-                                                      zlib1g-dev -y \
+                                                      zlib1g-dev git -y \
     # Cython and wheel are needed to later install pysam..
     && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec \
     && pip3 install pysam \
@@ -132,6 +134,6 @@ COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda /etc/profile.d/con
 
 COPY ./files/start.sh /usr/bin/start.sh
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT "/usr/bin/start.sh"
