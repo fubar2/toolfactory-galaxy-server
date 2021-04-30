@@ -132,6 +132,6 @@ COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda /etc/profile.d/con
 
 COPY ./files/start.sh /usr/bin/start.sh
 
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT "/usr/bin/start.sh"
