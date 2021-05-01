@@ -128,7 +128,7 @@ fi
 # Ensure proper permission (the configurator might have changed them "by mistake")
 chown -RL "$GALAXY_USER:$GALAXY_GROUP" "$GALAXY_CONFIG_DIR"
 $GALAXY_ROOT/tools/toolfactory/toolwatcher.sh &
-
+usermod -a -G docker galaxy
 echo "Starting Galaxy now.."
 cd "$GALAXY_ROOT" || { echo "Error: Could not change to $GALAXY_ROOT"; exit 1; }
 "$GALAXY_VIRTUAL_ENV/bin/uwsgi" --yaml "$GALAXY_CONFIG_DIR/galaxy.yml" --uid "$GALAXY_UID" --gid "$GALAXY_GID"

@@ -138,7 +138,7 @@ if [ ! -f /base_config.yml ]; then
   touch /base_config.yml
 fi
 
-galaxy_configs=( "job_conf.xml" "galaxy.yml" "job_metrics.xml" "container_resolvers_conf.xml" "GALAXY_PROXY_PREFIX.txt" )
+galaxy_configs=( "job_conf.xml" "tool_conf.xml" "datatypes_conf.xml" "galaxy.yml" "job_metrics.xml" "container_resolvers_conf.xml" "GALAXY_PROXY_PREFIX.txt" )
 
 for conf in "${galaxy_configs[@]}"; do
   echo "Configuring $conf"

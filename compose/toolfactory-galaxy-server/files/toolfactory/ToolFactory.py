@@ -78,11 +78,12 @@ class Tool_Conf_Updater():
     # if in a container possibly not so courageous.
     # Fine on your own laptop but security red flag for most production instances
 
-    def __init__(self, args, tool_conf_path, new_tool_archive_path, new_tool_name, tool_dir):
+    def __init__(self, args, tool_conf_path, new_tool_archive_path, new_tool_name, local_tool_dir):
         self.args = args
         self.tool_conf_path = os.path.join(args.galaxy_root,tool_conf_path)
-        self.tool_dir = os.path.join(args.galaxy_root, tool_dir)
+        self.tool_dir = os.path.join(args.galaxy_root, local_tool_dir)
         self.our_name = 'ToolFactory'
+        self.run_test = args.run_test
         tff = tarfile.open(new_tool_archive_path, "r:*")
         flist = tff.getnames()
         ourdir = os.path.commonpath(flist) # eg pyrevpos
@@ -90,6 +91,10 @@ class Tool_Conf_Updater():
         ourxml = [x for x in flist if x.lower().endswith('.xml')]
         res = tff.extractall()
         tff.close()
+        testflag = os.path.join(self.tool_dir,ourdir,'.testme')
+        if self.run_test:
+            with open(testflag,'w') as f:
+                f.write('Wake up Jeff!')
         self.run_rsync(ourdir, self.tool_dir)
         self.update_toolconf(ourdir,ourxml)
 
@@ -398,11 +403,13 @@ class Tool_Factory:
                 infp["infilename"] = infp["CL"]
             self.infiles[i] = infp
         for i, p in enumerate(self.outfiles):
-            p["origCL"] = p["CL"]  # keep copy
-            self.outfiles[i] = p
+            outfp = copy.copy(p)
+            outfp["origCL"] = outfp["CL"]  # keep copy
+            self.outfiles[i] = outfp
         for i, p in enumerate(self.addpar):
-            p["origCL"] = p["CL"]
-            self.addpar[i] = p
+            addp = copy.copy(p)
+            addp["origCL"] = addp["CL"]
+            self.addpar[i] = addp
 
     def clpositional(self):
         # inputs in order then params
@@ -410,8 +417,8 @@ class Tool_Factory:
         for (k, v, koverride) in self.xclsuffix:
             aXCL(v)
         if self.lastxclredirect:
-            aXCL(self.lastxclredirect[0])
-            aXCL(self.lastxclredirect[1])
+            for cl in self.lastxclredirect:
+                aXCL(cl)
         if self.args.cl_user_suffix:  # DIY CL end
             clp = shlex.split(self.args.cl_user_suffix)
             for c in clp:
@@ -435,8 +442,8 @@ class Tool_Factory:
                 aXCL(k)
                 aXCL(v)
         if self.lastxclredirect:
-            aXCL(self.lastxclredirect[0])
-            aXCL(self.lastxclredirect[1])
+            for cl in self.lastxclredirect:
+                aXCL(cl)
         if self.args.cl_user_suffix:  # DIY CL end
             clp = shlex.split(self.args.cl_user_suffix)
             for c in clp:
@@ -749,16 +756,23 @@ class Tool_Factory:
         if self.args.packages:
             try:
                 for d in self.args.packages.split(","):
-                    ver = ""
+                    ver = None
+                    packg = None
                     d = d.replace("==", ":")
                     d = d.replace("=", ":")
                     if ":" in d:
                         packg, ver = d.split(":")
+                        ver = ver.strip()
+                        packg = packg.strip()
                     else:
-                        packg = d
-                    requirements.append(
-                        gxtp.Requirement("package", packg.strip(), ver.strip())
-                    )
+                        packg = d.strip()
+                        ver = None
+                    if ver == "":
+                        ver = None
+                    if packg:
+                        requirements.append(
+                            gxtp.Requirement("package", packg.strip(), ver)
+                        )
             except Exception:
                 print('### malformed packages string supplied - cannot parse =',self.args.packages)
                 sys.exit(2)
@@ -962,9 +976,9 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.writeShedyml()
     r.makeTool()
     r.makeToolTar()
-    if args.install:
+    if args.install or args.run_test:
         #try:
-        tcu = Tool_Conf_Updater(args=args, tool_dir=args.local_tools,
+        tcu = Tool_Conf_Updater(args=args, local_tool_dir=args.local_tools,
         new_tool_archive_path=r.newtarpath, tool_conf_path=args.tool_conf_path,
         new_tool_name=r.tool_name)
         #except Exception:

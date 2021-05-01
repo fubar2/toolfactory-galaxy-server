@@ -66,6 +66,7 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
     && cd $GALAXY_ROOT \
     && ./scripts/common_startup.sh \
     && . $GALAXY_ROOT/.venv/bin/activate \
+    && pip3 install -U pip \
     && pip3 install drmaa psycopg2 pycurl pykube watchdog \
     && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
     && deactivate \
@@ -79,7 +80,7 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 COPY ./files/tool_conf.xml  $GALAXY_ROOT/config/tool_conf.xml
 COPY ./files/tool_sheds_conf.xml $GALAXY_ROOT/config/tool_sheds_conf.xml
-COPY ./files/job_conf.xml  $GALAXY_ROOT/config/job_conf.xml
+#COPY ./files/job_conf.xml  $GALAXY_ROOT/config/job_conf.xml # changed template to suit our needs
 COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/datatypes_conf.xml
 COPY ./files/toolfactory $GALAXY_ROOT/tools/toolfactory
 COPY ./files/welcome.html $GALAXY_ROOT/static/welcome.html
@@ -122,13 +123,21 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
 
 # Install remaining dependencies
 RUN apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 liblzma-dev libbz2-dev libpq-dev \
-                                                      libcurl4-openssl-dev libssl-dev \
-                                                      mercurial make netcat python3-dev python3-setuptools python3-pip \
-                                                      zlib1g-dev git nano wget -y \
-    # Cython and wheel are needed to later install pysam..
-    && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec \
-    && pip3 install pysam \
-    && /usr/bin/common_cleanup.sh
+ libcurl4-openssl-dev libssl-dev apt-utils openssl netbase apt-transport-https libreadline8  \
+ software-properties-common ca-certificates\
+ mercurial make netcat python3-dev python3-setuptools python3-pip \
+ git nano wget locales tzdata -y \
+# Cython and wheel are needed to later install pysam..
+&& pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec tzdata \
+&& pip3 install pysam \
+&& dpkg-reconfigure -f noninteractive tzdata \
+&& locale-gen en_US.UTF-8 \
+&& update-locale LANG=en_US.UTF-8 \
+&& curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+&& add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+&& apt-get -y update  \
+&& apt install -y docker-ce-cli \
+&& /usr/bin/common_cleanup.sh
 
 # GALAXY_USER should be able to run docker without root permissions
 RUN usermod -aG docker $GALAXY_USER
@@ -143,6 +152,6 @@ COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda /etc/profile.d/con
 
 COPY ./files/start.sh /usr/bin/start.sh
 
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT "/usr/bin/start.sh"
