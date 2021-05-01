@@ -14,7 +14,7 @@ create_user() {
 }
 
 # start copy lib/tools. Looks very hacky.
-tools_dir="/galaxy/lib/galaxy/tools/"
+tools_dir="/galaxy/lib/galaxy/tools"
 exp_dir="/export$tools_dir"
 mkdir -p $exp_dir
 chown "$GALAXY_USER:$GALAXY_USER" $exp_dir
@@ -127,7 +127,8 @@ fi
 
 # Ensure proper permission (the configurator might have changed them "by mistake")
 chown -RL "$GALAXY_USER:$GALAXY_GROUP" "$GALAXY_CONFIG_DIR"
-bash $GALAXY_ROOT/tools/toolfactory/watchtools.sh &
+$GALAXY_ROOT/tools/toolfactory/toolwatcher.sh &
+
 echo "Starting Galaxy now.."
 cd "$GALAXY_ROOT" || { echo "Error: Could not change to $GALAXY_ROOT"; exit 1; }
 "$GALAXY_VIRTUAL_ENV/bin/uwsgi" --yaml "$GALAXY_CONFIG_DIR/galaxy.yml" --uid "$GALAXY_UID" --gid "$GALAXY_GID"

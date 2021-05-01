@@ -2,8 +2,9 @@ ARG DOCKER_REGISTRY=quay.io
 ARG DOCKER_REGISTRY_USERNAME=fubar2
 ARG IMAGE_TAG=latest
 
-FROM quay.io/cybozu/ubuntu-minimal:focal-20210217 as build_base
-# buildpack-deps:20.04 was rate limited by docker for me :(
+#FROM quay.io/cybozu/ubuntu-minimal:focal-20210217 as build_base
+FROM buildpack-deps:20.04 as build_base
+#was rate limited by docker for me :(
 ENV DEBIAN_FRONTEND=noninteractive
 ENV EXPORT_DIR=/export \
     GALAXY_ROOT=/galaxy \
@@ -35,8 +36,9 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
 
 FROM build_base as build_miniconda
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
-RUN apt update && apt install --no-install-recommends curl libcurl4-openssl-dev libssl-dev python3-dev python3-pip wget nano git -y \
-&&  curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" > /home/$GALAXY_USER/miniconda.sh
+### apt update && apt install --no-install-recommends curl libcurl4-openssl-dev libssl-dev python3-dev python3-pip wget nano git -y \
+
+RUN curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" > /home/$GALAXY_USER/miniconda.sh
 RUN /bin/bash  /home/$GALAXY_USER/miniconda.sh -b -p $GALAXY_CONDA_PREFIX \
     && rm  /home/$GALAXY_USER/miniconda.sh \
     && ln -s $GALAXY_CONDA_PREFIX/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
@@ -55,7 +57,7 @@ FROM build_base as build_galaxy
 ARG GALAXY_RELEASE=release_20.09
 ARG GALAXY_REPO=https://github.com/galaxyproject/galaxy
 
-COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
+
 # Install Galaxy
 RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip git wget nano curl -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
@@ -64,23 +66,30 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
     && cd $GALAXY_ROOT \
     && ./scripts/common_startup.sh \
     && . $GALAXY_ROOT/.venv/bin/activate \
-    && pip3 install drmaa psycopg2 pycurl pykube \
+    && pip3 install drmaa psycopg2 pycurl pykube watchdog \
     && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
     && deactivate \
     && rm -rf .ci .circleci .coveragerc .gitignore .travis.yml CITATION CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS.md \
               LICENSE.txt Makefile README.rst SECURITY_POLICY.md pytest.ini tox.ini \
               client contrib doc config/plugins lib/galaxy_test test test-data \
               .venv/lib/node_modules .venv/src/node-v10.15.3-linux-x64 \
-              .venv/include/node .venv/bin/node .venv/bin/nodeenv \
-    && /usr/bin/common_cleanup.sh
-
-# --- Final image ---
-FROM $DOCKER_REGISTRY/$DOCKER_REGISTRY_USERNAME/galaxy-cluster-base:$IMAGE_TAG as final
+              .venv/include/node .venv/bin/node .venv/bin/nodeenv
+    #&& /usr/bin/common_cleanup.sh
 
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
+COPY ./files/tool_conf.xml  $GALAXY_ROOT/config/tool_conf.xml
+COPY ./files/tool_sheds_conf.xml $GALAXY_ROOT/config/tool_sheds_conf.xml
+COPY ./files/job_conf.xml  $GALAXY_ROOT/config/job_conf.xml
+COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/datatypes_conf.xml
+COPY ./files/toolfactory $GALAXY_ROOT/tools/toolfactory
+COPY ./files/welcome.html $GALAXY_ROOT/static/welcome.html
+
+# --- Final image ---
+
+FROM quay.io/bgruening/galaxy-cluster-base:latest as final
+COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 COPY ./files/create_galaxy_user.py /usr/local/bin/create_galaxy_user.py
-COPY ./files/tool_conf.xml  ./files/tool_sheds_conf.xml  ./files/job_conf.xml  ./files/datatypes_conf.xml $GALAXY_ROOT/config/
-COPY ./files/toolfactory $GALAXY_ROOT/tools/
+
 
 ENV EXPORT_DIR=/export \
     GALAXY_ROOT=/galaxy \
@@ -115,7 +124,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
 RUN apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 liblzma-dev libbz2-dev libpq-dev \
                                                       libcurl4-openssl-dev libssl-dev \
                                                       mercurial make netcat python3-dev python3-setuptools python3-pip \
-                                                      zlib1g-dev git -y \
+                                                      zlib1g-dev git nano wget -y \
     # Cython and wheel are needed to later install pysam..
     && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec \
     && pip3 install pysam \

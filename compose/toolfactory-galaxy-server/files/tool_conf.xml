@@ -1,26 +1,6 @@
 <toolbox monitor="true">
   <section id="tf" name="ToolFactory">
-    <!--    <tool file="plotter/plotter.xml"/>
-    <tool file="select_test/select_test.xml"/>
-    <tool file="evil_script_that_fails/evil_script_that_fails.xml"/>
-    <tool file="prolog_demo/prolog_demo.xml"/>
-    <tool file="hello_toolshed/hello_toolshed.xml"/>
-    <tool file="planemo_test/planemo_test.xml"/>
-    <tool file="perl_gc_counter/perl_gc_counter.xml"/>
-    <tool file="planemo_lint/planemo_lint.xml"/>
-    <tool file="bwa_test_toolfactory_positional_bash/bwa_test_toolfactory_positional_bash.xml"/>
-    <tool file="bwa_test_command_override/bwa_test_command_override.xml"/>
-    <tool file="pyrev_pos_test/pyrev_pos_test.xml"/>
-    <tool file="tacrev/tacrev.xml"/>
-    <tool file="lisp_demo/lisp_demo.xml"/>
-    <tool file="tacrev_demo/tacrev_demo.xml"/>
     <tool file="toolfactory/ToolFactory.xml"/>
-    <tool file="tacrev_demo_2/tacrev_demo_2.xml"/>
-    <tool file="echo/echo.xml"/> -->
-    <tool file="sedtest_toolshed/sedtest_toolshed.xml"/>
-    <tool file="pyrev_argparse_test/pyrev_argparse_test.xml"/>
-    <tool file="tacrev/tacrev.xml"/>
-    <tool file="api_tester/api_tester.xml"/>
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml"/>

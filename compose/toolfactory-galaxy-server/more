@@ -1,0 +1,48 @@
+2c2
+< ARG DOCKER_REGISTRY_USERNAME=fubar2
+---
+> ARG DOCKER_REGISTRY_USERNAME=bgruening
+5,7c5,6
+< FROM quay.io/cybozu/ubuntu-minimal:focal-20210217 as build_base
+< # buildpack-deps:20.04 was rate limited by docker for me :(
+< ENV DEBIAN_FRONTEND=noninteractive
+---
+> FROM buildpack-deps:20.04 as build_base
+> 
+27,28c26,27
+< ENV GALAXY_CONDA_PREFIX=$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR/_conda
+< ENV MINICONDA_VERSION=py38_4.9.2
+---
+> ENV GALAXY_CONDA_PREFIX=$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR/_conda \
+>     MINICONDA_VERSION=py38_4.9.2
+35d33
+< 
+38,41c36,39
+< RUN apt update && apt install --no-install-recommends curl libcurl4-openssl-dev libssl-dev python3-dev python3-pip wget nano git -y \
+< &&  curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" > /home/$GALAXY_USER/miniconda.sh
+< RUN /bin/bash  /home/$GALAXY_USER/miniconda.sh -b -p $GALAXY_CONDA_PREFIX \
+<     && rm  /home/$GALAXY_USER/miniconda.sh \
+---
+> # Install Miniconda
+> RUN curl -s -L "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" > ~/miniconda.sh \
+>     && /bin/bash ~/miniconda.sh -b -p $GALAXY_CONDA_PREFIX \
+>     && rm ~/miniconda.sh \
+60c58
+< RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip git wget nano curl -y \
+---
+> RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip -y \
+82,83d79
+< COPY ./files/tool_conf.xml  ./files/tool_sheds_conf.xml  ./files/job_conf.xml  ./files/datatypes_conf.xml $GALAXY_ROOT/config/
+< COPY ./files/toolfactory $GALAXY_ROOT/tools/
+118c114
+<                                                       zlib1g-dev git -y \
+---
+>                                                       zlib1g-dev -y \
+120c116
+<     && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec \
+---
+>     && pip3 install Cython wheel \
+128c124
+< RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9
+---
+> RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9 
