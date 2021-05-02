@@ -12,7 +12,7 @@ Something like this should get you going.
 ```
 git clone https://github.com/fubar2/toolfactory-galaxy-server
 cd toolfactory-galaxy-server/compose
-docker-compose up
+docker-compose up -d
 ```
 
 Your appliance should be available on localhost:8080
