@@ -1,9 +1,10 @@
-This is copied from https://github.com/bgruening/docker-galaxy-stable - the excellent documentation at
+This is derived from https://github.com/bgruening/docker-galaxy-stable - the excellent documentation at
 that site is not repeated here. Respect.
 
 It adds:
-1.    watchdog support for detecting new tools
-2.    an external tool directory watchdog to run Planemo test and generate a tested toolshed archive, stored in `/export/galaxy/tested_TF_tools`
+1.    A working copy of the ToolFactory
+1.    A background watchdog process to trigger testing when requested at build.
+2.    Background Planemo test to generate a tested toolshed archive, stored in `/export/galaxy/tested_TF_tools`
 
 It is the ToolFactory appliance built for the GTN ToolFactory tutorial
 
