@@ -122,35 +122,35 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && /usr/bin/common_cleanup.sh
 
 # Install remaining dependencies
-RUN apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 liblzma-dev libbz2-dev libpq-dev \
+# Make Python3 standard
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
+ && apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 liblzma-dev libbz2-dev libpq-dev \
  libcurl4-openssl-dev libssl-dev apt-utils openssl netbase apt-transport-https libreadline8  \
  software-properties-common ca-certificates\
- mercurial make netcat python3-dev python3-setuptools python3-pip \
+ mercurial make netcat python3-dev python3-setuptools python3-pip python3-venv \
  git nano wget locales tzdata -y \
-# Cython and wheel are needed to later install pysam..
-&& pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec tzdata \
-&& pip3 install pysam \
-&& dpkg-reconfigure -f noninteractive tzdata \
-&& locale-gen en_US.UTF-8 \
-&& update-locale LANG=en_US.UTF-8 \
-&& curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
-&& add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
-&& apt-get -y update  \
-&& apt install -y docker-ce-cli \
-&& /usr/bin/common_cleanup.sh
+ && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+ && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+ && apt-get -y update  \
+ && apt install -y docker-ce-cli \
+ # Cython and wheel are needed to later install pysam..
+ && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec tzdata \
+ && pip3 install pysam nodeenv \
+ && dpkg-reconfigure -f noninteractive tzdata \
+ && locale-gen en_US.UTF-8 \
+ && update-locale LANG=en_US.UTF-8 \
+ && usermod -aG docker $GALAXY_USER \
+ && /usr/bin/common_cleanup.sh
 
 # GALAXY_USER should be able to run docker without root permissions
-RUN usermod -aG docker $GALAXY_USER
 
-# Make Python3 standard
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9
+COPY ./files/start.sh /usr/bin/start.sh
+COPY ./files/tacrev $GALAXY_ROOT/tools/tacrev
 
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_galaxy ${GALAXY_ROOT} ${GALAXY_ROOT}
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda ${GALAXY_CONFIG_TOOL_DEPENDENCY_DIR} ${GALAXY_CONFIG_TOOL_DEPENDENCY_DIR}
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda ${GALAXY_HOME} ${GALAXY_HOME}
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda /etc/profile.d/conda.sh /etc/profile.d/conda.sh
-
-COPY ./files/start.sh /usr/bin/start.sh
 
 EXPOSE 8080
 
