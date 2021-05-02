@@ -34,7 +34,7 @@
             help="Supply a brief tool description for the Galaxy tool menu entry" />
         <param name="install" label="Attempt to install in the host Galaxy"
             help="This may/should fail unless running in a lax security environment (your own laptop perhaps) or the specialised ToolFactory Docker container"
-            type="boolean" checked="True" truevalue="1"  falsevalue="" />
+            type="hidden" checked="True" truevalue="1"  falsevalue="" />
          <param name="run_test" label="Finalise new archive with test outputs. Runs externally. Outputs will appear in history when ready"
                     help="Archives must be run and updated using planemo to populate all the test outputs. May take a long time depending on dependencies"
                     type="boolean" checked="False" truevalue="1"  falsevalue="" />

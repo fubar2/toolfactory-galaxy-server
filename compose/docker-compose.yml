@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   toolfactory-galaxy-server:
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-server:${IMAGE_TAG:-latest}
+    image: quay.io/fubar2/toolfactory-galaxy-server:latest
     build: toolfactory-galaxy-server
     environment:
       - GALAXY_DEFAULT_ADMIN_USER=admin
