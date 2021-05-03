@@ -84,7 +84,7 @@ class Tool_Conf_Updater:
         self.args = args
         self.tool_conf_path = os.path.join(args.galaxy_root, tool_conf_path)
         self.tool_dir = os.path.join(args.galaxy_root, local_tool_dir)
-        self.our_name = "ToolFactory"
+        self.out_section = "ToolFactory Generated Tools"
         self.run_test = args.run_test
         tff = tarfile.open(new_tool_archive_path, "r:*")
         flist = tff.getnames()
@@ -93,14 +93,7 @@ class Tool_Conf_Updater:
         ourxml = [x for x in flist if x.lower().endswith(".xml")]
         tff.extractall()
         tff.close()
-        testflag = os.path.join(self.tool_dir, ourdir, ".testme")
         self.run_rsync(ourdir, self.tool_dir)
-        if self.run_test:
-            wuj = ".wuj"
-            foo = open(wuj, "w")
-            foo.write("Wake up Jeff!!!")
-            foo.close()
-            self.run_rsync(wuj, testflag)
         self.update_toolconf(ourdir, ourxml)
 
     def run_rsync(self, srcf, dstf):
@@ -109,7 +102,7 @@ class Tool_Conf_Updater:
         if os.path.isdir(src):
             cll = ["rsync", "-r", src, dst]
         else:
-            cll = ["rsync",  src, dst]
+            cll = ["rsync", src, dst]
         subprocess.run(
             cll,
             capture_output=False,
@@ -117,14 +110,7 @@ class Tool_Conf_Updater:
             shell=False,
         )
 
-    def install_deps(self):
-        gi = galaxy.GalaxyInstance(
-            url=self.args.galaxy_url, key=self.args.galaxy_api_key
-        )
-        x = gi.tools.install_dependencies(self.tool_id)
-        print(f"Called install_dependencies on {self.tool_id} - got {x}")
-
-    def update_toolconf(self, ourdir, ourxml):  # path is relative to tools
+   def update_toolconf(self, ourdir, ourxml):  # path is relative to tools
         localconf = "./local_tool_conf.xml"
         self.run_rsync(self.tool_conf_path, localconf)
         tree = ET.parse(localconf)
@@ -132,11 +118,11 @@ class Tool_Conf_Updater:
         hasTF = False
         TFsection = None
         for e in root.findall("section"):
-            if e.attrib["name"] == self.our_name:
+            if e.attrib["name"] == self.out_section:
                 hasTF = True
                 TFsection = e
         if not hasTF:
-            TFsection = ET.Element("section")
+            TFsection = ET.Element("section", {"id":self.out_section, "name":self.out_section})
             root.insert(0, TFsection)  # at the top!
         our_tools = TFsection.findall("tool")
         conf_tools = [x.attrib["file"] for x in our_tools]
@@ -147,8 +133,6 @@ class Tool_Conf_Updater:
         newconf = f"{self.tool_id}_conf"
         tree.write(newconf, pretty_print=True)
         self.run_rsync(newconf, self.tool_conf_path)
-        if False and self.args.packages and self.args.packages > "":
-            self.install_deps()
 
 
 class Tool_Factory:
@@ -960,7 +944,7 @@ def main():
     a("--collection", action="append", default=[])
     a("--include_tests", default=False, action="store_true")
     a("--admin_only", default=False, action="store_true")
-    a("--install", default=False, action="store_true")
+    a("--install", default=True, action="store_true")
     a("--run_test", default=False, action="store_true")
     a("--local_tools", default="tools")  # relative to $__root_dir__
     a("--tool_conf_path", default="config/tool_conf.xml")  # relative to $__root_dir__

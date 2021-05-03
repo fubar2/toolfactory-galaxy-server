@@ -36,17 +36,17 @@
             help="This may/should fail unless running in a lax security environment (your own laptop perhaps) or the specialised ToolFactory Docker container"
             type="hidden" checked="True" truevalue="1"  falsevalue="" />
          <param name="run_test" label="Finalise new archive with test outputs. Runs externally. Outputs will appear in history when ready"
-                    help="Archives must be run and updated using planemo to populate all the test outputs. May take a long time depending on dependencies"
-                    type="boolean" checked="False" truevalue="1"  falsevalue="" />
-            <param name="help_text" label="Tool form documentation and help text for users" type="text" area="true"
+            help="Archives must be run and updated using planemo to populate all the test outputs. May take a long time depending on dependencies"
+            type="hidden" checked="False" truevalue="1"  falsevalue="" />
+         <param name="help_text" label="Tool form documentation and help text for users" type="text" area="true"
             value="**What it Does**"
              help="Supply user documentation to appear on the new tool form as reStructured text - http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html" >
                 <sanitizer>
                     <valid initial="string.printable" />
                     <mapping initial="none"/>
                 </sanitizer>
-            </param>
-            <repeat name="citations" title="Citation">
+        </param>
+        <repeat name="citations" title="Citation">
                 <conditional name="citation_type">
                     <param name="type" type="select" display="radio" label="Citation Type">
                         <option value="doi">DOI</option>
@@ -66,7 +66,7 @@
                         </param>
                     </when>
                 </conditional>
-            </repeat>
+        </repeat>
      </xml>
      <xml name="io">
      <section name="io" title="Input and output files" expanded="true">
@@ -220,12 +220,6 @@ python3 $__tool_directory__/ToolFactory.py
 --tool_desc "$tool_desc"
 --tool_version "$tool_version"
 --help_text "$helpme"
-    #if $install:
-       --install
-    #end if
-    #if $run_test:
-       --run_test
-    #end if
    #if $io_param.ppass.parampass != '0':
      #if str($io_param.ppass.addparam.edit_params) == "yes":
 --edit_additional_parameters

@@ -11,10 +11,12 @@ create_user() {
   python /usr/local/bin/create_galaxy_user.py --user "$GALAXY_DEFAULT_ADMIN_EMAIL" --password "$GALAXY_DEFAULT_ADMIN_PASSWORD" \
   -c "$GALAXY_CONFIG_FILE" --username "$GALAXY_DEFAULT_ADMIN_USER" --key "$GALAXY_DEFAULT_ADMIN_KEY"
   deactivate
+  /usr/bin/python3 /usr/bin/install-sample-history.py
+  # only first time run
 }
 
 # start copy lib/tools. Looks very hacky.
-tools_dir="/galaxy/lib/galaxy/tools"
+tools_dir="/galaxy/lib/galaxy/tools/"
 exp_dir="/export$tools_dir"
 mkdir -p $exp_dir
 chown "$GALAXY_USER:$GALAXY_USER" $exp_dir
@@ -127,8 +129,7 @@ fi
 
 # Ensure proper permission (the configurator might have changed them "by mistake")
 chown -RL "$GALAXY_USER:$GALAXY_GROUP" "$GALAXY_CONFIG_DIR"
-/usr/bin/python $GALAXY_ROOT/tools/toolfactory/toolwatcher.py  &
-usermod -a -G docker galaxy
+## /usr/bin/python $GALAXY_ROOT/tools/toolfactory/toolwatcher.py  & ## no longer needed?
 echo "Starting Galaxy now.."
 cd "$GALAXY_ROOT" || { echo "Error: Could not change to $GALAXY_ROOT"; exit 1; }
 "$GALAXY_VIRTUAL_ENV/bin/uwsgi" --yaml "$GALAXY_CONFIG_DIR/galaxy.yml" --uid "$GALAXY_UID" --gid "$GALAXY_GID"
