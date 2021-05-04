@@ -1,7 +1,7 @@
 version: "3.7"
 services:
-  toolfactory-galaxy-server:
-    image: quay.io/fubar2/toolfactory-galaxy-server:latest
+  galaxy-server:
+    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-server:${IMAGE_TAG:-latest}
     build: toolfactory-galaxy-server
     environment:
       - GALAXY_DEFAULT_ADMIN_USER=admin
@@ -25,7 +25,7 @@ services:
   # The galaxy-configurator is responsible for the whole configuration of
   # your setup and should be the central place of configuration.
   galaxy-configurator:
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-bgruening}/galaxy-configurator:${IMAGE_TAG:-latest}
+    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-configurator:${IMAGE_TAG:-latest}
     build: galaxy-configurator
     environment:
       - EXPORT_DIR=${EXPORT_DIR:-./export}
@@ -62,7 +62,7 @@ services:
   # offload static file serving
   # (https://docs.galaxyproject.org/en/master/admin/production.html#using-a-proxy-server)
   nginx:
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-bgruening}/galaxy-nginx:${IMAGE_TAG:-latest}
+    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-nginx:${IMAGE_TAG:-latest}
     build: galaxy-nginx
     ports:
       - 8080:80
@@ -71,7 +71,7 @@ services:
       - ${EXPORT_DIR:-./export}/galaxy/static:/export/galaxy/static:ro
       - ${EXPORT_DIR:-./export}/galaxy/config/plugins:/galaxy/config/plugins:ro
     depends_on:
-      - toolfactory-galaxy-server
+      - galaxy-server
     networks:
       - galaxy
   # Message queue for better performance

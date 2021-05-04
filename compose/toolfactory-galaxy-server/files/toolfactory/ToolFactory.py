@@ -85,7 +85,6 @@ class Tool_Conf_Updater:
         self.tool_conf_path = os.path.join(args.galaxy_root, tool_conf_path)
         self.tool_dir = os.path.join(args.galaxy_root, local_tool_dir)
         self.out_section = "ToolFactory Generated Tools"
-        self.run_test = args.run_test
         tff = tarfile.open(new_tool_archive_path, "r:*")
         flist = tff.getnames()
         ourdir = os.path.commonpath(flist)  # eg pyrevpos
@@ -110,7 +109,7 @@ class Tool_Conf_Updater:
             shell=False,
         )
 
-   def update_toolconf(self, ourdir, ourxml):  # path is relative to tools
+    def update_toolconf(self, ourdir, ourxml):  # path is relative to tools
         localconf = "./local_tool_conf.xml"
         self.run_rsync(self.tool_conf_path, localconf)
         tree = ET.parse(localconf)
@@ -849,6 +848,8 @@ class Tool_Factory:
         xreal = "%s.xml" % self.tool_name
         xout = os.path.join(self.tooloutdir, xreal)
         shutil.copyfile(xreal, xout)
+        #xout = os.path.join(self.repdir, xreal)
+        #shutil.copyfile(xreal, xout)
         for p in self.infiles:
             pth = p["name"]
             dest = os.path.join(self.testdir, "%s_sample" % p["infilename"])
@@ -873,7 +874,7 @@ class Tool_Factory:
             if not os.path.isfile(tdest):
                 if os.path.isfile(src):
                     shutil.copyfile(src, tdest)
-                    dest = os.path.join(self.repdir, "%s.sample" % (oname))
+                    dest = os.path.join(self.repdir, "%s.sample.%s" % (oname,p['format']))
                     shutil.copyfile(src, dest)
                 else:
                     if report_fail:
@@ -888,9 +889,7 @@ class Tool_Factory:
             filter=exclude_function,
         )
         tf.close()
-        if not os.path.exists('toolgen'):
-            os.mkdir('toolgen')
-        dest = os.path.join('toolgen', self.newtarpath)
+        dest = self.args.untested_tool_out
         shutil.copyfile(self.newtarpath, dest)
 
     def moveRunOutputs(self):
@@ -944,8 +943,7 @@ def main():
     a("--collection", action="append", default=[])
     a("--include_tests", default=False, action="store_true")
     a("--admin_only", default=False, action="store_true")
-    a("--install", default=True, action="store_true")
-    a("--run_test", default=False, action="store_true")
+    a("--untested_tool_out", default=None)
     a("--local_tools", default="tools")  # relative to $__root_dir__
     a("--tool_conf_path", default="config/tool_conf.xml")  # relative to $__root_dir__
     a("--galaxy_url", default="http://localhost:8080")
@@ -967,18 +965,13 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.makeTool()
     r.makeToolTar()
     r.moveRunOutputs()
-    if args.install or args.run_test:
-        try:
-            Tool_Conf_Updater(
-                args=args,
-                local_tool_dir=args.local_tools,
-                new_tool_archive_path=r.newtarpath,
-                tool_conf_path=args.tool_conf_path,
-                new_tool_name=r.tool_name,
-            )
-        except Exception:
-            print("### Unable to install the new tool. Are you sure you have all the required special settings?")
-
+    TCU = Tool_Conf_Updater(
+        args=args,
+        local_tool_dir=args.local_tools,
+        new_tool_archive_path=r.newtarpath,
+        tool_conf_path=args.tool_conf_path,
+        new_tool_name=r.tool_name,
+    )
 
 if __name__ == "__main__":
     main()

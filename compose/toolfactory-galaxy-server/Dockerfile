@@ -1,5 +1,5 @@
 ARG DOCKER_REGISTRY=quay.io
-ARG DOCKER_REGISTRY_USERNAME=bgruening
+ARG DOCKER_REGISTRY_USERNAME=fubar2
 ARG IMAGE_TAG=latest
 
 FROM buildpack-deps:20.04 as build_base
@@ -77,7 +77,7 @@ COPY ./files/planemo_test $GALAXY_ROOT/tools/planemo_test
 COPY ./files/welcome.html $GALAXY_ROOT/static/welcome.html
 
 # --- Final image ---
-FROM $DOCKER_REGISTRY/$DOCKER_REGISTRY_USERNAME/galaxy-cluster-base:$IMAGE_TAG as final
+FROM ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-cluster-base:${IMAGE_TAG:-latest} as final
 
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 COPY ./files/create_galaxy_user.py /usr/local/bin/create_galaxy_user.py
@@ -117,7 +117,7 @@ RUN apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 l
                                                       mercurial make netcat python3-dev python3-setuptools python3-pip python3-venv \
                                                       zlib1g-dev -y \
 # Cython and wheel are needed to later install pysam..
- && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec tzdata \
+ && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec tzdata nodeenv \
  && pip3 install pysam \
  && dpkg-reconfigure -f noninteractive tzdata \
  && locale-gen en_US.UTF-8 \

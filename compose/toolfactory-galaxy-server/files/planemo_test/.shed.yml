@@ -1,6 +1,6 @@
 category: TF Generated Tools
-description: Test/update untested toolshed archives
-name: planemo_test
-owner: admin
-synopsis: Test/update untested toolshed archives
+description: Lints a ToolFactory or other xml using planemo
+name: planemo_lint
+owner: planemo
+synopsis: Lints a ToolFactory or other xml using planemo
 type: unrestricted

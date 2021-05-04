@@ -259,6 +259,7 @@ python3 $__tool_directory__/ToolFactory.py
      #for $collect in $io_param.ppass.io.collection_outputs:
 --collection '{"name": "$collect.name", "kind": "$collect.kind", "discover": "$collect.discover", "label": "$collect.label"}'
      #end for
+--untested_tool_out "$untested_tool"
 --galaxy_root "$__root_dir__"
 --tool_dir "$__tool_directory__"
  #end if
@@ -390,9 +391,10 @@ ${help_text}
     <expand macro="tool_metadata" />
   </inputs>
   <outputs>
-    <collection name="toolgen" type="list" label="${tool_name} Outputs">
-      <discover_datasets  pattern="__name_and_ext__" directory="toolgen" visible="false"/>
+     <collection name="toolgen" type="list" label="${tool_name} generated components">
+      <discover_datasets pattern="__name_and_ext__" directory="toolgen" visible="false"/>
     </collection>
+      <data name="untested_tool" format="toolshed.gz" label = "${tool_name} untested archive"/>
   </outputs>
 <tests>
 <test>

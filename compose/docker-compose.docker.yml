@@ -10,4 +10,4 @@ services:
   galaxy-configurator:
     environment:
       - GALAXY_DEPENDENCY_RESOLUTION=docker
-      - GALAXY_CONFIG_CONDA_AUTO_INSTALL=false
+      - GALAXY_CONFIG_CONDA_AUTO_INSTALL=true
