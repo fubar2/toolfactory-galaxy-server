@@ -41,7 +41,7 @@ for galaxy_dir in "${!exports[@]}"; do
   exp_dir=${exports[$galaxy_dir]}
   if [ ! -d  $exp_dir ] || [ -z "$(ls -A $exp_dir)" ]; then
     echo "Exporting $galaxy_dir to $exp_dir"
-    mkdir $exp_dir
+    mkdir -p $exp_dir
     chown "$GALAXY_USER:$GALAXY_USER" $exp_dir
     cp -rpf $galaxy_dir/* $exp_dir
   fi
@@ -69,6 +69,15 @@ mkdir -p "$EXPORT_DIR/$GALAXY_DATABASE_PATH"
 chown "$GALAXY_USER:$GALAXY_USER" "$EXPORT_DIR/$GALAXY_DATABASE_PATH"
 ln -v -s "$EXPORT_DIR/$GALAXY_DATABASE_PATH" "$GALAXY_DATABASE_PATH"
 chown -h "$GALAXY_USER:$GALAXY_USER" "$GALAXY_DATABASE_PATH"
+
+
+# Exported tools retained if present
+if [ ! -z "$(ls -A $EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH)" ]; then
+rm -rf "$GALAXY_CONFIG_TOOL_PATH"
+chown "$GALAXY_USER:$GALAXY_USER" "$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH"
+ln -v -s "$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH" "$GALAXY_CONFIG_TOOL_PATH"
+chown -h "$GALAXY_USER:$GALAXY_USER" "$GALAXY_CONFIG_TOOL_PATH"
+fi
 
 # Try to guess if we are running under --privileged mode
 if mount | grep "/proc/kcore"; then
