@@ -22,6 +22,8 @@ galaxy:
   watch_tools: true
   brand: ToolFactory Appliance
   sanitize_all_html: false
+  conda_auto_init: True
+  conda_auto_install: True
 
 pulsar:
   conda_auto_init: True

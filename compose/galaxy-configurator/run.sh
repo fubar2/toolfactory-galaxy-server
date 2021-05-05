@@ -157,7 +157,7 @@ if [ ! -f "${GALAXY_CONF_DIR}/$conf" ]; then
 else
  s1=`stat -c %s "/tmp/$conf"`
  s2=`stat -c %s "${GALAXY_CONF_DIR}/$conf"`
- echo "Not replacing larger ${GALAXY_CONF_DIR}/$conf ($s2) with smaller $conf.j2 ($s1) - assuming tools have been added"
+ echo "Not replacing existing ${GALAXY_CONF_DIR}/$conf with template $conf.j2 ($s1) - assuming tools have already been added"
 fi
 
 echo "Finished configuring Galaxy"

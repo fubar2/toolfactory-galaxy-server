@@ -3,7 +3,8 @@
 
 import argparse
 import os
-
+import requests
+import time
 
 from bioblend import galaxy
 
@@ -16,11 +17,25 @@ def _parser():
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=["rgtf2",], action="append")
     return parser
 
+import requests
+
+
+def wait_for_server(url):
+    up = False
+    while not up:
+        try:
+            requests.get(url)
+            up = True
+        except requests.exceptions.ConnectionError:
+            print(f"URL {url} not reachable")
+            time.sleep(1)
+
 def main():
     """
     load a folder of histories or a single gz
     """
     args = _parser().parse_args()
+    wait_for_server(args.galaxy)
     if args.key:
         gi = galaxy.GalaxyInstance(url=args.galaxy, key=args.key)
     else:

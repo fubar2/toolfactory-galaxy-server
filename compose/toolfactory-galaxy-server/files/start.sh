@@ -11,7 +11,6 @@ create_user() {
   python /usr/local/bin/create_galaxy_user.py --user "$GALAXY_DEFAULT_ADMIN_EMAIL" --password "$GALAXY_DEFAULT_ADMIN_PASSWORD" \
   -c "$GALAXY_CONFIG_FILE" --username "$GALAXY_DEFAULT_ADMIN_USER" --key "$GALAXY_DEFAULT_ADMIN_KEY"
   deactivate
-  /usr/bin/python3 /usr/bin/install-sample-history.py
   # only first time run
 }
 
@@ -35,11 +34,12 @@ declare -A exports=( ["$GALAXY_STATIC_DIR"]="$EXPORT_DIR/$GALAXY_STATIC_DIR" \
                      ["$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR"]="$EXPORT_DIR/$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR" \
                      ["$GALAXY_CONFIG_TOOL_DATA_PATH"]="$EXPORT_DIR/$GALAXY_CONFIG_TOOL_DATA_PATH" \
                      ["$GALAXY_VIRTUAL_ENV"]="$EXPORT_DIR/$GALAXY_VIRTUAL_ENV" )
-
+NEW="0"
 # shellcheck disable=SC2143,SC2086,SC2010
 for galaxy_dir in "${!exports[@]}"; do
   exp_dir=${exports[$galaxy_dir]}
   if [ ! -d  $exp_dir ] || [ -z "$(ls -A $exp_dir)" ]; then
+    NEW="1"
     echo "Exporting $galaxy_dir to $exp_dir"
     mkdir -p $exp_dir
     chown "$GALAXY_USER:$GALAXY_USER" $exp_dir
@@ -136,6 +136,13 @@ if [[ -n $GALAXY_DEFAULT_ADMIN_USER ]]; then
   create_user &
 fi
 
+if [ $NEW == "1" ] ; then
+# only first time a new export directory is found at startup
+  echo "Installing sample history - fresh export directory found at start"
+  /usr/bin/python3 /usr/bin/install-sample-history.py
+else
+  echo "Skipping sample history - populated export directory found at start"
+fi
 # Ensure proper permission (the configurator might have changed them "by mistake")
 chown -RL "$GALAXY_USER:$GALAXY_GROUP" "$GALAXY_CONFIG_DIR"
 ## /usr/bin/python $GALAXY_ROOT/tools/toolfactory/toolwatcher.py  & ## no longer needed?
