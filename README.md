@@ -1,5 +1,5 @@
 #Galaxy ToolFactory appliance
-##Use this for the GTN ToolFactory developer's tutorial.
+##Ideal the GTN ToolFactory developer's tutorial.
 
 The docker-compose infrastructure used here was copied wholesale from https://github.com/bgruening/docker-galaxy-stable - the excellent documentation at
 that site is not repeated here. Respect. A few minor pointers only are provided below - please refer to the original documentation for details.
@@ -21,12 +21,13 @@ ToolFactory and other related source code is included in this repository for the
 
 ## Installation and startup
 
-Something like this should get it started - *adding the singularity yml to the command is essential for the planemo tester to work*:
+Something like this should get it started
 
 ```
 git clone https://github.com/fubar2/toolfactory-galaxy-server
 cd toolfactory-galaxy-server/compose
-docker-compose -f docker-compose.yml -f docker-compose.singularity.yml up -d
+docker-compose pull
+docker-compose up -d
 ```
 
 Your appliance should be running with a local Galaxy on localhost:8080 after a fair bit of activity.

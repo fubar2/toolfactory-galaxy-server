@@ -3,7 +3,8 @@
   <!--Created by admin@galaxy.org at 04/05/2021 03:41:57 using the Galaxy Tool Factory.-->
   <description>Planemo test/update a toolshed archive</description>
   <requirements>
-    <requirement type="package">planemo</requirement>
+    <requirement type="package" >planemo</requirement>
+   <requirement type="package" >git</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"/>
@@ -57,7 +58,8 @@ Runs planemo test and returns a toolshed archive updated with test outputs and a
 
 Dogfood demonstration - this tool was generated with the ToolFactory and is included as a sample of what's possible
 
- 
+
+
 
 ------
 
