@@ -1,3 +1,4 @@
+# modified to add watchdog and some tools from the galaxy-server Dockerfile
 ARG DOCKER_REGISTRY=quay.io
 ARG DOCKER_REGISTRY_USERNAME=fubar2
 ARG IMAGE_TAG=latest
