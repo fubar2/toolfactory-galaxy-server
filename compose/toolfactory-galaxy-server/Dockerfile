@@ -130,6 +130,10 @@ RUN usermod -aG docker $GALAXY_USER
 
 # Make Python3 standard
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9
+# setup appliance tools and welcome again - not sure if this is needed
+COPY ./files/toolfactory $GALAXY_ROOT/tools/toolfactory
+COPY ./files/planemo_test $GALAXY_ROOT/tools/planemo_test
+COPY ./files/welcome.html $GALAXY_ROOT/static/welcome.html
 
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_galaxy ${GALAXY_ROOT} ${GALAXY_ROOT}
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda ${GALAXY_CONFIG_TOOL_DEPENDENCY_DIR} ${GALAXY_CONFIG_TOOL_DEPENDENCY_DIR}
