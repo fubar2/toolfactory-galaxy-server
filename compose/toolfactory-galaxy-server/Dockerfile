@@ -56,14 +56,14 @@ ARG GALAXY_REPO=https://github.com/galaxyproject/galaxy
 
 COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 # Install Galaxy
-RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip -y \
+RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libssl-dev python3-dev python3-pip python3-venv -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir "${GALAXY_ROOT}" \
     && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT \
     && cd $GALAXY_ROOT \
     && ./scripts/common_startup.sh \
     && . $GALAXY_ROOT/.venv/bin/activate \
-    && pip3 install drmaa psycopg2 pycurl pykube watchdog uwsgi \
+    && pip3 install drmaa psycopg2 pycurl pykube watchdog \
     && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
     && deactivate \
     && rm -rf .ci .circleci .coveragerc .gitignore .travis.yml CITATION CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS.md \
@@ -73,9 +73,6 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
               .venv/include/node .venv/bin/node .venv/bin/nodeenv \
     && /usr/bin/common_cleanup.sh
 # setup appliance tools and welcome
-COPY ./files/toolfactory $GALAXY_ROOT/tools/toolfactory
-COPY ./files/planemo_test $GALAXY_ROOT/tools/planemo_test
-COPY ./files/welcome.html $GALAXY_ROOT/static/welcome.html
 
 # --- Final image ---
 FROM ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-cluster-base:${IMAGE_TAG:-latest} as final
@@ -114,11 +111,11 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
 
 # Install remaining dependencies
 RUN apt update && apt install --no-install-recommends curl gcc gnupg2 libgomp1 liblzma-dev libbz2-dev libpq-dev \
-                                                      libcurl4-openssl-dev libssl-dev  gcc gnupg2 git nano wget locales tzdata \
-                                                      mercurial make netcat python3-dev python3-setuptools python3-pip python3-venv \
+                                                      libcurl4-openssl-dev libssl-dev  gcc git nano wget locales tzdata \
+                                                      mercurial make netcat python3-dev python3-pip python3-venv python3-wheel \
                                                       zlib1g-dev -y \
 # Cython and wheel are needed to later install pysam..
- && pip3 install Cython wheel watchdog planemo ephemeris galaxyxml lxml bioblend parsec tzdata nodeenv \
+ && pip3 install Cython wheel planemo tzdata nodeenv \
  && pip3 install pysam \
  && dpkg-reconfigure -f noninteractive tzdata \
  && locale-gen en_US.UTF-8 \
@@ -131,18 +128,16 @@ RUN usermod -aG docker $GALAXY_USER
 
 # Make Python3 standard
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 9
-# setup appliance tools and welcome again - not sure if this is needed
-COPY ./files/toolfactory $GALAXY_ROOT/tools/toolfactory
-COPY ./files/planemo_test $GALAXY_ROOT/tools/planemo_test
-COPY ./files/welcome.html $GALAXY_ROOT/static/welcome.html
 
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_galaxy ${GALAXY_ROOT} ${GALAXY_ROOT}
-COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_galaxy ${GALAXY_ROOT}/.venv ${GALAXY_ROOT}/.venv
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda ${GALAXY_CONFIG_TOOL_DEPENDENCY_DIR} ${GALAXY_CONFIG_TOOL_DEPENDENCY_DIR}
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda ${GALAXY_HOME} ${GALAXY_HOME}
 COPY --chown=$GALAXY_USER:$GALAXY_USER --from=build_miniconda /etc/profile.d/conda.sh /etc/profile.d/conda.sh
 COPY ./files/install-history.py /usr/bin/install-sample-history.py
 COPY ./files/start.sh /usr/bin/start.sh
+COPY ./files/toolfactory /galaxy/tools/toolfactory
+COPY ./files/planemo_test /galaxy/tools/planemo_test
+COPY ./files/toolfactory/welcome.html /galaxy/static/welcome.html
 
 EXPOSE 8080
 

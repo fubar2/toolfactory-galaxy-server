@@ -12,7 +12,9 @@ from bioblend import galaxy
 def _parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--galaxy", help='URL of target galaxy', default="http://nginx")
-    parser.add_argument("-a", "--key", help='Galaxy admin key', default="fakekey")
+    parser.add_argument("-k", "--key", help='Galaxy admin key', default="fakekey")
+    parser.add_argument("-e", "--email", help='admin email of target galaxy', default="admin@galaxy.org")
+    parser.add_argument("-p", "--password", help='Galaxy admin password', default="password")
     parser.add_argument("-i", "--history_path", help='Path to history gz files to be loaded', default="/galaxy/tools/toolfactory/TF_demo_history_May4.tar.gz")
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=["rgtf2",], action="append")
     return parser
@@ -20,22 +22,12 @@ def _parser():
 import requests
 
 
-def wait_for_server(url):
-    up = False
-    while not up:
-        try:
-            requests.get(url)
-            up = True
-        except requests.exceptions.ConnectionError:
-            print(f"URL {url} not reachable")
-            time.sleep(1)
-
 def main():
     """
     load a folder of histories or a single gz
     """
     args = _parser().parse_args()
-    wait_for_server(args.galaxy)
+    time.sleep(5) # for some reason, the galaxy admin user doesn't appear for a while. Go figure..
     if args.key:
         gi = galaxy.GalaxyInstance(url=args.galaxy, key=args.key)
     else:

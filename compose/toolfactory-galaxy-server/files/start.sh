@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "## start.sh called at $(date)"
 create_user() {
   GALAXY_PROXY_PREFIX=$(cat $GALAXY_CONFIG_DIR/GALAXY_PROXY_PREFIX.txt)
   echo "Waiting for Galaxy..."
@@ -11,7 +11,17 @@ create_user() {
   python /usr/local/bin/create_galaxy_user.py --user "$GALAXY_DEFAULT_ADMIN_EMAIL" --password "$GALAXY_DEFAULT_ADMIN_PASSWORD" \
   -c "$GALAXY_CONFIG_FILE" --username "$GALAXY_DEFAULT_ADMIN_USER" --key "$GALAXY_DEFAULT_ADMIN_KEY"
   deactivate
-  # only first time run
+}
+
+install_history() {
+  GALAXY_PROXY_PREFIX=$(cat $GALAXY_CONFIG_DIR/GALAXY_PROXY_PREFIX.txt)
+  echo "Waiting for Galaxy..."
+  until [ "$(curl -s -o /dev/null -w '%{http_code}' ${GALAXY_URL:-nginx}$GALAXY_PROXY_PREFIX)" -eq "200" ] && echo Galaxy started; do
+    sleep 0.1;
+  done;
+# only first time a new export directory is found at startup
+  echo "## Installing sample history - fresh export directory found at start"
+  /usr/bin/python3 /usr/bin/install-sample-history.py
 }
 
 # start copy lib/tools. Looks very hacky.
@@ -25,29 +35,34 @@ cp -rf $tools_dir/* $exp_dir
 # First start?? Check if something exists that indicates that environment is not new.. Config file? Something in DB maybe??
 
 echo "Initialization: Check if files already exist, export otherwise."
-
+echo "galaxy config tool path <- $GALAXY_CONFIG_TOOL_PATH
+"
 # Create initial $GALAXY_ROOT in $EXPORT_DIR if not already existent
 mkdir -p "$EXPORT_DIR/$GALAXY_ROOT"
 
-declare -A exports=( ["$GALAXY_STATIC_DIR"]="$EXPORT_DIR/$GALAXY_STATIC_DIR" \
-                     ["$GALAXY_CONFIG_TOOL_PATH"]="$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH" \
-                     ["$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR"]="$EXPORT_DIR/$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR" \
-                     ["$GALAXY_CONFIG_TOOL_DATA_PATH"]="$EXPORT_DIR/$GALAXY_CONFIG_TOOL_DATA_PATH" \
-                     ["$GALAXY_VIRTUAL_ENV"]="$EXPORT_DIR/$GALAXY_VIRTUAL_ENV" )
-NEW="0"
+
+declare -A exports=( ["$GALAXY_STATIC_DIR"]="$EXPORT_DIR$GALAXY_STATIC_DIR" \
+                      ["$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR"]="$EXPORT_DIR$GALAXY_CONFIG_TOOL_DEPENDENCY_DIR" \
+                      ["$GALAXY_CONFIG_TOOL_PATH"]="$EXPORT_DIR$GALAXY_CONFIG_TOOL_PATH" \
+                     ["$GALAXY_CONFIG_TOOL_DATA_PATH"]="$EXPORT_DIR$GALAXY_CONFIG_TOOL_DATA_PATH" \
+                     ["$GALAXY_VIRTUAL_ENV"]="$EXPORT_DIR$GALAXY_VIRTUAL_ENV" )
+
+NEWEXPORT="0"
 # shellcheck disable=SC2143,SC2086,SC2010
 for galaxy_dir in "${!exports[@]}"; do
   exp_dir=${exports[$galaxy_dir]}
   if [ ! -d  $exp_dir ] || [ -z "$(ls -A $exp_dir)" ]; then
-    NEW="1"
-    echo "Exporting $galaxy_dir to $exp_dir"
+    echo "#### Exporting $galaxy_dir to $exp_dir"
     mkdir -p $exp_dir
-    chown "$GALAXY_USER:$GALAXY_USER" $exp_dir
     cp -rpf $galaxy_dir/* $exp_dir
+    chown  "$GALAXY_USER:$GALAXY_USER" $exp_dir
+    NEWEXPORT="1"
+  else
+     echo "#### NOT exporting $galaxy_dir to $exp_dir"
   fi
   rm -rf $galaxy_dir
   ln -v -s $exp_dir $galaxy_dir
-  chown -h "$GALAXY_USER:$GALAXY_USER" $galaxy_dir
+  chown -h -R "$GALAXY_USER:$GALAXY_USER" $galaxy_dir
 done
 
 # Export galaxy_config seperately (special treatment because of plugins-dir)
@@ -71,13 +86,13 @@ ln -v -s "$EXPORT_DIR/$GALAXY_DATABASE_PATH" "$GALAXY_DATABASE_PATH"
 chown -h "$GALAXY_USER:$GALAXY_USER" "$GALAXY_DATABASE_PATH"
 
 
-# Exported tools retained if present
-if [ ! -z "$(ls -A $EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH)" ]; then
-rm -rf "$GALAXY_CONFIG_TOOL_PATH"
-chown "$GALAXY_USER:$GALAXY_USER" "$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH"
-ln -v -s "$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH" "$GALAXY_CONFIG_TOOL_PATH"
-chown -h "$GALAXY_USER:$GALAXY_USER" "$GALAXY_CONFIG_TOOL_PATH"
-fi
+## Exported tools retained if present
+#if [ ! -z "$(ls -A $EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH)" ]; then
+#rm -rf "$GALAXY_CONFIG_TOOL_PATH"
+#chown "$GALAXY_USER:$GALAXY_USER" "$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH"
+#ln -v -s "$EXPORT_DIR/$GALAXY_CONFIG_TOOL_PATH" "$GALAXY_CONFIG_TOOL_PATH"
+#chown -h "$GALAXY_USER:$GALAXY_USER" "$GALAXY_CONFIG_TOOL_PATH"
+#fi
 
 # Try to guess if we are running under --privileged mode
 if mount | grep "/proc/kcore"; then
@@ -111,7 +126,7 @@ done;
 
 if [ "$SKIP_LOCKING" != "true" ]; then
   echo "Waiting for Galaxy configurator to finish and release lock"
-  until [ ! -f "$GALAXY_CONFIG_DIR/configurator.lock" ] && echo Lock released; do
+  until [ ! -f "$GALAXY_CONFIG_DIR/configurator.lock" ] && echo "Lock released"; do
     sleep 0.1;
   done;
 fi
@@ -134,18 +149,11 @@ fi
 if [[ -n $GALAXY_DEFAULT_ADMIN_USER ]]; then
   # Run in background and wait for Galaxy having finished starting up
   create_user &
-fi
-
-if [ $NEW == "1" ] ; then
-# only first time a new export directory is found at startup
-  echo "Installing sample history - fresh export directory found at start"
-  /usr/bin/python3 /usr/bin/install-sample-history.py
-else
-  echo "Skipping sample history - populated export directory found at start"
+   install_history &
 fi
 # Ensure proper permission (the configurator might have changed them "by mistake")
 chown -RL "$GALAXY_USER:$GALAXY_GROUP" "$GALAXY_CONFIG_DIR"
-## /usr/bin/python $GALAXY_ROOT/tools/toolfactory/toolwatcher.py  & ## no longer needed?
+
 echo "Starting Galaxy now.."
 cd "$GALAXY_ROOT" || { echo "Error: Could not change to $GALAXY_ROOT"; exit 1; }
 "$GALAXY_VIRTUAL_ENV/bin/uwsgi" --yaml "$GALAXY_CONFIG_DIR/galaxy.yml" --uid "$GALAXY_UID" --gid "$GALAXY_GID"

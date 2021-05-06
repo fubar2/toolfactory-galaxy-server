@@ -138,7 +138,7 @@ if [ ! -f /base_config.yml ]; then
   touch /base_config.yml
 fi
 
-galaxy_configs=( "job_conf.xml" "datatypes_conf.xml" "galaxy.yml" "job_metrics.xml" "container_resolvers_conf.xml" "GALAXY_PROXY_PREFIX.txt" )
+galaxy_configs=( "tool_conf.xml" "job_conf.xml" "galaxy.yml" "job_metrics.xml" "container_resolvers_conf.xml" "GALAXY_PROXY_PREFIX.txt" )
 
 for conf in "${galaxy_configs[@]}"; do
   echo "Configuring $conf"
@@ -147,18 +147,6 @@ for conf in "${galaxy_configs[@]}"; do
   diff "${GALAXY_CONF_DIR}/$conf" "/tmp/$conf"
   mv -f "/tmp/$conf" "${GALAXY_CONF_DIR}/$conf"
 done
-
-# tools may have been added. Keep old tool_conf.xml if larger than the expanded template
-conf="tool_conf.xml"
-if [ ! -f "${GALAXY_CONF_DIR}/$conf" ]; then
- j2 --customize /customize.py --undefined -o "/tmp/$conf" "/templates/galaxy/$conf.j2" /base_config.yml
- echo "Changes will be applied to $conf as it is missing:"
- mv -f "/tmp/$conf" "${GALAXY_CONF_DIR}/$conf"
-else
- s1=`stat -c %s "/tmp/$conf"`
- s2=`stat -c %s "${GALAXY_CONF_DIR}/$conf"`
- echo "Not replacing existing ${GALAXY_CONF_DIR}/$conf with template $conf.j2 ($s1) - assuming tools have already been added"
-fi
 
 echo "Finished configuring Galaxy"
 echo "Lock for Galaxy config released"
