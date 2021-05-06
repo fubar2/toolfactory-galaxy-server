@@ -19,11 +19,11 @@ galaxy_uwsgi:
 galaxy:
   tool_dependency_dir: /tool_deps
   tool_data_table_config_path: /cvmfs/data.galaxyproject.org/byhand/location/tool_data_table_conf.xml,/cvmfs/data.galaxyproject.org/managed/location/tool_data_table_conf.xml
-  watch_tools: true
   brand: ToolFactory Appliance
   sanitize_all_html: false
   conda_auto_init: True
   conda_auto_install: True
+  watch_tools: auto
 
 pulsar:
   conda_auto_init: True
