@@ -114,6 +114,7 @@ class ToolHandler(PatternMatchingEventHandler):
 
     def planemo_lint(self, tooldir, toolname):
         testrepdir = os.path.join(self.tar_dir, toolname)
+        os.makedirs(testrepdir,exist_ok=True)
         self.lint_path = os.path.join(
             testrepdir, f"{toolname}_planemo_lint.txt"
         )
