@@ -4,22 +4,28 @@ COPY ./files/common_cleanup.sh /usr/bin/common_cleanup.sh
 
 # Install Go (only needed for building singularity)
 ENV GO_VERSION=1.13
-RUN apt update && apt install --no-install-recommends cryptsetup-bin uuid-dev -y \
+RUN apt update && apt install --no-install-recommends cryptsetup-bin uuid-dev build-essential \
+    libssl-dev \
+    libgpgme11-dev \
+    squashfs-tools \
+    libseccomp-dev \
+    wget \
+    pkg-config \
+    git -y \
     && wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
     && tar -C /usr/local -xzvf go${GO_VERSION}.linux-amd64.tar.gz \
     && rm go${GO_VERSION}.linux-amd64.tar.gz \
     && /usr/bin/common_cleanup.sh
 
 ENV PATH=/usr/local/go/bin:${PATH}
-ENV SINGULARITY_VERSION=3.5.3
-RUN wget https://github.com/sylabs/singularity/releases/download/v${SINGULARITY_VERSION}/singularity-${SINGULARITY_VERSION}.tar.gz \
-    && tar -xzf singularity-${SINGULARITY_VERSION}.tar.gz \
-    && cd singularity \
+ENV SINGULARITY_VERSION=3.3.0
+RUN git clone https://github.com/sylabs/singularity.git && \
+    cd singularity && \
+    git checkout v3.3.0 \
     && ./mconfig \
-    && make -C builddir \
+    && make -C builddir && make -C builddir install \
     && /usr/bin/common_cleanup.sh
-
-
+#https://github.com/sylabs/singularity/archive/refs/tags/v3.7.0.tar.gz
 # --- Final image ---
 FROM ubuntu:20.04 as final
 
@@ -37,7 +43,7 @@ RUN apt update \
 # Install Singularity
 COPY --from=build_singularity /singularity /singularity
 RUN apt update && apt install --no-install-recommends make -y \
-    && make -C /singularity/builddir install \
+    && make -C /singularity/builddir && make -C /singularity/builddir install \
     && apt remove make -y \
     && rm -rf /singularity \
     && sed -e '/bind path = \/etc\/localtime/s/^/#/g' -i /usr/local/etc/singularity/singularity.conf \
