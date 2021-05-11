@@ -23,7 +23,7 @@ services:
       - galaxy-configurator
     networks:
       - galaxy
- # The galaxy-configurator is responsible for the whole configuration of
+  # The galaxy-configurator is responsible for the whole configuration of
   # your setup and should be the central place of configuration.
   galaxy-configurator:
     image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-bgruening}/galaxy-configurator:${IMAGE_TAG:-latest}
