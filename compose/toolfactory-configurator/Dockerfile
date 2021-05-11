@@ -20,30 +20,29 @@ ENV GALAXY_USER=galaxy \
     GALAXY_GID=1450 \
     GALAXY_HOME=/home/galaxy \
     GALAXY_ROOT=/galaxy-central \
-    PLANEMO_ROOT=$GALAXY_ROOT/planemo
+    PLANEMO_ROOT=/planemo
 
 RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && useradd -u $GALAXY_UID -r -g $GALAXY_USER -d $GALAXY_HOME -c "Galaxy user" --shell /bin/bash $GALAXY_USER \
     && mkdir -p $GALAXY_HOME \
     && mkdir -p $PLANEMO_ROOT \
-    && apt update && apt install python3 git python3-pip python3-wheel python3-venv git nano curl sudo -y \
+    && apt update && apt install python3 git python3-pip python3-wheel python3-venv git nano curl sudo openssh-server -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT" \
     && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
 
 
-
+#COPY ./files/container_resolvers_conf.xml /config/
+#COPY ./files/dependency_resolvers_conf.xml /config/
 #COPY ./files/Singularity.def /Singularity.def
 COPY ./files/toolfactory /tools/toolfactory
 COPY ./files/planemo_test /tools/planemo_test
 COPY ./files/tacrev /tools/tacrev
 COPY ./files/install-history.py /config/
 COPY ./files/datatypes_conf.xml /config/
-#COPY ./files/container_resolvers_conf.xml /config/
-#COPY ./files/dependency_resolvers_conf.xml /config/
 COPY ./files/tool_conf.xml /config/
 COPY ./files/toolfactory/welcome.html /welcome.html
-# for galaxy container
+# for planemo galaxy container
 COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/
 
 
@@ -51,7 +50,7 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 && python3 -m venv /venv \
 && . /venv/bin/activate \
 && pip3 install -U pip \
-&& pip3 install planemo bioblend ephemeris parsec requests wheel watchdog \
+&& pip3 install planemo bioblend ephemeris parsec requests wheel watchdog fabric \
 && mkdir -p /export/galaxy/config \
 && touch /export/galaxy/config/reload_uwsgi.touchme \
 && export HOME="$PLANEMO_ROOT" \
@@ -64,7 +63,5 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 
 COPY ./start.sh /usr/local/bin/start_tf_config.sh
 COPY ./files/toolwatcher.py /usr/local/bin/toolwatcher.py
-#COPY ./files/job_conf.xml /config/
-# add volumes for singularity to allow naughty things
 
 ENTRYPOINT /usr/local/bin/start_tf_config.sh

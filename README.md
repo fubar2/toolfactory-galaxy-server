@@ -1,6 +1,6 @@
-#Galaxy ToolFactory appliance
+# Galaxy ToolFactory Appliance
 
-##Use this for the GTN ToolFactory developer's tutorial.
+## Use this for the GTN ToolFactory developer's tutorial.
 
 The docker-compose infrastructure used here was copied wholesale from https://github.com/bgruening/docker-galaxy-stable - the excellent documentation at
 that site is not repeated here. Respect. A few minor pointers only are provided below - please refer to the original documentation for details.

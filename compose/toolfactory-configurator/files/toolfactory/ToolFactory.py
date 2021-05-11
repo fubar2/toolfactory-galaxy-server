@@ -11,7 +11,7 @@
 # as part of GTN tutorial development and biocontainer adoption
 # The tester runs planemo on a non-tested archive, creates the test outputs
 # and returns a new proper tool with test.
-# The tester was generated from the ToolFactory_tester.py script
+
 
 
 import argparse
@@ -230,9 +230,9 @@ class Tool_Factory:
             self.args.tool_desc,
             FAKEEXE,
         )
-        self.newtarpath = "%s_not_tested.toolshed.gz" % self.tool_name
         self.tooloutdir = "./tfout"
         self.repdir = "./toolgen"
+        self.newtarpath = os.path.join(self.tooloutdir, "%s_not_tested.toolshed.gz" % self.tool_name)
         self.testdir = os.path.join(self.tooloutdir, "test-data")
         if not os.path.exists(self.tooloutdir):
             os.mkdir(self.tooloutdir)
@@ -821,10 +821,12 @@ class Tool_Factory:
             fixed = "%s\n%s\n%s" % (part1, "\n".join(self.test_override), part2)
             exml = fixed
         # exml = exml.replace('range="1:"', 'range="1000:"')
-        xf = open("%s.xml" % self.tool_name, "w")
-        xf.write(exml)
-        xf.write("\n")
-        xf.close()
+        with open("%s.xml" % self.tool_name, "w") as xf:
+            xf.write(exml)
+            xf.write("\n")
+        with open(self.args.untested_tool_out, 'w') as outf:
+            outf.write(exml)
+            outf.write('\n')
         # ready for the tarball
 
     def writeShedyml(self):
@@ -897,23 +899,6 @@ class Tool_Factory:
             filter=exclude_function,
         )
         tf.close()
-        dest = self.args.untested_tool_out
-        shutil.copyfile(self.newtarpath, dest)
-
-    def moveRunOutputs(self):
-        """need to move planemo or run outputs into toolfactory collection"""
-        with os.scandir(self.tooloutdir) as outs:
-            for entry in outs:
-                if not entry.is_file() or entry.name == ".shed.yml":
-                    continue
-                fname, ext = os.path.splitext(entry.name)
-                if ext:
-                    newname = f"{entry.name.replace('.','_')}{ext}"
-                else:
-                    newname = f"{entry.name.replace('.','_')}.txt"
-                dest = os.path.join(self.repdir, newname)
-                src = os.path.join(self.tooloutdir, entry.name)
-                shutil.copyfile(src, dest)
 
 
 def main():
@@ -973,7 +958,6 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.writeShedyml()
     r.makeTool()
     r.makeToolTar()
-    r.moveRunOutputs()
     TCU = Tool_Conf_Updater(
         args=args,
         local_tool_dir=args.local_tools,

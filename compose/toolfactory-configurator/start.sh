@@ -1,7 +1,7 @@
 #!/bin/bash
 # seem to need a delay here
 # needs changes to base_config.yml to enable master and touch-reload on uwsgi and watchdog: auto for galaxy
-/usr/bin/sleep 30s
+/usr/bin/sleep 50s
 echo "slept well.."
 DONEONCE="0"
 if [ -f "/export/galaxy/tools/toolfactory/ToolFactory.xml" ]; then
@@ -18,11 +18,11 @@ else
   sudo -H -u galaxy bash -c 'cp /welcome.html /export/galaxy/static/welcome.html'
   sudo -H -u galaxy bash -c '. /export/galaxy/.venv/bin/activate ; python3 -m pip install -U pip; python3 -m pip install watchdog ; deactivate'
   echo "#### PLEASE STAND BY - waiting before restarting Galaxy. Should be inactive!"
-  /usr/bin/sleep 10s
+  /usr/bin/sleep 5s
   echo "#### Restarting Galaxy."
   touch /export/galaxy/config/reload_uwsgi.touchme
   chown galaxy:galaxy /export/galaxy/config/reload_uwsgi.touchme
-  /usr/bin/sleep 10s
+  /usr/bin/sleep 20s
   echo "configurator is installing the demonstration history"
   sudo -H -u galaxy bash -c '. /venv/bin/activate ; python3 /config/install-history.py ; deactivate'
   mkdir /export/galaxy/tested_TF_tools
