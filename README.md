@@ -1,5 +1,6 @@
 #Galaxy ToolFactory appliance
-##Ideal the GTN ToolFactory developer's tutorial.
+
+##Use this for the GTN ToolFactory developer's tutorial.
 
 The docker-compose infrastructure used here was copied wholesale from https://github.com/bgruening/docker-galaxy-stable - the excellent documentation at
 that site is not repeated here. Respect. A few minor pointers only are provided below - please refer to the original documentation for details.
@@ -12,6 +13,7 @@ report and updated archive to the user's current history magically
 3.    A warning that it would be extraordinarily unwise to ever expose this appliance anywhere on the public internet. Please, just don't.
 
 ## WARNING!
+
 **This appliance has been configured to "work around" some of Galaxy's normally very strict job runner isolation features**
 
 Running it on any server accessible from the public internet and potential miscreants is strongly discouraged as a result.
@@ -26,7 +28,7 @@ Something like this should get it started
 git clone https://github.com/fubar2/toolfactory-galaxy-server
 cd toolfactory-galaxy-server/compose
 docker-compose pull
-docker-compose up -d
+docker-compose up
 ```
 
 Your appliance should be running with a local Galaxy on localhost:8080 after a fair bit of activity.
