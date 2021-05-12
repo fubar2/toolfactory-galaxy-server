@@ -1,6 +1,7 @@
 #!/bin/bash
 # seem to need a delay here
 # needs changes to base_config.yml to enable master and touch-reload on uwsgi and watchdog: auto for galaxy
+# http://192.168.1.9:8080/api/histories returns nothing until the server is good to go
 /usr/bin/sleep 50s
 echo "slept well.."
 DONEONCE="0"
