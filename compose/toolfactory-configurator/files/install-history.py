@@ -4,6 +4,7 @@
 import argparse
 import os
 import requests
+import subprocess
 import time
 
 from bioblend import galaxy
@@ -15,9 +16,8 @@ def _parser():
     parser.add_argument("-k", "--key", help='Galaxy admin key', default="fakekey")
     parser.add_argument("-e", "--email", help='admin email of target galaxy', default="admin@galaxy.org")
     parser.add_argument("-p", "--password", help='Galaxy admin password', default="password")
-    parser.add_argument("-i", "--history_path", help='Path to history gz files to be loaded', default="/export/galaxy/tools/toolfactory/TF_demo_history_May4.tar.gz")
-    #parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=["rgtf2","planemo_test"], action="append")
-    parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=[], action="append")
+    parser.add_argument("-i", "--history_path", help='Path to history gz files to be loaded', default="/export/galaxy/tools/toolfactory/TF_demo_history_May_12.tar.gz")
+    parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=["rgtf2","planemo_test"], action="append")
     return parser
 
 import requests
@@ -50,7 +50,6 @@ def main():
     for tfid in args.toolid:
         x = gi.tools.install_dependencies(tfid)
         print('installed', tfid, 'dependencies, res=',x)
-
 
 if __name__ == "__main__":
     main()

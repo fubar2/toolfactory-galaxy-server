@@ -2,9 +2,11 @@
 
 import logging
 import os
+from queue import Queue
 import subprocess
 import shutil
 import tarfile
+import threading
 import time
 
 from bioblend import galaxy
@@ -38,7 +40,38 @@ class ToolHandler(PatternMatchingEventHandler):
         logging.info('Starting watchdog toolhandler in %s' % self.galaxy_root)
         if not os.path.exists(self.tar_dir):
             os.mkdir(self.tar_dir)
+        self.testq_lock = threading.Lock()
+        self.testq = Queue()
+        # single thread just to prevent planemo overload
+        threading.Thread(target=self.worker, daemon=True).start()
+        # classify as a daemon, so they will die when the main dies
 
+
+
+    def worker(self):
+        while True:
+            (tooldir, toolname) = self.testq.get()
+            with self.testq_lock:
+                testrepdir = os.path.join(self.tar_dir, toolname)
+                xml_path = os.path.join(testrepdir, f"{toolname}.xml")
+                tool_test_output = os.path.join(self.tar_dir, toolname, f"{toolname}_planemo_test_report.html")
+                lintpath = os.path.join(self.tar_dir, toolname, f"{toolname}_planemo_lint.txt")
+                os.makedirs(self.testrepdir, exist_ok=True)
+                logging.info("Starting queued test for tool %s" % toolname)
+                p = self.planemo_lint(tooldir, toolname, lintpath)
+                p = self.planemo_test(tooldir, toolname, tool_test_output)
+                if p.returncode == 0:
+                    newtarpath = self.makeToolTar(tooldir, toolname)
+                    self.create_history_result(newtarpath=newtarpath,tool_test_output=tool_test_output,
+                         lint_path=lint_path, xml_path=xml_path, toolname=toolname)
+                    logging.info("### Tested toolshed tarball %s written" % newtarpath)
+                else:
+                    logging.debug("### planemo stdout:")
+                    logging.debug(p.stdout)
+                    logging.debug("### planemo stderr:")
+                    logging.debug(p.stderr)
+                    logging.info("### Planemo call return code = %d" % p.returncode)
+                self.testq.task_done()
 
     def on_any_event(self, event):
         # rsync and watchdog work strangely
@@ -67,38 +100,22 @@ class ToolHandler(PatternMatchingEventHandler):
                     % (toolname, event.src_path)
                 )
                 return
-            self.xml_path = os.path.join(tooldir,xmls[0])
-            p = self.planemo_lint(tooldir, toolname)
-            p = self.planemo_test(tooldir, toolname)
-            if p:
-                if p.returncode == 0:
-                    newtarpath = self.makeToolTar(tooldir, toolname)
-                    self.create_history_result(newtarpath=newtarpath,tool_test_output=self.tool_test_output,
-                    lint_path=self.lint_path, xml_path=self.xml_path, toolname=toolname)
-                    logging.info("### Tested toolshed tarball %s written" % newtarpath)
-                else:
-                    logging.debug("### planemo stdout:")
-                    logging.debug(p.stdout)
-                    logging.debug("### planemo stderr:")
-                    logging.debug(p.stderr)
-                    logging.info("### Planemo call return code = %d" % p.returncode)
+            logging.info('### Putting (%s, %s) in the queue for testing' % (tooldir, toolname))
+            task = (tooldir, toolname)
+            self.testq.put_nowait(task)
         else:
             logging.info("Event %s on %s ignored" % (event.event_type, event.src_path))
 
-    def planemo_test(self, tooldir, toolname):
-        testrepdir = os.path.join(self.tar_dir, toolname)
-        self.tool_test_output = os.path.join(
-            testrepdir, f"{toolname}_planemo_test_report.html"
-        )
+    def planemo_test(self, tooldir, toolname, tool_test_output):
         cll = [
-            "planemo",
+            "/venv/bin/planemo",
             "test",
             "--conda_prefix",
             self.CONDA_PREFIX,
             "--galaxy_root",
             self.GALAXY_ROOT,
             "--test_output",
-            self.tool_test_output,
+            tool_test_output,
             "--update_test_data",
             os.path.join(tooldir, "%s.xml" % toolname),
         ]
@@ -112,28 +129,21 @@ class ToolHandler(PatternMatchingEventHandler):
         )
         return p
 
-    def planemo_lint(self, tooldir, toolname):
-        testrepdir = os.path.join(self.tar_dir, toolname)
-        os.makedirs(testrepdir,exist_ok=True)
-        self.lint_path = os.path.join(
-            testrepdir, f"{toolname}_planemo_lint.txt"
-        )
-
+    def planemo_lint(self, tooldir, toolname, lintrep):
         cll = [
-            "planemo",
+            "/venv/bin/planemo",
             "lint",
             os.path.join(tooldir, "%s.xml" % toolname),
         ]
         logging.info("### calling %s" % " ".join(cll))
-        lintrep = open(self.lint_path, 'w')
-        p = subprocess.run(
-            cll,
-            cwd=self.workdir,
-            shell=False,
-            stdout=lintrep,
-            stderr=lintrep
-        )
-        lintrep.close()
+        with open(lintrep, 'w') as lintout
+            p = subprocess.run(
+                cll,
+                cwd=self.workdir,
+                shell=False,
+                stdout=lintout,
+                stderr=lintout
+            )
         return p
 
 

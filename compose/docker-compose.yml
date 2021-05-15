@@ -51,9 +51,11 @@ services:
   toolfactory-configurator:
     image: quay.io/fubar2/toolfactory-configurator:latest
     build: toolfactory-configurator
+    privileged: True
     environment:
       - EXPORT_DIR=${EXPORT_DIR:-./export}
       - GALAXY_CONFIG_ADMIN_USERS=admin@galaxy.org
+    hostname: planemo-server
     depends_on:
       - galaxy-server
       - nginx

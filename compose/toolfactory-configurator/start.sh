@@ -28,11 +28,13 @@ else
   sudo -H -u galaxy bash -c '. /venv/bin/activate ; python3 /config/install-history.py ; deactivate'
   mkdir /export/galaxy/tested_TF_tools
   chown galaxy:galaxy /export/galaxy/tested_TF_tools
+  mkdir /export/galaxy/tested_TF_reports
+  chown galaxy:galaxy /export/galaxy/tested_TF_reports
 fi
 # run toolwatcher watchdog to trigger planemo tests when requested by toolfactory
 touch /export/galaxy/toolwatcher.log
 chown galaxy:galaxy /export/galaxy/toolwatcher.log
-cd /export/galaxy ; sudo -H -u galaxy bash -c ". /venv/bin/activate ; python3 /usr/local/bin/toolwatcher.py"
+cd /export/galaxy ; bash -c ". /venv/bin/activate ; python3 /usr/local/bin/planemo_rpyc.py"
 echo "## All done. Please login and enjoy your ToolFactory Appliance"
 while [ 1 ]
 do

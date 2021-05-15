@@ -1,0 +1,197 @@
+<tool name="planemo_test" id="planemo_test" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 04/05/2021 03:41:57 using the Galaxy Tool Factory.-->
+  <description>Planemo test/update a toolshed archive</description>
+  <requirements>
+    <requirement type="package">rpyc</requirement>
+    <requirement type="package">rsync</requirement>
+    <requirement type="package">lxml</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[python
+$runme
+$ToolFactory_toolshed_XML_from_the_history_to_test
+$new_tested_toolshed_archive]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+### script for ToolFactory toolshed archive test tool
+
+import lxml.etree as ET
+
+import os
+import rpyc
+import shutil
+import subprocess
+import sys
+import tarfile
+import time
+
+def run_rsync(srcf, dstf):
+    src = os.path.abspath(srcf)
+    dst = os.path.abspath(dstf)
+    if os.path.isdir(src):
+        cll = ["rsync", "-r", src, dst]
+    else:
+        cll = ["rsync", src, dst]
+    subprocess.run(
+        cll,
+        capture_output=False,
+        encoding="utf8",
+        shell=False,
+    )
+
+def main():
+    assert len(sys.argv) >= 3, 'Must have input xml and output archive paths on command line'
+    xmlin = sys.argv[1]
+    arcout = sys.argv[2]
+    conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
+    tree = ET.parse(xmlin)
+    root = tree.getroot()
+    toolname = root.get('id')
+    os.mkdir('testout') # for collection
+    pwork = os.path.join("/export", "galaxy", "tested_TF_archives")
+    ptooldir =  os.path.join(pwork,toolname)
+    pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
+    prepdir = os.path.join(pworkrep, toolname)
+    galtooldir = os.path.join('/export/galaxy/tools', toolname)
+    for maked in [prepdir, ptooldir]:
+        if not os.path.isdir(maked):
+            res = conn.root.run_cmd(f"mkdir -p {maked}")
+    res = conn.root.run_cmd(f"cp -r {galtooldir} {pwork}/")
+    toolxml = os.path.join(ptooldir, '%s.xml' % toolname)
+    res = conn.root.run_cmd("planemo lint %s" % toolxml)
+    if res:
+        with open(os.path.join('testout', '%s_planemo_lint_report.txt' % toolname), 'w') as lint:
+            lint.write(res)
+            lint.write('\nEnd report\n')
+    planemo_rep = os.path.join(prepdir, "%s_planemo_test_report.html" % toolname)
+    planemo_log = os.path.join('testout', "%s_planemo_test_log.txt" % toolname)
+    res = conn.root.run_cmd("planemo test --galaxy_root /galaxy-central --docker --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_rep, toolxml))
+    if not res:
+        res="no response...."
+    else:
+        with open(planemo_log, 'w') as replog:
+            replog.write(res)
+    res = conn.root.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/")
+    shutil.copy(planemo_rep, 'testout')
+    run_rsync(prepdir, 'testout')
+    res = conn.root.run_cmd(f"tar -cvz -f {prepdir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
+    res = conn.root.run_cmd(f"cp {prepdir}/{toolname}_tested.toolshed.gz {ptooldir}/{toolname}_tested.toolshed.gz")
+    run_rsync(f"{prepdir}/{toolname}_tested.toolshed.gz", ".")
+    shutil.copy(f"{toolname}_tested.toolshed.gz", arcout)
+    res = conn.root.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir} 'testout'")
+
+
+main()
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="ToolFactory_toolshed_XML_from_the_history_to_test" type="data" optional="false" label="ToolFactory toolshed XML from the history to test"
+    help="" format="xml" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="new_tested_toolshed_archive" format="toolshed.gz" label="${ToolFactory_toolshed_XML_from_the_history_to_test.name}_tested.toolshed.gz" hidden="false"/>
+    <collection name="testout" type="list" label="${ToolFactory_toolshed_XML_from_the_history_to_test.name} Planemo Test Reports">
+      <discover_datasets pattern="__name_and_ext__" directory="testout" visible="false" />
+    </collection>
+  </outputs>
+  <tests>
+    <test>
+      <output name="new_tested_toolshed_archive" value="new_tested_toolshed_archive_sample" compare="sim_size" delta_frac="0.2"/>
+      <param name="ToolFactory_toolshed_XML_from_the_history_to_test" value="ToolFactory_toolshed_XML_from_the_history_to_test_sample"/>
+      <output_collection name="testout"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Runs planemo test and returns a toolshed archive updated with test outputs and a Planemo test result.
+
+Dogfood demonstration - this tool was generated with the ToolFactory - labels were adjusted to include names.
+A sample of what's possible
+
+
+------
+
+
+Script::
+
+    ### script for ToolFactory toolshed archive test tool
+
+    import lxml.etree as ET
+
+    import os
+    import rpyc
+    import shutil
+    import subprocess
+    import sys
+    import tarfile
+    import time
+
+    def run_rsync(srcf, dstf):
+        src = os.path.abspath(srcf)
+        dst = os.path.abspath(dstf)
+        if os.path.isdir(src):
+            cll = ["rsync", "-r", src, dst]
+        else:
+            cll = ["rsync", src, dst]
+        subprocess.run(
+            cll,
+            capture_output=False,
+            encoding="utf8",
+            shell=False,
+        )
+
+    def main():
+        assert len(sys.argv) >= 3, 'Must have input xml and output archive paths on command line'
+        xmlin = sys.argv[1]
+        arcout = sys.argv[2]
+        conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
+        tree = ET.parse(xmlin)
+        root = tree.getroot()
+        toolname = root.get('id')
+        os.mkdir('testout') # for collection
+        pwork = os.path.join("/export", "galaxy", "tested_TF_archives")
+        ptooldir =  os.path.join(pwork,toolname)
+        pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
+        prepdir = os.path.join(pworkrep, toolname)
+        galtooldir = os.path.join('/export/galaxy/tools', toolname)
+        for maked in [prepdir, ptooldir]:
+            if not os.path.isdir(maked):
+                res = conn.root.run_cmd(f"mkdir -p {maked}")
+        res = conn.root.run_cmd(f"cp -r {galtooldir} {pwork}/")
+        toolxml = os.path.join(ptooldir, '%s.xml' % toolname)
+        res = conn.root.run_cmd("planemo lint %s" % toolxml)
+        if res:
+            with open(os.path.join('testout', '%s_planemo_lint_report.txt' % toolname), 'w') as lint:
+                lint.write(res)
+                lint.write('\nEnd report\n')
+        planemo_rep = os.path.join(prepdir, "%s_planemo_test_report.html" % toolname)
+        planemo_log = os.path.join('testout', "%s_planemo_test_log.txt" % toolname)
+        res = conn.root.run_cmd("planemo test --galaxy_root /galaxy-central --docker --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_rep, toolxml))
+        if not res:
+            res="no response...."
+        else:
+            with open(planemo_log, 'w') as replog:
+                replog.write(res)
+        res = conn.root.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/")
+        shutil.copy(planemo_rep, 'testout')
+        run_rsync(prepdir, 'testout')
+        res = conn.root.run_cmd(f"tar -cvz -f {prepdir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
+        res = conn.root.run_cmd(f"cp {prepdir}/{toolname}_tested.toolshed.gz {ptooldir}/{toolname}_tested.toolshed.gz")
+        run_rsync(f"{prepdir}/{toolname}_tested.toolshed.gz", ".")
+        shutil.copy(f"{toolname}_tested.toolshed.gz", arcout)
+        res = conn.root.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir} 'testout'")
+
+
+    main()
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

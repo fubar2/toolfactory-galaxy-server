@@ -1,9 +1,6 @@
 # Galaxy ToolFactory Appliance
 
-## Use this for the GTN ToolFactory developer's tutorial.
-
-The docker-compose infrastructure used here was copied wholesale from https://github.com/bgruening/docker-galaxy-stable - the excellent documentation at
-that site is not repeated here. Respect. A few minor pointers only are provided below - please refer to the original documentation for details.
+## Tutorials are currently at [GTN ToolFactory developer's tutorial](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html).
 
 This appliance takes a basic Galaxy server configuration and creates a ToolFactory appliance in Docker by adding:
 
@@ -12,13 +9,19 @@ This appliance takes a basic Galaxy server configuration and creates a ToolFacto
 report and updated archive to the user's current history magically
 3.    A warning that it would be extraordinarily unwise to ever expose this appliance anywhere on the public internet. Please, just don't.
 
+## Depends upon
+
+This is a flavour of the docker-compose infrastructure copied from https://github.com/bgruening/docker-galaxy-stable - there is excellent documentation at
+that site. Respect. A few minor pointers only are provided below - please refer to the original documentation for details about this extensive infrastructure for Galaxy flavours.
+
+
 ## WARNING!
 
 **This appliance has been configured to "work around" some of Galaxy's normally very strict job runner isolation features**
 
-Running it on any server accessible from the public internet and potential miscreants is strongly discouraged as a result.
-It is safe to run on a laptop or desktop and runs as a set of Docker containers.
-ToolFactory and other related source code is included in this repository for the curious or the dubious.
+Users are strongly discouraged from running it on any server accessible from the public internet and potential miscreants.
+It is safe to run on a sanely secured laptop or desktop. It runs as a set of Docker containers so secured to that extent from the
+host system. ToolFactory and other related source code is included in this repository for the curious or the dubious.
 
 ## Installation and startup
 
@@ -31,11 +34,15 @@ docker-compose pull
 docker-compose up
 ```
 
-Your appliance should be running with a local Galaxy on localhost:8080 after a fair bit of activity.
+ - Your appliance should be running with a local Galaxy on localhost:8080 after a fair bit of activity.
+ - Watch the logs. They are very instructive and informative for those who need to understand how Galaxy actually works.
 
-Out of the box login is 'admin@galaxy.org' and the password is 'password'
-This is obviously insecure but convenient and easily changed at first login.
-Or more permanently in the docker-compose.yml if you prefer.
+- Out of the box login is `admin@galaxy.org` and the password is `password`
+- This is obviously insecure but convenient and easily changed at first login.
+- Change it more permanently in docker-compose.yml if you intend to use this Appliance for your own work.
+  - Please also change the admin_key from the default`fakekey` to something less well known
+  - The API key is the administrative key for the appliance Galaxy so if you are exposed on any large network, you are
+exposed to easy API based remote mischief until it is changed.
 
 The container `/export` directory is mounted locally at `compose/export` .
 

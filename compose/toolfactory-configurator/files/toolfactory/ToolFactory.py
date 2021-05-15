@@ -16,6 +16,7 @@
 
 import argparse
 import copy
+import fcntl
 import json
 import os
 import re
@@ -69,6 +70,21 @@ def parse_citations(citations_text):
             citation_tuples.append(("bibtex", citation[len("bibtex") :].strip()))
     return citation_tuples
 
+class Locker:
+    def __enter__ (self):
+        lockfile = "/tmp/.toolfactory_lockfile.lck"
+        if not os.path.exists(lockfile):
+            try:
+                os.utime(lockfile, None)
+            except OSError:
+                open(lockfile, 'a').close()
+        self.fp = open(lockfile)
+        fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX)
+
+    def __exit__ (self, _type, value, tb):
+        fcntl.flock(self.fp.fileno(), fcntl.LOCK_UN)
+        self.fp.close()
+
 
 class Tool_Conf_Updater:
 
@@ -76,6 +92,7 @@ class Tool_Conf_Updater:
     # requires highly insecure docker settings - like write to tool_conf.xml and to tools !
     # if in a container possibly not so courageous.
     # Fine on your own laptop but security red flag for most production instances
+    Note potential race condition for tool_conf.xml update - uses a file lock.
     """
 
     def __init__(
@@ -93,7 +110,8 @@ class Tool_Conf_Updater:
         tff.extractall()
         tff.close()
         self.run_rsync(ourdir, self.tool_dir)
-        self.update_toolconf(ourdir, ourxml)
+        with Locker():
+            self.update_toolconf(ourdir, ourxml)
         if self.args.run_test:
             watchflag = os.path.join(self.tool_dir, ourdir, ".testme")
             wuj = ".wuj"
@@ -101,6 +119,7 @@ class Tool_Conf_Updater:
             foo.write("Wake up Jeff!!!")
             foo.close()
             self.run_rsync(wuj, watchflag)
+
 
     def run_rsync(self, srcf, dstf):
         src = os.path.abspath(srcf)
