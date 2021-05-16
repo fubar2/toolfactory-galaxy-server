@@ -27,7 +27,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && mkdir -p $GALAXY_HOME \
     && mkdir -p $PLANEMO_ROOT \
     && mkdir -p $PLANEMO_ROOT/work \
-    && apt update && apt install python3 git python3-pip python3-wheel python3-venv git nano curl sudo -y \
+    && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT" \
     && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
@@ -41,7 +41,7 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 && python3 -m venv /venv \
 && . /venv/bin/activate \
 && pip3 install -U pip \
-&& pip3 install planemo bioblend ephemeris parsec requests wheel rpyc requests \
+&& pip3 install planemo bioblend ephemeris parsec requests wheel rpyc \
 && mkdir -p /export/galaxy/config \
 && touch /export/galaxy/config/reload_uwsgi.touchme \
 && export HOME="$PLANEMO_ROOT" \

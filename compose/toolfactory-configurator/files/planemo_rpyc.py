@@ -23,7 +23,10 @@ class cmd_service(Service):
             sp = subprocess.run(
                cl, shell=False, cwd="/planemo", capture_output=True, encoding="utf-8")
             outs = sp.stdout + sp.stderr
-            logging.info('retcode %d; cmd=%s' % (sp.returncode, cl))
+            if sp.returncode == 0:
+                logging.info('retcode %d; cmd=%s' % (sp.returncode, cl))
+            else:
+                logging.info('### retcode %d NOT zero; cmd=%s; returned %s' % (sp.returncode, cl, outs))
             return(outs)
 
 
@@ -31,7 +34,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logging.basicConfig(level='INFO')
     t = ThreadPoolServer(cmd_service, port=9999, logger=logger, nbThreads=1)
-    # single thread experiment to see if planemo/conda behave better - yes they do.
+    # single thread experiment to see if planemo/conda behave better - seems so. many condas spoil the conga - it seems to do bad things
     t.start()
 
 

@@ -17,7 +17,7 @@ def _parser():
     parser.add_argument("-e", "--email", help='admin email of target galaxy', default="admin@galaxy.org")
     parser.add_argument("-p", "--password", help='Galaxy admin password', default="password")
     parser.add_argument("-i", "--history_path", action="append", help='Paths to history gz files to be loaded',
-       default=[ "/export/galaxy/tools/toolfactory/TF_demo_history_May_12.tar.gz", "/export/galaxy/tools/toolfactory/TF-Demo-data-May-16.tar.gz"])
+       default=[ "/export/galaxy/tools/toolfactory/TF-Demo-data-May-16.tar.gz", "/export/galaxy/tools/toolfactory/TF_demo_history_May_12.tar.gz"])
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=["rgtf2","planemo_lint"], action="append")
     return parser
 
