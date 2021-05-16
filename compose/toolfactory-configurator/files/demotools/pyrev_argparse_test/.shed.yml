@@ -1,0 +1,6 @@
+category: TF Generated Tools
+description: ToolFactory demonstration python script with argparse parameters
+name: pyrev_argparse_test
+owner: admin
+synopsis: ToolFactory demonstration python script with argparse parameters
+type: unrestricted

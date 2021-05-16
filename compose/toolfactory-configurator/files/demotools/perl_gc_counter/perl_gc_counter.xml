@@ -1,0 +1,99 @@
+<tool name="perl_gc_counter" id="perl_gc_counter" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:13 using the Galaxy Tool Factory.-->
+  <description>Perl script demonstration</description>
+  <requirements>
+    <requirement type="package">perl</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[perl
+$runme
+$Input_fasta_for_GC_estimate
+$perl_gc_output]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+#!/usr/bin/perl -w
+
+# usage : perl toolExample.pl <FASTA file> <output file>
+
+open (IN, "<$ARGV[0]");
+open (OUT, ">$ARGV[1]");
+while (<IN>) {
+    chop;
+    if (m/^>/) {
+        s/^>//;
+        if ($. > 1) {
+            print OUT sprintf("%.3f", $gc/$length) . "\n";
+        }
+        $gc = 0;
+        $length = 0;
+    } else {
+        ++$gc while m/[gc]/ig;
+        $length += length $_;
+    }
+}
+print OUT sprintf("%.3f", $gc/$length) . "\n";
+close( IN );
+close( OUT );
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="Input_fasta_for_GC_estimate" type="data" optional="false" label="Input fasta for GC estimate" help="" format="fasta" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="perl_gc_output" format="txt" label="perl_gc_output" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="perl_gc_output" value="perl_gc_output_sample" compare="diff" lines_diff="0"/>
+      <param name="Input_fasta_for_GC_estimate" value="Input_fasta_for_GC_estimate_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Perl is also possible.
+
+It is also hard to maintain but we are a welcoming community so have it your way if you must.
+
+ 
+
+------
+
+
+Script::
+
+    #!/usr/bin/perl -w
+    # usage : perl toolExample.pl <FASTA file> <output file>
+    open (IN, "<$ARGV[0]");
+    open (OUT, ">$ARGV[1]");
+    while (<IN>) {
+        chop;
+        if (m/^>/) {
+            s/^>//;
+            if ($. > 1) {
+                print OUT sprintf("%.3f", $gc/$length) . "\n";
+            }
+            $gc = 0;
+            $length = 0;
+        } else {
+            ++$gc while m/[gc]/ig;
+            $length += length $_;
+        }
+    }
+    print OUT sprintf("%.3f", $gc/$length) . "\n";
+    close( IN );
+    close( OUT );
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

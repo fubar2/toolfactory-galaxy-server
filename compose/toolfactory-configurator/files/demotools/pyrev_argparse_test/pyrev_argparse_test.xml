@@ -1,0 +1,91 @@
+<tool name="pyrev_argparse_test" id="pyrev_argparse_test" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:18 using the Galaxy Tool Factory.-->
+  <description>ToolFactory demonstration python script with argparse parameters</description>
+  <requirements/>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[python
+$runme
+--infile
+$infile
+--pyrevargparse_outfile
+$pyrevargparse_outfile]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+# reverse order of text by row
+import argparse
+parser = argparse.ArgumentParser()
+a = parser.add_argument
+a('--infile',default='')
+a('--pyrevargparse_outfile',default=None)
+args = parser.parse_args()
+inp = args.infile
+outp = args.pyrevargparse_outfile
+i = open(inp,'r').readlines()
+o = open(outp,'w')
+for row in i:
+  rs = row.rstrip()
+  rs = list(rs)
+  rs.reverse()
+  o.write(''.join(rs))
+  o.write('\n')
+o.close()
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="infile" type="data" optional="false" label="input file to be reversed" help="" format="txt" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="pyrevargparse_outfile" format="txt" label="pyrevargparse_outfile" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="pyrevargparse_outfile" value="pyrevargparse_outfile_sample" compare="diff" lines_diff="0"/>
+      <param name="infile" value="infile_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Demonstrates argparse - script must correctly parse the names given on the form for this to work.
+
+Argparse argument names your script should expect are constructed according to the parameter type - please read the tool form carefully.
+
+ 
+
+------
+
+
+Script::
+
+    # reverse order of text by row
+    import argparse
+    parser = argparse.ArgumentParser()
+    a = parser.add_argument
+    a('--infile',default='')
+    a('--pyrevargparse_outfile',default=None)
+    args = parser.parse_args()
+    inp = args.infile
+    outp = args.pyrevargparse_outfile
+    i = open(inp,'r').readlines()
+    o = open(outp,'w')
+    for row in i:
+      rs = row.rstrip()
+      rs = list(rs)
+      rs.reverse()
+      o.write(''.join(rs))
+      o.write('\n')
+    o.close()
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

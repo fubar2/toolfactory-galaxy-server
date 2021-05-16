@@ -1,0 +1,2 @@
+#!sbcl --script
+(write-line "Hello, ToolFactory does Lisp!")

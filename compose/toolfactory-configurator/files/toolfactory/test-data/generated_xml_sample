@@ -1,0 +1,53 @@
+<tool name="pyrevpos" id="pyrevpos" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by test@bx.psu.edu at 11/05/2021 18:27:13 using the Galaxy Tool Factory.-->
+  <description>positional reverse</description>
+  <requirements>
+    <requirement type="package">python</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[python
+$runme
+$input
+$output2]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+import sys; inp = sys.argv[1]; outp = sys.argv[2]; inlist = open(inp,'r').readlines(); o = open(outp,'w'); rs = [''.join(list(reversed(x.rstrip()))) for x in inlist]; o.write('\n'.join(rs)); o.close()
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="input" type="data" optional="false" label="input" help="help" format="txt" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="output2" format="txt" label="output2" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="output2" value="output2_sample" compare="diff" lines_diff="0"/>
+      <param name="input" value="input_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+help text goes here
+
+ 
+
+------
+
+
+Script::
+
+    import sys; inp = sys.argv[1]; outp = sys.argv[2]; inlist = open(inp,'r').readlines(); o = open(outp,'w'); rs = [''.join(list(reversed(x.rstrip()))) for x in inlist]; o.write('\n'.join(rs)); o.close()
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

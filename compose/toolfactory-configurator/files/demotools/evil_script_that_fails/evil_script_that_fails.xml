@@ -1,0 +1,77 @@
+<tool name="evil_script_that_fails" id="evil_script_that_fails" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:06 using the Galaxy Tool Factory.-->
+  <description>Tries some naughty things</description>
+  <requirements/>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[bash
+$runme
+>
+$evil_script_output]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+# pathetic attempt at a malicious script in Galaxy
+# it fails because the job execution environment gives write access to few places
+echo "ls -la"
+ls -la
+cd /
+echo "ls -la after changing to /"
+ls -la
+touch "foo_was.here"
+echo "ls -la in root after touch foo_was.here - foo_was_not.here more like it"
+ls -la
+
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs/>
+  <outputs>
+    <data name="evil_script_output" format="txt" label="evil_script_output" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="evil_script_output" value="evil_script_output_sample" compare="sim_size" delta_frac="0.05"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Shows what you can't do with a bash script
+
+Check the tool stderr - it isn't captured but should be. Send code.
+
+Results vary - in a biocontainer, you are root so can do anything.
+
+In a normal Galaxy, not so much.
+
+This is a very interesting way to see what a tool can do on your machine.
+
+ 
+
+------
+
+
+Script::
+
+    # pathetic attempt at a malicious script in Galaxy
+    # it fails because the job execution environment gives write access to few places
+    echo "ls -la"
+    ls -la
+    cd /
+    echo "ls -la after changing to /"
+    ls -la
+    touch "foo_was.here"
+    echo "ls -la in root after touch foo_was.here - foo_was_not.here more like it"
+    ls -la
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

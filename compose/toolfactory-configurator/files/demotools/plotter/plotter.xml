@@ -1,0 +1,103 @@
+<tool name="plotter" id="plotter" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:09 using the Galaxy Tool Factory.-->
+  <description>Collection demonstration</description>
+  <requirements>
+    <requirement type="package">r-base</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[Rscript
+$runme
+"$nplot"]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+# demo
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)==0) {
+   n_plots = 3
+} else {
+   n_plots = as.integer(args[1]) }
+dir.create('plots')
+for (i in 1:n_plots) {
+    foo = runif(100)
+    bar = rnorm(100)
+    bar = foo + 0.05*bar
+    pdf(paste('plots/yet',i,"anotherplot.pdf",sep='_'))
+    plot(foo,bar,main=paste("Foo by Bar plot #",i),col="maroon", pch=3,cex=0.6)
+    dev.off()
+    foo = data.frame(a=runif(100),b=runif(100),c=runif(100),d=runif(100),e=runif(100),f=runif(100))
+    bar = as.matrix(foo)
+    pdf(paste('plots/yet',i,"anotherheatmap.pdf",sep='_'))
+    heatmap(bar,main='Random Heatmap')
+    dev.off()
+}
+
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="nplot" type="text" value="3" label="Number of random plots pairs to draw" help=""/>
+  </inputs>
+  <outputs>
+    <collection name="plots" type="list" label="Plots">
+      <discover_datasets pattern="__name_and_ext__" directory="plots" visible="false"/>
+    </collection>
+  </outputs>
+  <tests>
+    <test>
+      <param name="nplot" value="3"/>
+      <output_collection name="plots"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+ToolFactory demonstration of a collection to hide lots of outputs from a tool in a single history item to avoid clutter.
+
+As many random plots as you want.
+
+Viewable inside the resulting history collection
+
+Script is responsible for writing all the appropriate outputs into a directory called the same name as the collection as shown here.
+
+Very handy for things not useful downstream but useful for the user to review and study.
+
+ 
+
+------
+
+
+Script::
+
+    # demo
+    args = commandArgs(trailingOnly=TRUE)
+    if (length(args)==0) {
+       n_plots = 3
+    } else {
+       n_plots = as.integer(args[1]) }
+    dir.create('plots')
+    for (i in 1:n_plots) {
+        foo = runif(100)
+        bar = rnorm(100)
+        bar = foo + 0.05*bar
+        pdf(paste('plots/yet',i,"anotherplot.pdf",sep='_'))
+        plot(foo,bar,main=paste("Foo by Bar plot #",i),col="maroon", pch=3,cex=0.6)
+        dev.off()
+        foo = data.frame(a=runif(100),b=runif(100),c=runif(100),d=runif(100),e=runif(100),f=runif(100))
+        bar = as.matrix(foo)
+        pdf(paste('plots/yet',i,"anotherheatmap.pdf",sep='_'))
+        heatmap(bar,main='Random Heatmap')
+        dev.off()
+    }
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

@@ -71,6 +71,10 @@ def parse_citations(citations_text):
     return citation_tuples
 
 class Locker:
+    """
+    multiple instances of the TF may try to update tool_conf.xml so use a simple lockfile
+    to prevent overwriting mix ups.
+    """
     def __enter__ (self):
         lockfile = "/tmp/.toolfactory_lockfile.lck"
         if not os.path.exists(lockfile):
@@ -100,7 +104,7 @@ class Tool_Conf_Updater:
     ):
         self.args = args
         self.tool_conf_path = os.path.join(args.galaxy_root, tool_conf_path)
-        self.tool_dir = os.path.join(args.galaxy_root, local_tool_dir)
+        self.tool_dir = os.path.join(args.galaxy_root, local_tool_dir,'TFtools')
         self.out_section = "ToolFactory Generated Tools"
         tff = tarfile.open(new_tool_archive_path, "r:*")
         flist = tff.getnames()
@@ -112,14 +116,6 @@ class Tool_Conf_Updater:
         self.run_rsync(ourdir, self.tool_dir)
         with Locker():
             self.update_toolconf(ourdir, ourxml)
-        if self.args.run_test:
-            watchflag = os.path.join(self.tool_dir, ourdir, ".testme")
-            wuj = ".wuj"
-            foo = open(wuj, "w")
-            foo.write("Wake up Jeff!!!")
-            foo.close()
-            self.run_rsync(wuj, watchflag)
-
 
     def run_rsync(self, srcf, dstf):
         src = os.path.abspath(srcf)
@@ -153,11 +149,11 @@ class Tool_Conf_Updater:
         conf_tools = [x.attrib["file"] for x in our_tools]
         for xml in ourxml:  # may be > 1
             if xml not in conf_tools:  # new
-                ET.SubElement(TFsection, "tool", {"file": xml})
-        ET.indent(tree)
+                ET.SubElement(TFsection, "tool", {"file": os.path.join('TFtools', xml)})
         newconf = f"{self.tool_id}_conf"
         tree.write(newconf, pretty_print=True)
         self.run_rsync(newconf, self.tool_conf_path)
+
 
 
 
@@ -917,6 +913,7 @@ class Tool_Factory:
             arcname=self.tool_name,
             filter=exclude_function,
         )
+        shutil.copy(self.newtarpath, os.path.join(self.tooloutdir, f"{self.tool_name}_untested.toolshed.gz"))
         tf.close()
 
 

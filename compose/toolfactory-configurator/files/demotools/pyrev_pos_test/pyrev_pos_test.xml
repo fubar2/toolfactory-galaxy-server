@@ -1,0 +1,83 @@
+<tool name="pyrev_pos_test" id="pyrev_pos_test" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:20 using the Galaxy Tool Factory.-->
+  <description>positional parameter example for a python script.</description>
+  <requirements>
+    <requirement type="package">python</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[python
+$runme
+$Input_text_file_to_be_reversed
+$pyrev_positionalparse_output]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+## reverse order of text by row
+## ToolFactory demonstration
+## positional parameters
+import sys
+inp = sys.argv[1]
+outp = sys.argv[2]
+i = open(inp,'r').readlines()
+o = open(outp,'w')
+for row in i:
+  rs = row.rstrip()
+  rs = list(rs)
+  rs.reverse()
+  o.write(''.join(rs))
+  o.write('\n')
+o.close()
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="Input_text_file_to_be_reversed" type="data" optional="false" label="Input text file to be reversed" help="" format="txt" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="pyrev_positionalparse_output" format="txt" label="pyrev_positionalparse_output" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="pyrev_positionalparse_output" value="pyrev_positionalparse_output_sample" compare="diff" lines_diff="0"/>
+      <param name="Input_text_file_to_be_reversed" value="Input_text_file_to_be_reversed_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Pass parameters to a python program using their positions
+
+ 
+
+------
+
+
+Script::
+
+    ## reverse order of text by row
+    ## ToolFactory demonstration
+    ## positional parameters
+    import sys
+    inp = sys.argv[1]
+    outp = sys.argv[2]
+    i = open(inp,'r').readlines()
+    o = open(outp,'w')
+    for row in i:
+      rs = row.rstrip()
+      rs = list(rs)
+      rs.reverse()
+      o.write(''.join(rs))
+      o.write('\n')
+    o.close()
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

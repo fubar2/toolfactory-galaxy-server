@@ -3,6 +3,21 @@
     <tool file="toolfactory/ToolFactory.xml"/>
     <tool file="planemo_test/planemo_test.xml"/>
   </section>
+  <section id="ToolFactory Generated Tools" name="ToolFactory Generated Tools">
+    <tool file="TFtools/tacrev/tacrev.xml"/>
+    <tool file="TFtools/bwa_test_toolfactory_positional_bash/bwa_test_toolfactory_positional_bash.xml"/>
+    <tool file="TFtools/evil_script_that_fails/evil_script_that_fails.xml"/>
+    <tool file="TFtools/hello_toolshed/hello_toolshed.xml"/>
+    <tool file="TFtools/lisp_demo/lisp_demo.xml"/>
+    <tool file="TFtools/perl_gc_counter/perl_gc_counter.xml"/>
+    <tool file="TFtools/planemo_lint/planemo_lint.xml"/>
+    <tool file="TFtools/plotter/plotter.xml"/>
+    <tool file="TFtools/prolog_demo/prolog_demo.xml"/>
+    <tool file="TFtools/pyrev_argparse_test/pyrev_argparse_test.xml"/>
+    <tool file="TFtools/pyrev_pos_test/pyrev_pos_test.xml"/>
+    <tool file="TFtools/sedtest_toolshed/sedtest_toolshed.xml"/>
+    <tool file="TFtools/select_test/select_test.xml"/>
+  </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml"/>
     <tool file="data_source/ucsc_tablebrowser.xml"/>

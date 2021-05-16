@@ -26,6 +26,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && useradd -u $GALAXY_UID -r -g $GALAXY_USER -d $GALAXY_HOME -c "Galaxy user" --shell /bin/bash $GALAXY_USER \
     && mkdir -p $GALAXY_HOME \
     && mkdir -p $PLANEMO_ROOT \
+    && mkdir -p $PLANEMO_ROOT/work \
     && apt update && apt install python3 git python3-pip python3-wheel python3-venv git nano curl sudo -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT" \
@@ -33,36 +34,37 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
 
 
 
-COPY ./files/tacrev /tools/tacrev
+COPY ./files/demotools/planemo_lint /tools/TFtools/planemo_lint
 
 
 RUN python3 -m venv $GALAXY_ROOT/.venv \
 && python3 -m venv /venv \
 && . /venv/bin/activate \
 && pip3 install -U pip \
-&& pip3 install planemo bioblend ephemeris parsec requests wheel rpyc \
+&& pip3 install planemo bioblend ephemeris parsec requests wheel rpyc requests \
 && mkdir -p /export/galaxy/config \
 && touch /export/galaxy/config/reload_uwsgi.touchme \
 && export HOME="$PLANEMO_ROOT" \
 && planemo conda_init --conda_prefix $PLANEMO_ROOT/con \
-&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/tacrev/tacrev.xml" \
+&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/TFtools/planemo_lint/planemo_lint.xml" \
 && apt-get clean && apt-get purge \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
 COPY ./start.sh /usr/local/bin/start_tf_config.sh
+COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
 #COPY ./files/container_resolvers_conf.xml /config/
 #COPY ./files/dependency_resolvers_conf.xml /config/
 #COPY ./files/Singularity.def /Singularity.def
 COPY ./files/toolfactory /tools/toolfactory
 COPY ./files/planemo_test /tools/planemo_test
-COPY ./files/install-history.py /config/
+COPY ./files/demotools /tools/TFtools
+COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
 COPY ./files/tool_conf.xml /config/
-COPY ./files/toolfactory/welcome.html /welcome.html
-# for planemo galaxy container
+COPY ./files/toolfactory/welcome.html /config/welcome.html
+# for planemo galaxy this container
 COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/
-
+RUN chown -R galaxy:galaxy /tools /config
 
 ENTRYPOINT /usr/local/bin/start_tf_config.sh
