@@ -13,8 +13,9 @@ Rscript and for more discerning users, prolog and lisp. Any scriptable language 
 
 This is a flavour of the docker-compose infrastructure copied from https://github.com/bgruening/docker-galaxy-stable - there is excellent documentation at
 that site. Respect. A few minor pointers only are provided below - please refer to the original documentation for details about this extensive infrastructure for Galaxy flavours including
-(untested) cluster and other deployment options. The Appliance supporting the ToolFactory is a fully featured `docker-galaxy-stable` Galaxy server, ideal for scientists and developers who need a
-their own pop-up desktop server for learning how Galaxy works, building new tools, and combining them with interactive environments and with toolshed tools to do real work, potentially at scale.
+(untested) cluster and other deployment options. The Appliance supporting the ToolFactory is a fully featured `docker-galaxy-stable` Galaxy server, ideal for scientists and developers
+who need their own pop-up desktop server for learning how Galaxy works, building new tools, using interactive environments and any available toolshed tools to do real work,
+potentially at scale.
 
 
 ## WARNING!
@@ -24,8 +25,16 @@ their own pop-up desktop server for learning how Galaxy works, building new tool
 Users are advised **not to run it on any server accessible from the public internet and potential miscreants**.
 It is safe to run on a normally secured Linux laptop or desktop that is not accessible from any remote network.
 It runs as a set of Docker containers, so it is secured to that extent from the
-host system. ToolFactory and other related source code is included in this repository for the curious or the dubious. The included rpyc remote procedure call
-server and calling client code are described below.
+host system. ToolFactory and other related source code is included in this repository for the curious or the dubious.
+
+### Specific security disclosures
+
+1. The ToolFactory uses rsync to update the running Galaxy config/tool_conf.xml when a new tool is built. That will fail on a secured cluster production system
+where rsync would need ssh to access the server disk. In the Appliance, rsync can write anywhere Galaxy can which is as handy as it is insecure, so please
+be careful and remember, if you break anything with the Appliance, the pieces are all yours.
+
+2. The `planemo_test` tool calls an rpyc (old fashioned remote procedure call with a python twist) server to run planemo, and to write tested archives to
+directories that tools should never be allowed to write, described in more detail below. Again, extremely handy for the ToolFactory but also horribly insecure.
 
 
 ## Tutorial and documentation
