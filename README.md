@@ -1,13 +1,13 @@
 # Galaxy ToolFactory Appliance
 
-## Tutorials are currently at [GTN ToolFactory developer's tutorial](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html).
+## A [GTN ToolFactory developer tutorial PR is in beta testing on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html).
 
-This appliance takes a basic Galaxy server configuration and creates a ToolFactory appliance in Docker by adding:
+This Appliance takes the basic docker server configuration and creates a ToolFactory appliance in Docker by adding:
 
 1.    A working copy of the ToolFactory - a form driven code generator to make new Galaxy tools from scripts
-2.    A container that does post-install adjustment of the docker-compose and can test tools using planemo, returning the planemo test
-report and updated archive to the user's current history magically
-3.    A warning that it would be extraordinarily unwise to ever expose this appliance anywhere on the public internet. Please, just don't.
+2.    A container that does post-install adjustment of the docker-compose to add the ToolFactory flavour. It runs planemo, to test tools, returning the planemo test
+reports, log and updated archive to the user's current history.
+3.    A warning that it would be extraordinarily unwise to ever expose this appliance anywhere on the public internet. Please, just don't. Read on to learn why.
 
 ## Depends upon
 
@@ -19,9 +19,9 @@ that site. Respect. A few minor pointers only are provided below - please refer 
 
 **This appliance has been configured to "work around" some of Galaxy's normally very strict job runner isolation features**
 
-Users are strongly discouraged from running it on any server accessible from the public internet and potential miscreants.
-It is safe to run on a sanely secured laptop or desktop. It runs as a set of Docker containers so secured to that extent from the
-host system. ToolFactory and other related source code is included in this repository for the curious or the dubious and the rpyc
+Users are advised **not to run it on any server accessible from the public internet and potential miscreants**.
+It is safe to run on a normally secured Linux laptop or desktop. It runs as a set of Docker containers, so it is secured to that extent from the
+host system. ToolFactory and other related source code is included in this repository for the curious or the dubious. The rpyc remote procedure call
 server and calling client code are described below.
 
 ## Installation and startup
@@ -36,7 +36,7 @@ docker-compose up
 ```
 
  - Your appliance should be running with a local Galaxy on localhost:8080 after a fair bit of activity.
- - Watch the logs. They are very instructive and informative for those who need to understand how Galaxy actually works.
+ - Watch the logs as they scroll by on the terminal. They are very instructive and informative for those who need to understand how Galaxy actually works.
 
 - Out of the box login is `admin@galaxy.org` and the password is `password`
 - This is obviously insecure but convenient and easily changed at first login.
@@ -94,13 +94,13 @@ The testing tool built in to the appliance uses the remote container server by m
 
 For the ToolFactory, running Planemo to test tools has proven difficult. It was not designed to work as a Galaxy tool and is difficult to manage when called by a tool running as a Galaxy job. It was designed for command line use and works without problems in the dedicated container when called by the testing tool. Only a few lines of Python code are needed for the running tool to connect to the Rpyc server running in the dedicated container:
 
-`
-import rpyc
-conn = rpyc.connect("planemo-server", port=9999,  config={'sync_request_timeout':1200})
-`
+
+>import rpyc
+>conn = rpyc.connect("planemo-server", port=9999,  config={'sync_request_timeout':1200})
+
 Default docker networking is used by the ToolFactory appliance, so the remote server can be accessed using just the container name. Docker automatically permits the RPC calls to pass between the two containers. After the connection is established, the tool code can run shell commands on the remote container and receive the output with a call to the Rpyc server such as:
 
-`res = conn.root.run_cmd("planemo lint %s" % toolxml)`
+>res = conn.root.run_cmd("planemo lint %s" % toolxml)
 
 The output from the lint proceedure is returned to the calling tool as res and from there can be sent to a history item by the tool in the usual way.
 
@@ -108,7 +108,7 @@ The server is a minor adaption of simple samples from the Rpyc documentation. No
 necessary because if two or more Planemo test tasks are installing dependencies, the Planemo Conda data is quickly corrupted since Conda and Planemo have not been designed to
 provide any resource locking.
 
-`
+``` python
 import logging
 import os
 from rpyc.utils.server import ThreadPoolServer
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     t = ThreadPoolServer(cmd_service, port=9999, logger=logger, nbThreads=1)
     # single thread - planemo/conda behave better
     t.start()
-`
+```
 
 
 
