@@ -1,8 +1,5 @@
 # Galaxy ToolFactory Appliance
 
-## A GTN ToolFactory developer tutorial PR is in beta testing [and available here on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html) to
-help explain how this Appliance can be used to generate Galaxy tools from working command line scripts.
-
 This Appliance takes the basic docker server configuration and creates a ToolFactory appliance in Docker by adding:
 
 1.    A working copy of the ToolFactory - a form driven code generator to make new Galaxy tools from scripts
@@ -24,6 +21,13 @@ Users are advised **not to run it on any server accessible from the public inter
 It is safe to run on a normally secured Linux laptop or desktop. It runs as a set of Docker containers, so it is secured to that extent from the
 host system. ToolFactory and other related source code is included in this repository for the curious or the dubious. The rpyc remote procedure call
 server and calling client code are described below.
+
+
+## Tutorial and documentation
+
+There is an accompanying GTN ToolFactory developer tutorial PR in beta test. [It is available here on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html)
+to help explain how this Appliance can be used to generate Galaxy tools from working command line scripts.
+
 
 ## Installation and startup
 
