@@ -956,12 +956,8 @@ def main():
     a("--untested_tool_out", default=None)
     a("--local_tools", default="tools")  # relative to $__root_dir__
     a("--tool_conf_path", default="config/tool_conf.xml")  # relative to $__root_dir__
-    a("--galaxy_url", default="http://localhost:8080")
-    a("--toolshed_url", default="http://localhost:9009")
     # make sure this is identical to tool_sheds_conf.xml
     # localhost != 127.0.0.1 so validation fails
-    a("--toolshed_api_key", default="fakekey")
-    a("--galaxy_api_key", default="8993d65865e6d6d1773c2c34a1cc207d")
     args = parser.parse_args()
     if args.admin_only:
         assert not args.bad_user, (

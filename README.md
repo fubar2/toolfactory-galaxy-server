@@ -46,9 +46,9 @@ docker-compose up
 - Out of the box login is `admin@galaxy.org` and the password is `password`
 - This is obviously insecure but convenient and easily changed at first login.
 - Change it more permanently in docker-compose.yml if you intend to use this Appliance for your own work.
-  - Please also change the admin_key from the default`fakekey` to something less well known
-  - The API key is the administrative key for the appliance Galaxy so if you are exposed on any large network, you are
-exposed to easy API based remote mischief until it is changed.
+  - At present, the admin_key default (`fakekey`) is hard-wired into the ToolFactory boot process, but should be changed at first login to something less well known if the appliance is exposed at all.
+  - The API key is the administrative key for the appliance Galaxy so if the Appliance is accessible on a network, it is
+exposed to easy API based remote mischief until a new API key is generated. Another good reason not to expose the Appliance anywhere.
 
 The container `/export` directory is mounted locally at `compose/export` .
 
@@ -80,6 +80,7 @@ The first test takes 6 minutes. Subsequently more like a minute or two, dependin
 for the tool to run.
 
 ## Tutorial
+
 The sample tools provided in the Appliance are supported by a GTN tutorial PR, [available here on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html).
 An advanced tutorial showing some of the features available when building tools with the ToolFactory Appliance is linked at the end of the introductory tutorial.
 
@@ -105,6 +106,7 @@ For the ToolFactory, running Planemo to test tools has proven difficult. It was 
 
 
 >import rpyc
+
 >conn = rpyc.connect("planemo-server", port=9999,  config={'sync_request_timeout':1200})
 
 Default docker networking is used by the ToolFactory appliance, so the remote server can be accessed using just the container name. Docker automatically permits the RPC calls to pass between the two containers. After the connection is established, the tool code can run shell commands on the remote container and receive the output with a call to the Rpyc server such as:
@@ -156,7 +158,7 @@ if __name__ == "__main__":
 
 
 
-The ToolFactory runs as a private developer appliance, and does not make use of security features offered by Rpyc such as authenticated connections
+The ToolFactory Appliance runs as a private developer instance, and does not make use of security features offered by Rpyc such as authenticated connections
 and exposing only constrained functions. These are easy to configure and would be recommended for a production environment where this remote
 procedure call work-around is used.
 
