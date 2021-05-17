@@ -119,29 +119,41 @@ After all, they are unlikely to deliberately damage their own development machin
 Even if they do, the Docker containers and associated local exported volumes can quickly be rebuilt from scratch, at the cost of losing any work done on the Appliance and not backed up.
 Before destroying a damaged local installation, generated tool archives can be found in the local `...compose/export/galaxy/tools/TFtools` directory.
 
-The motivating use case for this deliberate security “work-around” is the requirement for the ToolFactory tool to install newly generated tools into the running Galaxy, and to test them with Planemo. These are functions available in the ToolFactory appliance, a flavour of the docker-galaxy-stable core. The Appliance adds automated post-installation configuration by a specialised server container based on the normal docker-galaxy-stable server. As soon as the Galaxy server installation is completed, the additional container loads tools, demonstration data, history and workflows to provide the “flavour”. It also starts a minimal Rpyc server capable of accepting commands from tools running in the Galaxy server container. It is this rpyc server that is the key to running tasks independently of the normal Galaxy job runner system, but triggered by a specially configured running tool - the planemo test tool.
+The motivating use case for this deliberate security “work-around” is the requirement for the ToolFactory tool to immediately
+install newly generated tools into the running Galaxy, and to test them with Planemo.
+These are functions available in the ToolFactory appliance, a flavour of the docker-galaxy-stable core.
+The Appliance adds automated post-installation configuration by a specialised server container based on the normal docker-galaxy-stable server.
+As soon as the Galaxy server installation is completed, the additional container loads tools, demonstration data, history and workflows to provide the “flavour”.
+It also starts a minimal Rpyc server capable of accepting commands from tools running in the Galaxy server container.
+It is this rpyc server that is the key to running tasks independently of the normal Galaxy job runner system,
+but triggered by a specially configured running tool.
 
-The testing tool built in to the appliance uses the remote container server by making RPC calls. The server invokes the command using the Python subprocess module inside the dedicated container. When the task completes, outputs are returned to the tool as a response.
+The mechanism described here is a completely generic and completely insecure way to allow tools executing as normal Galaxy jobs to do things that
+Galaxy security, very wisely would normally not permit. These impossible things may have other interesting applications but the cost of associated insecurity cannot be over emphasised.
+
+The planemo test tool is the testing tool built in to the appliance uses the remote container server by making RPC calls.
+The server invokes the command using the Python subprocess module inside the dedicated container. When the task completes, outputs are returned to the tool as a response.
 
 For the ToolFactory, running Planemo as a tool to test tools has proven difficult.
 It was not designed to work as a Galaxy tool and is difficult to manage when called by a tool running as a Galaxy job.
 It was designed for command line use and works without problems in the dedicated container when called by the testing tool.
-Only a few lines of Python code are needed for the running tool to connect to the Rpyc server running in the dedicated container after rpyc is imported:
+The running tool sets up a connection to the Rpyc server running in the dedicated container after rpyc is imported with:
 
 >conn = rpyc.connect("planemo-server", port=9999,  config={'sync_request_timeout':1200})
 
-Default docker bridge networking is used by the ToolFactory appliance, so the planemo server can be accessed using its' container name.
+Default docker bridge networking is used by the ToolFactory appliance, so the planemo server can be accessed using the container name.
 Docker automatically permits the RPC calls to pass between the two containers.
-After the connection is established, the tool code can run shell commands on the remote container and receive the output as a response with a blocking call to the Rpyc server such as:
+After the connection is established, rpyc allows the tool code to run shell commands on the remote container and receive the outputs as a response,
+with a blocking call to the Rpyc server such as:
 
 >res = conn.root.run_cmd("planemo lint %s" % toolxml)
 
 Assuming `toolxml` is the path of a valid Galaxy tool XML file, the output from the lint proceedure is returned to the calling tool as `res`.
 From there can be written to a history item by the tool in the usual way.
 
-The server is a minor adaption of simple samples from the Rpyc documentation. Note that the threadcount given as nbThreads allows only a single thread to run at any one time. This is
-necessary because if two or more Planemo test tasks are installing dependencies, the Planemo Conda data is quickly corrupted since Conda and Planemo have not been designed to
-provide any resource locking.
+The server is a bare-bones minor adaption of a sample from the Rpyc documentation. Note that the threadcount given as nbThreads allows only a single thread to run at any one time.
+This is necessary because if two or more Planemo test tasks are installing dependencies, the Planemo Conda data is quickly corrupted since Conda and Planemo have not been designed to
+provide any resource locking. It may not be needed for other applications where rpyc can invoke multiple threads or forks with the ForkingServer if preferred.
 
 ``` python
 import logging
