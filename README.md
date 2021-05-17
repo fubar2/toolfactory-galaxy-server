@@ -1,6 +1,7 @@
 # Galaxy ToolFactory Appliance
 
-## A [GTN ToolFactory developer tutorial PR is in beta testing on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html).
+## A GTN ToolFactory developer tutorial PR is in beta testing [and available here on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html) to
+help explain how this Appliance can be used to generate Galaxy tools from working command line scripts.
 
 This Appliance takes the basic docker server configuration and creates a ToolFactory appliance in Docker by adding:
 
@@ -73,6 +74,10 @@ container. The generated test outputs and the newly updated tested toolshed arch
 
 The first test takes 6 minutes. Subsequently more like a minute or two, depending on conda and the complexity of dependencies needed
 for the tool to run.
+
+## Tutorial
+The sample tools provided in the Appliance are supported by a GTN tutorial PR, [available here on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html).
+An advanced tutorial showing some of the features available when building tools with the ToolFactory Appliance is linked at the end of the introductory tutorial.
 
 
 ## To safely shut the appliance down
