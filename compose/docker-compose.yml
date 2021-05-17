@@ -8,7 +8,6 @@ services:
       - GALAXY_DEFAULT_ADMIN_EMAIL=admin@galaxy.org
       - GALAXY_DEFAULT_ADMIN_PASSWORD=password
       - GALAXY_DEFAULT_ADMIN_KEY=fakekey
-    hostname: galaxy-server
     privileged: True
     ports:
       - 5555:5555
@@ -21,8 +20,6 @@ services:
       - postgres
       - rabbitmq
       - galaxy-configurator
-    networks:
-      - galaxy
   # The galaxy-configurator is responsible for the whole configuration of
   # your setup and should be the central place of configuration.
   galaxy-configurator:
@@ -48,23 +45,19 @@ services:
       - ./base_config.yml:/base_config.yml
       - ./galaxy-configurator/templates:/templates
   #post install configution with tools, history and watchdog/planemo tester triggered by .testme appearing in any tool directory
-  toolfactory-configurator:
+  planemo-server:
     image: quay.io/fubar2/toolfactory-configurator:latest
     build: toolfactory-configurator
     privileged: True
     environment:
       - EXPORT_DIR=${EXPORT_DIR:-./export}
       - GALAXY_CONFIG_ADMIN_USERS=admin@galaxy.org
-    hostname: planemo-server
     depends_on:
       - galaxy-server
       - nginx
       - postgres
-      - galaxy-configurator
     volumes:
       - ${EXPORT_DIR:-./export}/:/export/:delegated
-    networks:
-      - galaxy
   # The database for Galaxy
   postgres:
     image: postgres:12
@@ -75,8 +68,6 @@ services:
       - POSTGRES_DB=galaxy
     volumes:
       - ${EXPORT_DIR:-./export}/postgres/:/var/lib/postgresql/data:delegated
-    networks:
-      - galaxy
   # The proxy server. All web-traffic is going through here, so we can
   # offload static file serving
   # (https://docs.galaxyproject.org/en/master/admin/production.html#using-a-proxy-server)
@@ -91,20 +82,17 @@ services:
       - ${EXPORT_DIR:-./export}/galaxy/config/plugins:/galaxy/config/plugins:ro
     depends_on:
       - galaxy-server
-    networks:
-      - galaxy
   # Message queue for better performance
   rabbitmq:
     image: rabbitmq:alpine
     container_name: galaxy-rabbitmq
-    hostname: rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=galaxy
       - RABBITMQ_DEFAULT_PASS=vaiJa3ieghai2ief0jao
       - RABBITMQ_DEFAULT_VHOST=galaxy
     volumes:
       - ${EXPORT_DIR:-./export}/rabbitmq:/var/lib/rabbitmq:delegated
-    networks:
-      - galaxy
 networks:
-  galaxy:
+  default:
+    driver: bridge
+    attachable: true

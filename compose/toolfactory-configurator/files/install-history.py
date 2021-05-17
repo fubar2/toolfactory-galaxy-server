@@ -47,6 +47,9 @@ def main():
             except Exception:
                 print('install-history: No gi yet...')
                 time.sleep(5)
+    else:
+        print('Need a key passed to install-history - no default found')
+        sys.exit(1)
     job_check(gi)
     hists = args.history_path
     for hf in hists:
