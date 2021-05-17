@@ -161,7 +161,7 @@ Script::
         ptooldir =  os.path.join(pwork,toolname)
         pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
         prepdir = os.path.join(pworkrep, toolname)
-        galtooldir = os.path.join('/export/galaxy/tools', toolname)
+        galtooldir = os.path.join('/export/galaxy/tools/TFtools', toolname)
         for maked in [prepdir, ptooldir]:
             if not os.path.isdir(maked):
                 res = conn.root.run_cmd(f"mkdir -p {maked}")
@@ -173,21 +173,23 @@ Script::
                 lint.write(res)
                 lint.write('\nEnd report\n')
         planemo_rep = os.path.join(prepdir, "%s_planemo_test_report.html" % toolname)
+        planemo_json = os.path.join(prepdir, "%s_planemo_test_report.json" % toolname)
         planemo_log = os.path.join('testout', "%s_planemo_test_log.txt" % toolname)
-        res = conn.root.run_cmd("planemo test --galaxy_root /galaxy-central --docker --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_rep, toolxml))
+        res = conn.root.run_cmd("planemo --directory /planemo/work test --test_output_json %s --galaxy_root /galaxy-central \
+           --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_json, planemo_rep, toolxml))
         if not res:
             res="no response...."
         else:
             with open(planemo_log, 'w') as replog:
                 replog.write(res)
-        res = conn.root.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/")
+        res = conn.root.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/TFtools/")
         shutil.copy(planemo_rep, 'testout')
         run_rsync(prepdir, 'testout')
-        res = conn.root.run_cmd(f"tar -cvz -f {prepdir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
-        res = conn.root.run_cmd(f"cp {prepdir}/{toolname}_tested.toolshed.gz {ptooldir}/{toolname}_tested.toolshed.gz")
-        run_rsync(f"{prepdir}/{toolname}_tested.toolshed.gz", ".")
+        res = conn.root.run_cmd(f"tar -cvz -f {ptooldir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
+        run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", ".")
+        run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", galtooldir)
         shutil.copy(f"{toolname}_tested.toolshed.gz", arcout)
-        res = conn.root.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir} 'testout'")
+        res = conn.root.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir}")
 
 
     main()

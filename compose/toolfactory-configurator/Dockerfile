@@ -53,9 +53,6 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 COPY ./start.sh /usr/local/bin/start_tf_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
-#COPY ./files/container_resolvers_conf.xml /config/
-#COPY ./files/dependency_resolvers_conf.xml /config/
-#COPY ./files/Singularity.def /Singularity.def
 COPY ./files/toolfactory /tools/toolfactory
 COPY ./files/planemo_test /tools/planemo_test
 COPY ./files/demotools /tools/TFtools
@@ -63,7 +60,7 @@ COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
 COPY ./files/tool_conf.xml /config/
 COPY ./files/toolfactory/welcome.html /config/welcome.html
-# for planemo galaxy this container
+# not a typo - for the planemo galaxy in this container!
 COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/
 RUN chown -R galaxy:galaxy /tools /config
 
