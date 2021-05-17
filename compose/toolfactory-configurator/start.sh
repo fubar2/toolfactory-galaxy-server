@@ -1,7 +1,4 @@
 #!/bin/bash
-# seem to need a delay here
-# needs changes to base_config.yml to enable master and touch-reload on uwsgi and watchdog: auto for galaxy
-# http://192.168.1.9:8080/api/histories returns nothing until the server is good to go
 /venv/bin/python /usr/local/bin/waitforquiet.py
 # should only return when the admin exists and no jobs running
 echo "slept well.."
@@ -15,7 +12,6 @@ else
   chown galaxy:galaxy /export/galaxy/tested_TF_tools
   mkdir /export/galaxy/tested_TF_reports
   chown galaxy:galaxy /export/galaxy/tested_TF_reports
-  #cp /Singularity.def /export/galaxy/database/container_cache/singularity/mulled/
   cp -r /tools/* /export/galaxy/tools/
   cp -r /tools/TFtools /export/galaxy/tools/TFtools/
   cp -r /config/* /export/galaxy/config/

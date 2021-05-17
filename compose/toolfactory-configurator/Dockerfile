@@ -1,6 +1,6 @@
 
 # container with planemo with a galaxy dist for it to use
-# triggered by watchdog when a .testme file is written to anything in /export/galaxy/tools/*
+# runs an rpyc server in a totally insecure way.
 # planemo does not play nicely when run as a tool....
 ARG DOCKER_REGISTRY=quay.io
 ARG DOCKER_REGISTRY_USERNAME=bgruening
