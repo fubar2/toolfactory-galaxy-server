@@ -2,6 +2,7 @@
   <section id="tf" name="ToolFactory">
     <tool file="toolfactory/ToolFactory.xml"/>
     <tool file="planemo_test/planemo_test.xml"/>
+    <tool file="planemo_lint/planemo_lint.xml"/>
   </section>
   <section id="ToolFactory Generated Tools" name="ToolFactory Generated Tools">
     <tool file="TFtools/tacrev/tacrev.xml"/>

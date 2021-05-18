@@ -45,10 +45,11 @@ services:
       - ./base_config.yml:/base_config.yml
       - ./galaxy-configurator/templates:/templates
   #post install configution with tools, history and watchdog/planemo tester triggered by .testme appearing in any tool directory
-  planemo-server:
+  toolfactory-configurator:
     image: quay.io/fubar2/toolfactory-configurator:latest
     build: toolfactory-configurator
     privileged: True
+    hostname: planemo-server
     environment:
       - EXPORT_DIR=${EXPORT_DIR:-./export}
       - GALAXY_CONFIG_ADMIN_USERS=admin@galaxy.org

@@ -1,6 +1,0 @@
-category: TF Generated Tools
-description: Runs Planemo lint on any toolshed.gz file
-name: planemo_lint
-owner: admin
-synopsis: Runs Planemo lint on any toolshed.gz file
-type: unrestricted

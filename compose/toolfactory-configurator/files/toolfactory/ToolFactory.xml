@@ -34,7 +34,7 @@
             help="Supply a brief tool description for the Galaxy tool menu entry" />
         <param name="install" label="Attempt to install in the host Galaxy"
             help="This may/should fail unless running in a lax security environment (your own laptop perhaps) or the specialised ToolFactory Docker container"
-            type="hidden" checked="True" truevalue="1"  falsevalue="" />
+            type="hidden" checked="True" truevalue="1"  falsevalue="0" />
          <param name="run_test" label="Finalise new archive with test outputs. Runs externally. Outputs will appear in history when ready"
             help="Archives must be run and updated using planemo to populate all the test outputs. May take a long time depending on dependencies"
             type="hidden" checked="False" truevalue="1"  falsevalue="" />
@@ -260,9 +260,7 @@ python3 $__tool_directory__/ToolFactory.py
 --collection '{"name": "$collect.name", "kind": "$collect.kind", "discover": "$collect.discover", "label": "$collect.label"}'
      #end for
 --untested_tool_out "$generated_xml"
-#if $run_test == "1":
---run_test
-#end if
+--install "$install"
 --galaxy_root "$__root_dir__"
 --tool_dir "$__tool_directory__"
  #end if
@@ -416,6 +414,7 @@ ${help_text}
     <param name="dynScript" value="import sys; inp = sys.argv[1]; outp = sys.argv[2]; inlist = open(inp,'r').readlines(); o = open(outp,'w'); rs = [''.join(list(reversed(x.rstrip()))) for x in inlist]; o.write('\n'.join(rs)); o.close()"/>
     <param name="choosescript" value="yes" />
     <param name="script_path" value="$runme"/>
+    <param name="install" value="0"/>
     <output name="generated_xml" value="generated_xml_sample" compare="diff" lines_diff="5"/>
 </test>
 </tests>

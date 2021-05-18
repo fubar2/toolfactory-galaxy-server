@@ -100,7 +100,7 @@ class Tool_Conf_Updater:
     """
 
     def __init__(
-        self, args, tool_conf_path, new_tool_archive_path, new_tool_name, local_tool_dir, run_test
+        self, args, tool_conf_path, new_tool_archive_path, new_tool_name, local_tool_dir
     ):
         self.args = args
         self.tool_conf_path = os.path.join(args.galaxy_root, tool_conf_path)
@@ -131,7 +131,12 @@ class Tool_Conf_Updater:
             shell=False,
         )
 
+
     def update_toolconf(self, ourdir, ourxml):  # path is relative to tools
+
+        def sortchildrenby(parent, attr):
+            parent[:] = sorted(parent, key=lambda child: child.get(attr))
+
         localconf = "./local_tool_conf.xml"
         self.run_rsync(self.tool_conf_path, localconf)
         tree = ET.parse(localconf)
@@ -150,6 +155,7 @@ class Tool_Conf_Updater:
         for xml in ourxml:  # may be > 1
             if xml not in conf_tools:  # new
                 ET.SubElement(TFsection, "tool", {"file": os.path.join('TFtools', xml)})
+        sortchildrenby(TFsection,"file")
         newconf = f"{self.tool_id}_conf"
         tree.write(newconf, pretty_print=True)
         self.run_rsync(newconf, self.tool_conf_path)
@@ -951,7 +957,7 @@ def main():
     a("--galaxy_venv", default="/galaxy_venv")
     a("--collection", action="append", default=[])
     a("--include_tests", default=False, action="store_true")
-    a("--run_test", default=False, action="store_true")
+    a("--install", default="1")
     a("--admin_only", default=False, action="store_true")
     a("--untested_tool_out", default=None)
     a("--local_tools", default="tools")  # relative to $__root_dir__
@@ -968,14 +974,14 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.writeShedyml()
     r.makeTool()
     r.makeToolTar()
-    TCU = Tool_Conf_Updater(
-        args=args,
-        local_tool_dir=args.local_tools,
-        new_tool_archive_path=r.newtarpath,
-        tool_conf_path=args.tool_conf_path,
-        new_tool_name=r.tool_name,
-        run_test = args.run_test
-    )
+    if args.install == "true":
+        TCU = Tool_Conf_Updater(
+            args=args,
+            local_tool_dir=args.local_tools,
+            new_tool_archive_path=r.newtarpath,
+            tool_conf_path=args.tool_conf_path,
+            new_tool_name=r.tool_name
+        )
 
 if __name__ == "__main__":
     main()

@@ -27,14 +27,16 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && mkdir -p $GALAXY_HOME \
     && mkdir -p $PLANEMO_ROOT \
     && mkdir -p $PLANEMO_ROOT/work \
-    && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo -y \
+    && mkdir -p /tools \
+    && mkdir -p /config \
+    && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo rsync -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT" \
     && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
 
 
 
-COPY ./files/demotools/planemo_lint /tools/TFtools/planemo_lint
+COPY ./files/TFtools/tacrev /tools/TFtools/tacrev
 
 
 RUN python3 -m venv $GALAXY_ROOT/.venv \
@@ -46,16 +48,19 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 && touch /export/galaxy/config/reload_uwsgi.touchme \
 && export HOME="$PLANEMO_ROOT" \
 && planemo conda_init --conda_prefix $PLANEMO_ROOT/con \
-&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/TFtools/planemo_lint/planemo_lint.xml" \
+&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/TFtools/tacrev/tacrev.xml" \
 && apt-get clean && apt-get purge \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./start.sh /usr/local/bin/start_tf_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
-COPY ./files/toolfactory /tools/toolfactory
-COPY ./files/planemo_test /tools/planemo_test
-COPY ./files/demotools /tools/TFtools
+COPY ./files/TFtools /tools/TFtools
+COPY ./files/TFtools.yml /config/TFtools.yml
+COPY ./files/TF_demo_history_May_12.tar.gz /config/TF_demo_history_May_12.tar.gz
+COPY ./files/TF-Demo-data-May-16.tar.gz /config/TF-Demo-data-May-16.tar.gz
+#COPY ./files/planemo_test /tools/planemo_test
+#COPY ./files/planemo_lint /tools/planemo_lint
 COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
 COPY ./files/tool_conf.xml /config/

@@ -1,6 +1,6 @@
 <tool name="hello_toolshed" id="hello_toolshed" version="0.01">
   <!--Source in git at: https://github.com/fubar2/toolfactory-->
-  <!--Created by admin@galaxy.org at 15/05/2021 06:15:06 using the Galaxy Tool Factory.-->
+  <!--Created by admin@galaxy.org at 17/05/2021 23:05:16 using the Galaxy Tool Factory.-->
   <description></description>
   <requirements/>
   <stdio>

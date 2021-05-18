@@ -1,0 +1,96 @@
+<tool name="TFgenerated_planemo_lint" id="TFgenerated_planemo_lint" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 18/05/2021 01:16:17 using the Galaxy Tool Factory.-->
+  <description>Runs Planemo lint on any ToolFactory xml history file</description>
+  <requirements>
+    <requirement version="0.74.3" type="package">planemo</requirement>
+    <requirement version="3.7" type="package">python</requirement>
+    <requirement type="package" version="4.6.3">lxml</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[python
+$runme
+$ToolFactory_XML_to_be_linted
+>
+$lint_output]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+import lxml.etree as ET
+import os
+import subprocess
+import sys
+
+def main():
+    assert len(sys.argv) >= 2, 'Must have input xml on command line'
+    xmlin = sys.argv[1]
+    tree = ET.parse(xmlin)
+    root = tree.getroot()
+    toolname = root.get('id')
+    toolxml = os.path.join('/export/galaxy/tools/TFtools', toolname, '%s.xml' % toolname)
+    cl = ['planemo', 'lint', toolxml]
+    print('Running', cl)
+    p = subprocess.run(cl, shell=False)
+    if p.returncode > 0:
+         print('Planemo lint call returned error %d')
+    else:
+         print('Lint report ends')
+main()
+
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="ToolFactory_XML_to_be_linted" type="data" optional="false" label="ToolFactory XML to be linted" help="" format="xml" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="lint_output" format="txt" label="${ToolFactory_XML_to_be_linted.name}_lint_output" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="lint_output" value="lint_output_sample" compare="diff" lines_diff="5"/>
+      <param name="ToolFactory_XML_to_be_linted" value="ToolFactory_XML_to_be_linted_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+ToolFactory demonstration script using bash to run planemo lint from a history XML representing a tool.
+
+
+
+------
+
+
+Script::
+
+    import lxml.etree as ET
+    import os
+    import subprocess
+    import sys
+    def main():
+        assert len(sys.argv) >= 2, 'Must have input xml on command line'
+        xmlin = sys.argv[1]
+        tree = ET.parse(xmlin)
+        root = tree.getroot()
+        toolname = root.get('id')
+        toolxml = os.path.join('/export/galaxy/tools/TFtools', toolname, '%s.xml' % toolname)
+        cl = ['planemo', 'lint', toolxml]
+        print('Running', cl)
+        p = subprocess.run(cl, shell=False)
+        if p.returncode > 0:
+             print('Planemo lint call returned error %d')
+        else:
+             print('Lint report ends')
+    main()
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

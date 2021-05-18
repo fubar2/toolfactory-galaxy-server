@@ -12,9 +12,8 @@ else
   chown galaxy:galaxy /export/galaxy/tested_TF_tools
   mkdir /export/galaxy/tested_TF_reports
   chown galaxy:galaxy /export/galaxy/tested_TF_reports
-  cp -r /tools/* /export/galaxy/tools/
-  cp -r /tools/TFtools /export/galaxy/tools/TFtools/
-  cp -r /config/* /export/galaxy/config/
+  cp -r /tools /export/galaxy
+  cp -r /config /export/galaxy
   cp /config/welcome.html /export/galaxy/static/welcome.html
   chown -R galaxy:galaxy /export/galaxy/config
   chown -R galaxy:galaxy /export/galaxy/tools
@@ -28,6 +27,7 @@ else
   chown galaxy:galaxy /export/galaxy/config/reload_uwsgi.touchme
   bash -c ". /venv/bin/activate ; python /usr/local/bin/waitforquiet.py"
   echo "configurator is installing the demonstration history"
+  sudo -H -u galaxy bash -c '. /venv/bin/activate ; shed-tools install -g "http://nginx" -a "fakekey" -t "/config/TFtools.yml"'
   sudo -H -u galaxy bash -c  '. /venv/bin/activate ; python3 /usr/local/bin/install-history.py'
 fi
 # run rpyc server to trigger planemo tests when requested by toolfactory
