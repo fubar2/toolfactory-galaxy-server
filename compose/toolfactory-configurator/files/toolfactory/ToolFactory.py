@@ -977,7 +977,7 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.writeShedyml()
     r.makeTool()
     r.makeToolTar()
-    if args.install == "true":
+    if args.install == "1":
         TCU = Tool_Conf_Updater(
             args=args,
             local_tool_dir=args.local_tools,
