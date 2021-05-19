@@ -113,9 +113,12 @@ class Tool_Conf_Updater:
         ourxml = [x for x in flist if x.lower().endswith(".xml")]
         tff.extractall()
         tff.close()
-        self.run_rsync(ourdir, self.tool_dir)
-        with Locker():
-            self.update_toolconf(ourdir, ourxml)
+        try:
+            self.run_rsync(ourdir, self.tool_dir)
+            with Locker():
+                self.update_toolconf(ourdir, ourxml)
+        except Exception:
+            print('Cannot install the new tool. This is only possible in the ToolFactory appliance at https://github.com/fubar2/toolfactory-galaxy-server")
 
     def run_rsync(self, srcf, dstf):
         src = os.path.abspath(srcf)
