@@ -35,6 +35,7 @@ fi
 chown -R galaxy:galaxy /home/galaxy
 echo "## All configuration done. Please login and enjoy your ToolFactory Appliance"
 bash -c "cd /planemo ; . /venv/bin/activate ; python3 /usr/local/bin/planemo_rpyc.py"
+# this needs root sadly.
 while [ 1 ]
 do
 # so we can restart above for testing

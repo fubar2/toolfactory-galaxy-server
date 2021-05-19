@@ -113,9 +113,9 @@ where rsync would need passwordless ssh to access the (remote) server disk. In t
 you choose to adapt the rsync code for a tool, please be careful. If you do accidentally break the Appliance, it takes only a few minutes to delete and
 recreate the entire server from scratch if necessary.
 
-2. The `planemo_test` tool calls an rpyc (old fashioned remote procedure call with a python twist) server to run planemo, and to write tested archives to exported
+2. The `planemo_test` tool calls an rpyc (remote procedure call in python) server to run planemo, and to write tested archives to exported
 directories that tools should never be able to write, described in more detail below. It is even less secure than the rsync method having complete access to /export.
-At present, that container runs as root - something that needs repair before long. The remote server will soon be restricted to run specific exported functions just for
+At present, that container runs as root - something that could and should be changed. The remote server will soon be restricted to run specific exported functions just for
 the tester, so it will not be possible for a user to damage the system without changing that server code in the container. Again, extremely handy for integrating the
 ToolFactory but also not for public internet exposure. Given that constraint, it offers a generalisable model for other potential private desktop Galaxy appliances.
 They might be integrated with specialised local GPU or other hardware and services, in circumstances where the security risks are known and manageable, given benevolent users.
@@ -130,8 +130,7 @@ A publicly accessible server is not suited to the methods described here. They i
 On the other hand, in a completely private, dedicated Docker appliance used by a developer, they might be an acceptable risk to the user.
 After all, they are unlikely to deliberately damage their own development machine.
 Even if they do, the Docker containers and associated local exported volumes can quickly be rebuilt from scratch, at the cost of losing any work done on the Appliance
-and not backed up.
-Before destroying a damaged local installation, generated tool archives can be found in the local `...compose/export/galaxy/tools/TFtools` directory.
+and not backed up. Before destroying a damaged local installation, generated tool archives can be found in the local `...compose/export/galaxy/tools/TFtools` directory.
 
 The motivating use case for this deliberate security “work-around” is the requirement for the ToolFactory tool to immediately
 install newly generated tools into the running Galaxy, and to test them with Planemo.
@@ -153,22 +152,26 @@ It was not designed to work as a Galaxy tool and is difficult to manage when cal
 It was designed for command line use and works without problems in the dedicated container when called by the testing tool.
 The running tool sets up a connection to the Rpyc server running in the dedicated container after rpyc is imported with:
 
->conn = rpyc.connect("planemo-server", port=9999,  config={'sync_request_timeout':1200})
+```python
+conn = rpyc.connect('planemo-server', port=9999, config={'sync_request_timeout':1200})
+```
 
 Default docker bridge networking is used by the ToolFactory appliance, so the planemo server can be accessed using the container name.
-Docker automatically permits the RPC calls to pass between the two containers.
+Docker default bridge networking permits the RPC calls to pass between the two containers.
 After the connection is established, rpyc allows the tool code to run shell commands on the remote container and receive the outputs as a response,
 with a blocking call to the Rpyc server such as:
 
->res = conn.root.run_cmd("planemo lint %s" % toolxml)
+```python
+res = conn.root.run_cmd("planemo lint %s" % toolxml)
+```
 
 Assuming `toolxml` is the path of a valid Galaxy tool XML file, the output from the lint proceedure is returned to the calling tool as `res`.
 From there can be written to a history item by the tool in the usual way.
 
-The server is a bare-bones adaption of a sample from the Rpyc documentation. Note that the threadcount given as nbThreads allows only a single thread to run at any one time.
+The server is a bare-bones adaption of a sample from the Rpyc documentation. The threadcount given as nbThreads of 1 allows only a single thread to run at any one time.
 This is necessary because if two or more Planemo test tasks are installing dependencies, the Planemo Conda data is quickly corrupted since Conda and Planemo
 have not been designed to run safely in parallel and do not perform any resource locking.
-Other applications may be able to gain better throughput where rpyc can invoke multiple parallel threads or forks with the ForkingServer if preferred.
+Other applications may be able to gain better throughput where rpyc can invoke multiple parallel threads.
 
 ``` python
 import logging
