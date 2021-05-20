@@ -9,7 +9,7 @@
     <div class="jumbotron">
         <div class="container" >
             <center>
-            <font size="6" color="darkblue">Your private <a href="https://github.com/fubar2/toolfactory-galaxy-server" target="_blank">ToolFactory Appliance</a>
+            <font size="6" color="darkblue">This <a href="https://github.com/fubar2/toolfactory-galaxy-server" target="_blank">ToolFactory Appliance</a>
              is now running in <a href="https://github.com/bgruening/docker-galaxy-stable" target="_blank">Docker</a></font>
             </center>
             <ul>
@@ -39,7 +39,9 @@
             test outputs that are added to the new tool archive. The second time those sample outputs are tested.
             Conda adds time to install the dependencies and then there's the actual runtime for the test data</br>
            </br>
-            Each example jobs demonstrate many of the tool patterns that can be generated. <br/>
+            Examples demonstrate some of the tool patterns that can be generated for your own work. <br/>
+            </br>
+            <font size="4" color="darkred">Conda will fail if multiple tools run contemporaneously for the first time and compete to install dependencies! Patience is advised</font></br>
             <ul><li>Hello runs a bash script with a single user supplied parameter - "World" for example. STDOUT goes to the history</li>
             <li>Tacrev uses STDOUT and STDIN without parameters.</li>
             <li>Two simple python scripts to reverse lines in a text file are driven with (pyrevargparse) argparse style and with (pyrevpos) positional parameters</li>
