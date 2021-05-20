@@ -1,0 +1,63 @@
+<tool name="planemo_lint_bash" id="planemo_lint_bash" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 20/05/2021 00:19:38 using the Galaxy Tool Factory.-->
+  <description>Runs Planemo lint on a tool XML</description>
+  <requirements>
+    <requirement version="0.74.3" type="package">planemo</requirement>
+    <requirement version="3.7" type="package">python</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[bash
+$runme
+$ToolFactory_generated_XML_to_be_linted
+$lint_output]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+cp $1 ./testme.xml
+# planemo will only lint a file with xml extension
+planemo lint "./testme.xml" > $2
+echo 'Lint report ends' >> $2
+
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="ToolFactory_generated_XML_to_be_linted" type="data" optional="false" label="ToolFactory generated XML to be linted" help="" format="xml" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="lint_output" format="txt" label="lint_output" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="lint_output" value="lint_output_sample" compare="diff" lines_diff="0"/>
+      <param name="ToolFactory_generated_XML_to_be_linted" value="ToolFactory_generated_XML_to_be_linted_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+ToolFactory demonstration script using bash to run planemo lint from a history XML
+
+ 
+
+------
+
+
+Script::
+
+    cp $1 ./testme.xml
+    # planemo will only lint a file with xml extension
+    planemo lint "./testme.xml" > $2
+    echo 'Lint report ends' >> $2
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

@@ -1,4 +1,4 @@
-<tool name="planemo_lint" id="planemo_lint" version="0.01">
+<tool name="planemo_lint_python" id="planemo_lint_python" version="0.01">
   <!--Source in git at: https://github.com/fubar2/toolfactory-->
   <!--Created by admin@galaxy.org at 18/05/2021 01:16:17 using the Galaxy Tool Factory.-->
   <description>Runs Planemo lint on any ToolFactory xml history file</description>
