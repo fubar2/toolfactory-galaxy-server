@@ -35,9 +35,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
 
 
-
-COPY ./files/TFtools/tacrev /tools/TFtools/tacrev
-
+COPY ./files/TFtools /tools/TFtools
 
 RUN python3 -m venv $GALAXY_ROOT/.venv \
 && python3 -m venv /venv \
@@ -48,14 +46,13 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 && touch /export/galaxy/config/reload_uwsgi.touchme \
 && export HOME="$PLANEMO_ROOT" \
 && planemo conda_init --conda_prefix $PLANEMO_ROOT/con \
-&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/TFtools/tacrev/tacrev.xml" \
+&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/TFtools/planemo_lint_python/planemo_lint_python.xml" \
 && apt-get clean && apt-get purge \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./start.sh /usr/local/bin/start_tf_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
-COPY ./files/TFtools /tools/TFtools
 COPY ./files/TFtools.yml /config/TFtools.yml
 COPY ./files/TF_demo_history_May_12.tar.gz /config/TF_demo_history_May_12.tar.gz
 COPY ./files/TF-Demo-data-May-16.tar.gz /config/TF-Demo-data-May-16.tar.gz
