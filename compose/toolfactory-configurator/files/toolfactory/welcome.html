@@ -10,7 +10,7 @@
         <div class="container" >
             <center>
             <font size="6" color="darkblue">This <a href="https://github.com/fubar2/toolfactory-galaxy-server" target="_blank">ToolFactory Appliance</a>
-             is now running in <a href="https://github.com/bgruening/docker-galaxy-stable" target="_blank">Docker</a></font>
+             is now running <a href="https://github.com/bgruening/docker-galaxy-stable" target="_blank">in Docker</a></font>
             </center>
             <ul>
                 <li><a href="https://github.com/fubar2/toolfactory/blob/master/README.md" target="_blank">ToolFactory README</a></br></li>
@@ -33,40 +33,33 @@
             Change the wording of prompts to see how they change. Experimenting with the examples may help you figure out how to use it for your work.</br>
             The Hello World example is a useful base model. Any working bash script with a few parameters can be substituted starting with that example as a model. Add parameters and outputs/inputs as needed.</br>
             Generated tools are just ordinary Galaxy tools. They work for any user and in workflows.<br/>
-            Generating a tool takes a few seconds. Testing takes longer when it is requested. Testing with Planemo runs in a separate container for technical reasons but
-            test results appear in the history a few minutes after the test is requested.
+            Generating a tool takes a few seconds. Testing takes longer when it is requested. Testing with Planemo runs in a separate container for technical reasons.
             Planemo is run twice and a Galaxy is built and torn down each time. The first run is to generate
-            test outputs that are added to the new tool archive. The second time those sample outputs are tested.
+            test outputs that are added to the new testedtool archive. The second time those sample outputs are tested.
             Conda adds time to install the dependencies and then there's the actual runtime for the test data</br>
+            Tested tools and reports are in the exported <i>../compose/export/galaxy/tested_TF_tools and ../tested_TF_reports</i> directories on the local machine.
            </br>
-            Examples demonstrate some of the tool patterns that can be generated for your own work. <br/>
+            Examples in the history and installed in the Appliance demonstrate some of the tool patterns that can be generated for your own work. <br/>
             </br>
             <font size="4" color="darkred">Warning: If multiple tools are run for the first time and more than one attempts to install new dependencies, Conda will fail!</font></br>
-            <ul><li>Hello runs a bash script with a single user supplied parameter - "World" for example. STDOUT goes to the history</li>
+            <ul><li>Hello_toolfactory runs a bash script with a single user supplied parameter - "World" for example. STDOUT goes to the history</li>
             <li>Tacrev uses STDOUT and STDIN without parameters.</li>
             <li>Two simple python scripts to reverse lines in a text file are driven with (pyrevargparse) argparse style and with (pyrevpos) positional parameters</li>
             <li>The perl GC counter takes positional parameters and is taken straight from the Planemo documentation tool examples</li>
-            <li>The planemo advanced bwa example is shown in two versions. One uses the original Planemo tutorial code to demonstrate a <b>command
+            <li>The Planemo bwa example is shown in two versions. One uses the original Planemo tutorial code to demonstrate a <b>command
             over-ride</b>. An equivalent tool but using bash and positional parameters might be easier for some tool builders since it doesn't use mako/markup.</li>
-            <li>The Sed example shows how unix utilities like sed - or any Conda package - can be driven using positional parameters</li>
+            <li>The Sed example shows how unix utilities like sed - or similar Conda package - can be driven using positional parameters</li>
+            <li>The plotter tool illustrates the use of collections for messy outputs.</li>
+            <li>The repeats demonstration shows how any number of repeating parameters can be selected and used in a tool</li>
+            <li>There are two versions of a planemo lint tool - a simple bash script and a much more complex python script to show how some Conda dependencies can be used with a script to take care of complexities</li>
             <li>The Evil_script_that_fails example tries to create a file where it should not. It should build ok but an error should be noted in the history tgz after it runs. Note that it can do
 evil under docker because it runs as root - but only evil within the docker container itself. We hope. </li>
              </ul>
              </br>
-            <font size="3" color="darkblue">The ToolFactory sample workflow runs and installs all the ToolFactory demonstrations</font></br>
-            Copy the sample data from the imported history and run the workflow - you will need to change the input data sets to the
-            ones showing nearby so the tools get the right inputs!
-            <ol>
-            <li>Copy this URL: <b>https://zenodo.org/record/4729971/files/ToolFactoryDemosApril30.ga?download=1</b></li>
-            <li>Select the "Workflow" tab of the top bar; Click the "Import" button on the right; Paste that URL into the workflow import upload box</li>
-            <li>Copy the sample data sets from the demonstration history into a new history</li>
-            <li>Run the workflow and make sure the input data sets match their titles, then run it</li>
-            <li>All the sample tools will appear in the ToolFactory section of the tool menu - you will need to refresh the analysis screen to see them</li>
-            </ol>
-           </br>
+
             The demonstration tools are relatively simple for a good reason. Galaxy's UI is not ideal for the purpose of building tools with dozens of parameters. It can be done
             but there will be plenty of cases where the old fashioned manual/Planemo way will be way easier for most people. However, if you have the patience, it works. The
-            ToolFactory is ideal for relatively simple situations with a handful of files and parameters.
+            ToolFactory is ideal for relatively simple scripts with a handful of files and parameters.
         </div>
     </div>
     </br>

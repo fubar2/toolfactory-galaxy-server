@@ -62,6 +62,7 @@ COPY ./files/TF_demo_make_test_tools_May_21.ga /workflows/TF_demo_make_test_tool
 COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
 COPY ./files/tool_conf.xml /config/
+COPY ./files/base.css /config/
 COPY ./files/toolfactory/welcome.html /config/welcome.html
 # not a typo - for the planemo galaxy in this container!
 COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/

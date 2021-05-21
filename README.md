@@ -54,6 +54,7 @@ docker-compose up
  - Watch the logs as they scroll by on the terminal. They are very instructive and informative for those who need to understand how Galaxy actually works.
  - Keep an eye out for Conda processes on your machine.
  - Wait until they **all** stop.
+ - Restarting is much faster.
 
 - Out of the box login is `admin@galaxy.org` and the password is `password`
 - This is obviously insecure but convenient and easily changed at first login.
@@ -130,11 +131,11 @@ Galaxy configuration includes turning on the tool change watchdog so Galaxy will
 The ToolFactory configuration completes but the container continues to run, providing a service described in detail below.
 
 
-## Specific security disclosures
+## Security disclosures
 
 If you use the ToolFactory for ordinary scripts, it will work without endangering the Appliance. The details below explain how this is possible.
 
-The mechansims used will not affecting your work unless you write tools that use any of the methods described below.
+The mechanisms used will not affecting your work unless you write tools that use the methods described below.
 If you do, please be mindful that it is possible to damage the appliance
 by writing to the wrong places. Normal Galaxy security restrictions are removed to different degrees by these techniques. They are extremely powerful and generalisable but also
 a risk if anyone hostile can access the server. Best to ensure that your Appliance is not exposed on the public internet.
@@ -160,7 +161,7 @@ public internet exposure. Given that constraint, they offer generalisable models
 potential private desktop Galaxy appliances. These might be integrated with specialised local GPU or other hardware or services that are restricted in some way,
 in circumstances where the security risks are known and manageable, given benevolent users.
 
-## Detailed note on remote command execution for Galaxy tools in a private environment.
+## Remote command execution for Galaxy tools in a private environment.
 
 The Galaxy framework runs tools in a highly constrained and secure way. The job runner creates a tool execution environment that is very restricted in terms of resource access,
 in order to protect the framework, data and database from accidental bugs overwriting critical files or even from malicious damage.
@@ -183,13 +184,13 @@ It also starts a minimal Rpyc server capable of accepting commands from tools ru
 It is this rpyc server that is the key to running tasks independently of the normal Galaxy job runner system,
 but triggered by a specially configured running tool.
 
-### A generic non-Galaxy RPC for tools
+### A generic RPC for tools
 
 The approach described here is a generic way to allow tools executing as normal Galaxy jobs to do things that
 Galaxy security, very wisely would normally not permit. These impossible things may have other interesting applications
 but the potential cost of associated insecurity must be taken into account outside private settings.
 
-The `planemo_test` tool is the testing tool built in to the appliance. It uses the remote container server by making RPC calls.
+The `planemo_test` tool uses the remote container server by making RPC calls.
 The server exposes a single highly specialised and restricted function to test and lint a tool.
 It uses but does not expose the Python subprocess module inside the dedicated container to run individual commands including
 running planemo to lint and test the tool. When the task completes, the tool finishes up by moving some of the outputs.
@@ -202,6 +203,8 @@ been called on a command line.
 There may be other situations where the model used here may be useful on a private desktop. Any desired function can be exposed by the
 rpyc server as shown below. Exposed functions are named with the prefix `exposed_` and can make use of more generalised and dangerous
 code like the command line runner, but that function is not visible to any calling tools.
+
+### Using rpyc
 
 The running tool sets up a connection to the rpyc server running in the dedicated container (code below) after rpyc is imported with:
 
@@ -218,7 +221,7 @@ with a blocking call to the Rpyc server such as:
 res = conn.root.planemo_lint_test(xmlin, collectionpath)
 ```
 
-The server exposes a single function that runs planemo test and lint on the tool passed as the parameter. It uses a dangerous generic command line
+The provided rpyc server exposes a single function that runs planemo test and lint on the tool passed as the parameter. It uses a dangerous generic command line
 runner but this dangerous generic function is not exposed to RPC callers directly.
 
 Planemo is run in the remote container and the outputs from the lint and test proceedures are written to
@@ -231,6 +234,7 @@ have not been designed to run safely in parallel and do not perform any resource
 Other applications may be able to gain better throughput where rpyc can invoke multiple parallel threads. A separate service with higher threadcount could
 easily be added.
 
+
 ``` python
 
 import logging
@@ -242,7 +246,6 @@ import shlex
 import shutil
 import subprocess
 import sys
-import tarfile
 import time
 
 class planemo_run(Service):
