@@ -14,6 +14,7 @@ else
   chown galaxy:galaxy /export/galaxy/tested_TF_reports
   cp -r /tools /export/galaxy
   cp -r /config /export/galaxy
+  cp -r /workflows /export/galaxy
   cp /config/welcome.html /export/galaxy/static/welcome.html
   chown -R galaxy:galaxy /export/galaxy/config
   chown -R galaxy:galaxy /export/galaxy/tools

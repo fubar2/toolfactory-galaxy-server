@@ -17,7 +17,8 @@ $ToolFactory_toolshed_XML_from_the_history_to_test
 $new_tested_toolshed_archive]]></command>
   <configfiles>
     <configfile name="runme"><![CDATA[#raw
-### script for ToolFactory toolshed archive test tool
+# script for ToolFactory toolshed archive test tool
+# most of the work is done in the rpyc server function exposed for this purpose
 
 import lxml.etree as ET
 
@@ -26,8 +27,7 @@ import rpyc
 import shutil
 import subprocess
 import sys
-import tarfile
-import time
+
 
 def run_rsync(srcf, dstf):
     src = os.path.abspath(srcf)
@@ -47,46 +47,26 @@ def main():
     assert len(sys.argv) >= 3, 'Must have input xml and output archive paths on command line'
     xmlin = sys.argv[1]
     arcout = sys.argv[2]
-    conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
     tree = ET.parse(xmlin)
     root = tree.getroot()
     toolname = root.get('id')
-    collection = 'testout'
+    try:
+        conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
+    except ConnectionRefusedError:
+        print('### no remote rpyc server found on port 9999 - this only works in the ToolFactory Appliance with that server running...')
+        sys.exit(1)
+    collection = './testout'
+    abscoll = os.path.abspath(collection)
     os.mkdir(collection) # for collection
     pwork = os.path.join("/export", "galaxy", "tested_TF_archives")
     ptooldir =  os.path.join(pwork,toolname)
     pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
     prepdir = os.path.join(pworkrep, toolname)
     galtooldir = os.path.join('/export/galaxy/tools/TFtools', toolname)
-    for maked in [prepdir, ptooldir]:
-        if not os.path.isdir(maked):
-            res = conn.root.run_cmd(f"mkdir -p {maked}")
-    res = conn.root.run_cmd(f"cp -r {galtooldir} {pwork}/")
-    toolxml = os.path.join(ptooldir, '%s.xml' % toolname)
-    res = conn.root.run_cmd("planemo lint %s" % toolxml)
-    if res:
-        with open(os.path.join(collection, '%s_planemo_lint_report.txt' % toolname), 'w') as lint:
-            lint.write(res)
-            lint.write('\nEnd report\n')
-    planemo_rep = os.path.join(prepdir, "%s_planemo_test_report.html" % toolname)
-    planemo_json = os.path.join(prepdir, "%s_planemo_test_report.json" % toolname)
-    planemo_log = os.path.join(collection, "%s_planemo_test_log.txt" % toolname)
-    res = conn.root.run_cmd("planemo --directory /planemo/work test --test_output_json %s --galaxy_root /galaxy-central \
-       --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_json, planemo_rep, toolxml))
-    if not res:
-        res="no response...."
-    else:
-        with open(planemo_log, 'w') as replog:
-            replog.write(res)
-    res = conn.root.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/TFtools/")
-    shutil.copy(planemo_rep, collection)
-    run_rsync(prepdir, collection)
-    res = conn.root.run_cmd(f"tar -cvz -f {ptooldir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
+    res = conn.root.planemo_lint_test(xmlin, abscoll)
     run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", ".")
     run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", galtooldir)
     shutil.copy(f"{toolname}_tested.toolshed.gz", arcout)
-    res = conn.root.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir}")
-
 
 main()
 #end raw]]></configfile>
@@ -129,17 +109,16 @@ ToolFactory Appliance should never, ever be exposed on any public network. Priva
 
 Script::
 
-    ### script for ToolFactory toolshed archive test tool
+    # script for ToolFactory toolshed archive test tool
+    # most of the work is done in the rpyc server function exposed for this purpose
 
     import lxml.etree as ET
 
     import os
+    import sys
     import rpyc
     import shutil
     import subprocess
-    import sys
-    import tarfile
-    import time
 
     def run_rsync(srcf, dstf):
         src = os.path.abspath(srcf)
@@ -159,45 +138,22 @@ Script::
         assert len(sys.argv) >= 3, 'Must have input xml and output archive paths on command line'
         xmlin = sys.argv[1]
         arcout = sys.argv[2]
-        conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
         tree = ET.parse(xmlin)
         root = tree.getroot()
         toolname = root.get('id')
-        os.mkdir('testout') # for collection
+        conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
+        collection = './testout'
+        abscoll = os.path.abspath(collection)
+        os.mkdir(collection) # for collection
         pwork = os.path.join("/export", "galaxy", "tested_TF_archives")
         ptooldir =  os.path.join(pwork,toolname)
         pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
         prepdir = os.path.join(pworkrep, toolname)
         galtooldir = os.path.join('/export/galaxy/tools/TFtools', toolname)
-        for maked in [prepdir, ptooldir]:
-            if not os.path.isdir(maked):
-                res = conn.root.run_cmd(f"mkdir -p {maked}") # need a mkdir function
-        res = conn.root.run_cmd(f"cp -r {galtooldir} {pwork}/")
-        toolxml = os.path.join(ptooldir, '%s.xml' % toolname)
-        res = conn.root.run_cmd("planemo lint %s" % toolxml) # and a lint and test
-        if res:
-            with open(os.path.join('testout', '%s_planemo_lint_report.txt' % toolname), 'w') as lint:
-                lint.write(res)
-                lint.write('\nEnd report\n')
-        planemo_rep = os.path.join(prepdir, "%s_planemo_test_report.html" % toolname)
-        planemo_json = os.path.join(prepdir, "%s_planemo_test_report.json" % toolname)
-        planemo_log = os.path.join('testout', "%s_planemo_test_log.txt" % toolname)
-        res = conn.root.run_cmd("planemo --directory /planemo/work test --test_output_json %s --galaxy_root /galaxy-central \
-           --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_json, planemo_rep, toolxml))
-        if not res:
-            res="no response...."
-        else:
-            with open(planemo_log, 'w') as replog:
-                replog.write(res)
-        res = conn.root.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/TFtools/")
-        shutil.copy(planemo_rep, 'testout')
-        run_rsync(prepdir, 'testout')
-        res = conn.root.run_cmd(f"tar -cvz -f {ptooldir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
+        res = conn.root.planemo_lint_test(xmlin, abscoll)
         run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", ".")
         run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", galtooldir)
         shutil.copy(f"{toolname}_tested.toolshed.gz", arcout)
-        res = conn.root.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir}")
-
 
     main()
 ]]></help>

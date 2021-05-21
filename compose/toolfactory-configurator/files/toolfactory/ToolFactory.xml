@@ -107,8 +107,9 @@
             </param>
             <param name="history_CL" type="text"  label="Position"
               help="Positional: ordinal integer or 'STDOUT' if '>' required. Otherwise ignored if argparse because name is used. If positional parameters, enter the integer ordinal expected for this parameter. If argparse, ignore unless STDOUT needed" value=""/>
-            <param name="history_test" type="text"  label="Output test criteria"
-              help="Pass/fail decision criterion for this output compared to test generation. Available options are diff:[lines], sim_size:[delta (integer) or delta_frac (float)" value="diff:0"/>
+            <param name="history_test" type="text"  label="Test output comparison setting"
+              help="Pass/fail criterion for this output compared to stored test output. Available options are diff:[#lines] and sim_size:[delta (integer bytes) or delta_frac (float)"
+                value="diff:0"/>
         </repeat>
         <repeat name="collection_outputs" title="Output Collections" min="0"
              help="New history collections to appear in the user history after the tool runs. Hides outputs not needed for downstream tools such as images and intermediate reports." default="0">

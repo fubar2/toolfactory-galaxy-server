@@ -3,7 +3,7 @@
   <!--Created by admin@galaxy.org at 15/05/2021 06:15:09 using the Galaxy Tool Factory.-->
   <description>Collection demonstration</description>
   <requirements>
-    <requirement type="package">r-base</requirement>
+    <requirement type="package" version="4.0.5">r-base</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"/>
@@ -67,7 +67,7 @@ Script is responsible for writing all the appropriate outputs into a directory c
 
 Very handy for things not useful downstream but useful for the user to review and study.
 
- 
+
 
 ------
 

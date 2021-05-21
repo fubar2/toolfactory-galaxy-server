@@ -118,7 +118,7 @@ class Tool_Conf_Updater:
             with Locker():
                 self.update_toolconf(ourdir, ourxml)
         except Exception:
-            print('Cannot install the new tool. This is only possible in the ToolFactory appliance at https://github.com/fubar2/toolfactory-galaxy-server")
+            print('Cannot install the new tool. This is only possible in the ToolFactory appliance at https://github.com/fubar2/toolfactory-galaxy-server')
 
     def run_rsync(self, srcf, dstf):
         src = os.path.abspath(srcf)
@@ -508,7 +508,7 @@ class Tool_Factory:
             self.toutputs.append(aparm)
             ld = None
             if test.strip() > "":
-                if test.startswith("diff"):
+                if test.strip().startswith("diff"):
                     c = "diff"
                     ld = 0
                     if test.split(":")[1].isdigit:
@@ -977,7 +977,7 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.writeShedyml()
     r.makeTool()
     r.makeToolTar()
-    if args.install == "1":
+    if args.install:
         TCU = Tool_Conf_Updater(
             args=args,
             local_tool_dir=args.local_tools,

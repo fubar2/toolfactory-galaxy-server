@@ -29,6 +29,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && mkdir -p $PLANEMO_ROOT/work \
     && mkdir -p /tools \
     && mkdir -p /config \
+    && mkdir -p /workflows \
     && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo rsync -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT" \
@@ -54,10 +55,10 @@ COPY ./start.sh /usr/local/bin/start_tf_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
 COPY ./files/TFtools.yml /config/TFtools.yml
-COPY ./files/TF_demo_history_May_12.tar.gz /config/TF_demo_history_May_12.tar.gz
+COPY ./files/TF_demo_history_May_21.tar.gz /config/TF_demo_history_May_21.tar.gz
 COPY ./files/TF-Demo-data-May-16.tar.gz /config/TF-Demo-data-May-16.tar.gz
-#COPY ./files/planemo_test /tools/planemo_test
-#COPY ./files/planemo_lint /tools/planemo_lint
+COPY ./files/TF_demo_make_tools_May_21.ga /workflows/TF_demo_make_tools_May_21.ga
+COPY ./files/TF_demo_make_test_tools_May_21.ga /workflows/TF_demo_make_test_tools_May_21.ga
 COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
 COPY ./files/tool_conf.xml /config/

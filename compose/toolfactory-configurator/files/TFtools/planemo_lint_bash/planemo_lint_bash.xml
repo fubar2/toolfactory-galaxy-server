@@ -33,7 +33,7 @@ echo 'Lint report ends' >> $2
   </outputs>
   <tests>
     <test>
-      <output name="lint_output" value="lint_output_sample" compare="diff" lines_diff="0"/>
+      <output name="lint_output" value="lint_output_sample" compare="diff" lines_diff="5"/>
       <param name="ToolFactory_generated_XML_to_be_linted" value="ToolFactory_generated_XML_to_be_linted_sample"/>
     </test>
   </tests>

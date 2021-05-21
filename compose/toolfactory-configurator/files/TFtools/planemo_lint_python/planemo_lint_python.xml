@@ -32,7 +32,6 @@ def main():
     toolname = root.get('id')
     toolxml = os.path.join('/export/galaxy/tools/TFtools', toolname, '%s.xml' % toolname)
     cl = ['planemo', 'lint', toolxml]
-    print('Running', cl)
     p = subprocess.run(cl, shell=False)
     if p.returncode > 0:
          print('Planemo lint call returned error %d')
@@ -80,7 +79,6 @@ Script::
         toolname = root.get('id')
         toolxml = os.path.join('/export/galaxy/tools/TFtools', toolname, '%s.xml' % toolname)
         cl = ['planemo', 'lint', toolxml]
-        print('Running', cl)
         p = subprocess.run(cl, shell=False)
         if p.returncode > 0:
              print('Planemo lint call returned error %d')
