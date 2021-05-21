@@ -1,12 +1,12 @@
 # Galaxy ToolFactory Appliance
 
-This is a ToolFactory flavoured developer appliance in Docker extending the basic `docker-galaxy-stable` composition, by adding:
+This is a ToolFactory flavoured developer appliance in Docker extending the basic `docker-galaxy-stable` composition.
 
-1.    A working copy of the ToolFactory - a form driven code generator to make new Galaxy tools from scripts
-2.    The Appliance uses the official quay.io containers, adding a container for post-install configuration to create the ToolFactory flavour.
-The new container then runs a planemo server outside the Galaxy tool execution environment to test tools, returning the planemo test
+1.    The ToolFactory - a form driven code generator to make new Galaxy tools from scripts - is installed with a testing tool.
+2.    A container for post-install configuration is added to create the ToolFactory flavour. The new container then runs a planemo server
+outside the Galaxy tool execution environment to test tools, returning the planemo test
 reports, log and updated archive to the user's current history.
-3.    A history containing 14 demonstration tool generation jobs to rerun and build on. Samples use bash, python, perl (yes, even perl. Galaxy is a very welcoming community..),
+3.    A history containing 15 demonstration tool generation jobs to rerun and build on. Samples use bash, python, perl (yes, even perl. Galaxy is a very welcoming community..),
 Rscript and for more discerning users, prolog and lisp. Any scriptable language in Conda should work.
 
 ## Depends on docker-galaxy-stable
@@ -25,7 +25,8 @@ It is safe to run on a private Linux laptop or workstation.
 
 **Running it on any server accessible from the public internet exposes it to potential miscreants. This is discouraged unless you fully understand the risks**.
 
-In general, it is a very bad idea to allow potentially hostile users to build and then immediately run their own tools on a Galaxy production server.
+Although Galaxy's job execution security is very good, allowing potentially hostile users to build and then immediately run their own tools exposes any production server
+to unwelcome security risk.
 
 It runs as a set of Docker containers, so it is secured to that extent from the
 host system. ToolFactory and other related source code is included in this repository for the curious or the dubious.
@@ -182,9 +183,9 @@ It also starts a minimal Rpyc server capable of accepting commands from tools ru
 It is this rpyc server that is the key to running tasks independently of the normal Galaxy job runner system,
 but triggered by a specially configured running tool.
 
-### Two non-Galaxy mechanisms are used - rsync and RPC
+### A generic non-Galaxy RPC for tools
 
-The approaches described here off completely generic ways to allow tools executing as normal Galaxy jobs to do things that
+The approach described here is a generic way to allow tools executing as normal Galaxy jobs to do things that
 Galaxy security, very wisely would normally not permit. These impossible things may have other interesting applications
 but the potential cost of associated insecurity must be taken into account outside private settings.
 
@@ -218,16 +219,17 @@ res = conn.root.planemo_lint_test(xmlin, collectionpath)
 ```
 
 The server exposes a single function that runs planemo test and lint on the tool passed as the parameter. It uses a dangerous generic command line
-runner but this is not exposed to RPC calls.
+runner but this dangerous generic function is not exposed to RPC callers directly.
 
-Assuming `xmlin` is the path of a valid Galaxy tool XML file, planemo is run in the remote container and the outputs from the lint and test proceedures are written to
+Planemo is run in the remote container and the outputs from the lint and test proceedures are written to
 export directories and the tool output collection, so they appear in the history in the usual way.
 
-The threadcount given as nbThreads below of 1 allows only a single thread to run at any one time.
+The threadcount given as nbThreads below is 1. This may seem strange but it deliberately allows only a single thread to run at any one time.
 This is necessary because if two or more Planemo test tasks are installing dependencies, the Planemo Conda data is quickly corrupted since Conda and Planemo
 have not been designed to run safely in parallel and do not perform any resource locking.
 
-Other applications may be able to gain better throughput where rpyc can invoke multiple parallel threads.
+Other applications may be able to gain better throughput where rpyc can invoke multiple parallel threads. A separate service with higher threadcount could
+easily be added.
 
 ``` python
 
