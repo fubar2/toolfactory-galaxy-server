@@ -13,13 +13,16 @@ import time
 
 class planemo_run(Service):
     """
-    rpyc restricted access to a very specific function exposed to lint and test a tool with planemo
+    rpyc restricted server providing access to a very specific function exposed to lint and test a tool with planemo
     uses an unrestricted command runner but does not expose it.
     """
 
 
     def run_cmd(self, cmd):
-        # not exposed - you'll need to alter this server to suit your needs but this is a completely unconstrained command runner
+        """not exposed as too generic and dangerous.
+        you'll need to alter this server to suit your needs and this function is a handy but
+        completely unconstrained command runner not suitable for exposure....
+        """
         logging.info('Processing cmd %s' % cmd)
         cl = shlex.split(cmd)
         if ">" in cl:
@@ -38,11 +41,17 @@ class planemo_run(Service):
             return(outs)
 
     def exposed_planemo_lint_test(self, xmlpath, collection):
+        """ find the toolid, copy to tested directory, update with planemo test.
+        Move the updated files to the real tool directory and the planemo reports
+        and log to the collection so they appear in the histories. The calling tool
+        will write the tar to the history file.
+        """
         xmlin = os.path.join('/export', xmlpath[1:])
         print('xmlin=', xmlin, 'collection=', collection)
         tree = ET.parse(xmlin)
         root = tree.getroot()
         toolname = root.get('id')
+        # safest way to get the toolid - for the TF, this determines the tool path
         pwork = os.path.join("/export", "galaxy", "tested_TF_archives")
         ptooldir =  os.path.join(pwork,toolname)
         pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
@@ -89,7 +98,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logging.basicConfig(level='INFO')
     t = ThreadPoolServer(planemo_run, port=9999, logger=logger, nbThreads=1)
-    # single thread experiment to see if planemo/conda behave better - seems so. many condas spoil the conga - it seems to do bad things
+    # single thread experiment to see if planemo/conda behave better. Many condas spoil the conga - bad things happen.
     t.start()
 
 

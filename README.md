@@ -9,12 +9,16 @@ reports, log and updated archive to the user's current history.
 3.    A history containing 15 demonstration tool generation jobs to rerun and build on. Samples use bash, python, perl (yes, even perl. Galaxy is a very welcoming community..),
 Rscript and for more discerning users, prolog and lisp. Any scriptable language in Conda should work.
 
-## Depends on docker-galaxy-stable
+## Built on docker-galaxy-stable
 
-This flavour of the docker-compose infrastructure is copied from https://github.com/bgruening/docker-galaxy-stable - there is excellent documentation at
+This flavour of the docker-compose infrastructure is based on https://github.com/bgruening/docker-galaxy-stable - there is excellent documentation at
 that site. Respect. A few minor pointers only are provided below - please refer to the original documentation for details about this extensive infrastructure for Galaxy flavours including
-(untested) cluster and other deployment options. The Appliance supporting the ToolFactory is a fully featured `docker-galaxy-stable` Galaxy server, ideal for scientists and developers
-who need their own pop-up desktop server for learning how Galaxy works, building new tools, using interactive environments and any available toolshed tools to do real work,
+(untested) cluster and other deployment options.
+
+## A standalone, pop-up desktop Galaxy appliance
+
+The Appliance supporting the ToolFactory is a fully featured `docker-galaxy-stable` Galaxy server, ideal for scientists and developers
+who can use a private pop-up desktop server for learning how Galaxy works, building new tools, using interactive environments and any available toolshed tools to do real work,
 potentially at scale. The Appliance adds only one specific container. The others are all pulled from Björn's docker-galaxy-stable quay.io containers.
 
 
@@ -23,16 +27,15 @@ potentially at scale. The Appliance adds only one specific container. The others
 This Appliance has been configured to weaken some of Galaxy's strict job-runner isolation features so it can install and test tools conveniently.
 It is safe to run on a private Linux laptop or workstation.
 
-**Running it on any server accessible from the public internet exposes it to potential miscreants. This is discouraged unless you fully understand the risks**.
+**Running it on any server accessible from the public internet exposes it to potential miscreants. This is strongly discouraged**.
 
-Although Galaxy's job execution security is very good, allowing potentially hostile users to build and then immediately run their own tools exposes any production server
+Although Galaxy's job execution security is very tight and safe, allowing potentially hostile users to build and then immediately run their own tools exposes any production server
 to unwelcome security risk.
 
-It runs as a set of Docker containers, so it is secured to that extent from the
-host system. ToolFactory and other related source code is included in this repository for the curious or the dubious.
-Specific security disclosure details are discussed below. The mechanisms described offer a convenient way for tools to remotely execute tasks outside the Galaxy
-job execution environment in suitably private environments such as this Appliance. This may open up interesting uses for Galaxy on the desktop using GPU or
-other local resources.
+The Appliance runs as a set of Docker containers, so it is secured to that extent from the host system. ToolFactory and other related source code is
+included in this repository for the curious or the dubious. Specific security disclosure details are discussed below. The mechanisms described offer a
+convenient way for tools to remotely execute tasks outside the Galaxy job execution environment in suitably private environments such as this Appliance.
+This may open up interesting uses for Galaxy on the desktop with specialised tools accessing GPU or other local resources.
 
 ## Tutorial and documentation
 
@@ -77,9 +80,11 @@ Change the tool ID to change the tool name and avoid overwriting previous versio
 
 ## Generating your own tools
 
-Generated tools are installed on build. The whole process takes a few seconds normally.
+Generated tools are installed on build. The whole process takes a few seconds normally. Refreshing the Galaxy panel will be needed for the tool menu to be updated after the
+newly generated tool is installed. It will be found in the `ToolFactory Generated Tools` section.
 
-A new tool requiring Conda dependencies will take time to install those before running the first time. After that first run, the tool will run without delay.
+A new tool requiring Conda dependencies will take time as those must be installed the first time it is run. After that first run or if the dependency is already installed,
+the tool will run without delay.
 
 **If two or more new tools that need new dependencies on first run try to install them at the same time, Conda will fail in interesting ways. It is not designed for multiple simultaneous users**
 
@@ -143,25 +148,32 @@ a risk if anyone hostile can access the server. Best to ensure that your Applian
 More importantly, **any tools written using the Appliance that use either the server or rsync will always fail on a normally secured Galaxy server**, so they are
 useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it.
 
-1. The ToolFactory uses rsync to update the running Galaxy config/tool_conf.xml when a new tool is built. That will fail on a normal Galaxy installation or
+### Rsync
+
+The ToolFactory uses rsync to update the running Galaxy config/tool_conf.xml when a new tool is built. That will fail on a normal Galaxy installation or
 a secured cluster production system where rsync would need passwordless ssh to access the (remote) server disk. In the Appliance,
 rsync can write anywhere Galaxy can which is as handy as it is insecure. If you choose to use rsync for a tool, remember it will not work in other
-Galaxy servers and please, be careful where you write.
-If you do accidentally break the Appliance, it takes only a few minutes to delete and recreate the entire server from scratch if necessary.
+Galaxy servers and please, be careful where you write. If you do accidentally break the Appliance, it takes only a few minutes to delete and recreate the entire
+server from scratch if necessary.
 
-2. The `planemo_test` tool calls an rpyc (remote procedure call in python) server to run planemo, and to write tested archives to exported
+
+### Rpyc
+
+The `planemo_test` tool calls an rpyc (remote procedure call in python) server to run planemo, and to write tested archives to exported
 directories that tools should never be able to write, described in more detail below. It is far more restricted than the rsync method because only a single function
 is (currently) exposed. However, it is easy to change what the server exposes. It runs as root and has access to everything in the container so it is wise to
 expose only very specific and limited functions that cannot be exploited for malicious use of this powerful resource.
 At present, that container runs as root - something that could/should be changed. The remote server only exposes specific exported functions, currently only useful for
 the `planemo_test` tool, so it will not be possible for a user to damage the system without changing that server code running in the toolfactory-galaxy-server container.
 
+### Risks
+
 These techniques are completely unsupported by the Galaxy developers. They are handy for integrating the ToolFactory but completely unsuitable for
 public internet exposure. Given that constraint, they offer generalisable models for other
 potential private desktop Galaxy appliances. These might be integrated with specialised local GPU or other hardware or services that are restricted in some way,
 in circumstances where the security risks are known and manageable, given benevolent users.
 
-## Remote command execution for Galaxy tools in a private environment.
+## Details: Remote command execution for Galaxy tools in a private environment.
 
 The Galaxy framework runs tools in a highly constrained and secure way. The job runner creates a tool execution environment that is very restricted in terms of resource access,
 in order to protect the framework, data and database from accidental bugs overwriting critical files or even from malicious damage.
@@ -204,7 +216,7 @@ There may be other situations where the model used here may be useful on a priva
 rpyc server as shown below. Exposed functions are named with the prefix `exposed_` and can make use of more generalised and dangerous
 code like the command line runner, but that function is not visible to any calling tools.
 
-### Using rpyc
+### rpyc makes RPC trivially easy to implement.
 
 The running tool sets up a connection to the rpyc server running in the dedicated container (code below) after rpyc is imported with:
 
@@ -333,6 +345,9 @@ if __name__ == "__main__":
 The ToolFactory Appliance runs as a private developer instance, and does not make use of security features offered by rpyc such as authenticated connections.
 This is easy to configure for a production environment where this remote procedure call work-around is used.
 
+### The challenge of tools that will not run in a normally secured Galaxy
 
+This Appliance raises the question of how to quarantine tools that use resources not normally available on a public Galaxy server. Tools generated with the ToolFactory that
+do not use any of the rpyc or rsync tricks will run in any normal Galaxy so do not need to be restricted in any way.
 
 Ross Lazarus May 2021

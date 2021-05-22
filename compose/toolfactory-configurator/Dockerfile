@@ -1,5 +1,5 @@
 
-# container with planemo with a galaxy dist for it to use
+# container with planemo with a galaxy dist for it to use - need to use the one in the galaxy-server container really
 # runs an rpyc server in a totally insecure way.
 # planemo does not play nicely when run as a tool....
 ARG DOCKER_REGISTRY=quay.io

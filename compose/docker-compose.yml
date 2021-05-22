@@ -98,3 +98,4 @@ networks:
   default:
     driver: bridge
     attachable: true
+
