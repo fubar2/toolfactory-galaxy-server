@@ -19,7 +19,7 @@ ENV GALAXY_USER=galaxy \
     GALAXY_UID=1450 \
     GALAXY_GID=1450 \
     GALAXY_HOME=/home/galaxy \
-    GALAXY_ROOT=/galaxy-central \
+    GALAXY_ROOT=/galaxy \
     PLANEMO_ROOT=/planemo
 
 RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
@@ -32,14 +32,12 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && mkdir -p /workflows \
     && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo rsync -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
-    && mkdir -p "$GALAXY_ROOT" \
-    && curl -L -s $GALAXY_REPO/archive/$GALAXY_RELEASE.tar.gz | tar xzf - --strip-components=1 -C $GALAXY_ROOT
-
+    && mkdir -p "$GALAXY_ROOT"
 
 COPY ./files/TFtools /tools/TFtools
+COPY ./files/TFtools/planemo_lint_python /tools/TFtools/planemo_lint_python
 
-RUN python3 -m venv $GALAXY_ROOT/.venv \
-&& python3 -m venv /venv \
+RUN python3 -m venv /venv \
 && . /venv/bin/activate \
 && pip3 install -U pip \
 && pip3 install planemo bioblend ephemeris parsec requests wheel rpyc \
@@ -47,11 +45,10 @@ RUN python3 -m venv $GALAXY_ROOT/.venv \
 && touch /export/galaxy/config/reload_uwsgi.touchme \
 && export HOME="$PLANEMO_ROOT" \
 && planemo conda_init --conda_prefix $PLANEMO_ROOT/con \
-&& planemo test --conda_prefix "$PLANEMO_ROOT/con" --galaxy_root $GALAXY_ROOT "/tools/TFtools/planemo_lint_python/planemo_lint_python.xml" \
 && apt-get clean && apt-get purge \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY ./start.sh /usr/local/bin/start_tf_config.sh
+COPY ./files/start_TF_config.sh /usr/local/bin/start_TF_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
 COPY ./files/TFtools.yml /config/TFtools.yml
@@ -63,9 +60,8 @@ COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
 COPY ./files/tool_conf.xml /config/
 COPY ./files/base.css /config/
-COPY ./files/toolfactory/welcome.html /config/welcome.html
-# not a typo - for the planemo galaxy in this container!
-COPY ./files/datatypes_conf.xml $GALAXY_ROOT/config/
+COPY ./files/welcome.html /config/welcome.html
+
 RUN chown -R galaxy:galaxy /tools /config
 
-ENTRYPOINT /usr/local/bin/start_tf_config.sh
+ENTRYPOINT /usr/bin/bash /usr/local/bin/start_TF_config.sh

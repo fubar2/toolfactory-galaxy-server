@@ -1,8 +1,10 @@
 version: "3.7"
 services:
   galaxy-server:
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-bgruening}/galaxy-server:${IMAGE_TAG:-latest}
-    build: galaxy-server
+    # galaxy-server Dockerfile adjusted for ToolFactory appliance to preserve client/.node_version - without which planemo will not run
+    # in a "shared_galaxy" volume used by the Planemo container to save space from duplicated Galaxy code.
+    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-server:${IMAGE_TAG:-latest}
+    build: toolfactory-galaxy-server
     environment:
       - GALAXY_DEFAULT_ADMIN_USER=admin
       - GALAXY_DEFAULT_ADMIN_EMAIL=admin@galaxy.org
@@ -11,11 +13,13 @@ services:
     privileged: True
     ports:
       - 5555:5555
+    hostname: galaxy-server
     volumes:
       # This is the directory where all your files from Galaxy will be stored
       # on your host system
       - ${EXPORT_DIR:-./export}/:/export/:delegated
       - /var/run/docker.sock:/var/run/docker.sock
+      - shared_galaxy:/galaxy
     depends_on:
       - postgres
       - rabbitmq
@@ -44,7 +48,7 @@ services:
       - ${EXPORT_DIR:-./export}/nginx:/etc/nginx
       - ./base_config.yml:/base_config.yml
       - ./galaxy-configurator/templates:/templates
-  #post install configution with tools, history and watchdog/planemo tester triggered by .testme appearing in any tool directory
+  #post install configution with tools, history and planemo tester triggered by an exposed rpyc server function
   toolfactory-configurator:
     image: quay.io/fubar2/toolfactory-configurator:latest
     build: toolfactory-configurator
@@ -60,6 +64,7 @@ services:
     volumes:
       - ${EXPORT_DIR:-./export}/:/export/:delegated
       - /var/run/docker.sock:/var/run/docker.sock
+      - shared_galaxy:/galaxy
   # The database for Galaxy
   postgres:
     image: postgres:12
@@ -98,4 +103,6 @@ networks:
   default:
     driver: bridge
     attachable: true
+volumes:
+  shared_galaxy:
 

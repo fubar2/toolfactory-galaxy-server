@@ -20,6 +20,7 @@ import fcntl
 import json
 import os
 import re
+import rpyc
 import shlex
 import shutil
 import subprocess
@@ -69,101 +70,6 @@ def parse_citations(citations_text):
         else:
             citation_tuples.append(("bibtex", citation[len("bibtex") :].strip()))
     return citation_tuples
-
-class Locker:
-    """
-    multiple instances of the TF may try to update tool_conf.xml so use a simple lockfile
-    to prevent overwriting mix ups.
-    """
-    def __enter__ (self):
-        lockfile = "/tmp/.toolfactory_lockfile.lck"
-        if not os.path.exists(lockfile):
-            try:
-                os.utime(lockfile, None)
-            except OSError:
-                open(lockfile, 'a').close()
-        self.fp = open(lockfile)
-        fcntl.flock(self.fp.fileno(), fcntl.LOCK_EX)
-
-    def __exit__ (self, _type, value, tb):
-        fcntl.flock(self.fp.fileno(), fcntl.LOCK_UN)
-        self.fp.close()
-
-
-class Tool_Conf_Updater:
-
-    """# update config/tool_conf.xml with a new tool unpacked in /tools
-    # requires highly insecure docker settings - like write to tool_conf.xml and to tools !
-    # if in a container possibly not so courageous.
-    # Fine on your own laptop but security red flag for most production instances
-    Note potential race condition for tool_conf.xml update - uses a file lock.
-    """
-
-    def __init__(
-        self, args, tool_conf_path, new_tool_archive_path, new_tool_name, local_tool_dir
-    ):
-        self.args = args
-        self.tool_conf_path = os.path.join(args.galaxy_root, tool_conf_path)
-        self.tool_dir = os.path.join(args.galaxy_root, local_tool_dir,'TFtools')
-        self.out_section = "ToolFactory Generated Tools"
-        tff = tarfile.open(new_tool_archive_path, "r:*")
-        flist = tff.getnames()
-        ourdir = os.path.commonpath(flist)  # eg pyrevpos
-        self.tool_id = ourdir  # they are the same for TF tools
-        ourxml = [x for x in flist if x.lower().endswith(".xml")]
-        tff.extractall()
-        tff.close()
-        try:
-            self.run_rsync(ourdir, self.tool_dir)
-            with Locker():
-                self.update_toolconf(ourdir, ourxml)
-        except Exception:
-            print('Cannot install the new tool. This is only possible in the ToolFactory appliance at https://github.com/fubar2/toolfactory-galaxy-server')
-
-    def run_rsync(self, srcf, dstf):
-        src = os.path.abspath(srcf)
-        dst = os.path.abspath(dstf)
-        if os.path.isdir(src):
-            cll = ["rsync", "-r", src, dst]
-        else:
-            cll = ["rsync", src, dst]
-        subprocess.run(
-            cll,
-            capture_output=False,
-            encoding="utf8",
-            shell=False,
-        )
-
-
-    def update_toolconf(self, ourdir, ourxml):  # path is relative to tools
-
-        def sortchildrenby(parent, attr):
-            parent[:] = sorted(parent, key=lambda child: child.get(attr))
-
-        localconf = "./local_tool_conf.xml"
-        self.run_rsync(self.tool_conf_path, localconf)
-        tree = ET.parse(localconf)
-        root = tree.getroot()
-        hasTF = False
-        TFsection = None
-        for e in root.findall("section"):
-            if e.attrib["name"] == self.out_section:
-                hasTF = True
-                TFsection = e
-        if not hasTF:
-            TFsection = ET.Element("section", {"id":self.out_section, "name":self.out_section})
-            root.insert(0, TFsection)  # at the top!
-        our_tools = TFsection.findall("tool")
-        conf_tools = [x.attrib["file"] for x in our_tools]
-        for xml in ourxml:  # may be > 1
-            if xml not in conf_tools:  # new
-                ET.SubElement(TFsection, "tool", {"file": os.path.join('TFtools', xml)})
-        sortchildrenby(TFsection,"file")
-        newconf = f"{self.tool_id}_conf"
-        tree.write(newconf, pretty_print=True)
-        self.run_rsync(newconf, self.tool_conf_path)
-
-
 
 
 class Tool_Factory:
@@ -978,13 +884,14 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     r.makeTool()
     r.makeToolTar()
     if args.install:
-        TCU = Tool_Conf_Updater(
-            args=args,
-            local_tool_dir=args.local_tools,
-            new_tool_archive_path=r.newtarpath,
-            tool_conf_path=args.tool_conf_path,
-            new_tool_name=r.tool_name
-        )
+            try:
+                conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
+            except ConnectionRefusedError:
+                print('### no remote rpyc server found on port 9999 - this only works in the ToolFactory Appliance with that server running...')
+                sys.exit(1)
+            res = conn.root.tool_updater(galaxy_root=args.galaxy_root,
+                tool_conf_path=args.tool_conf_path, new_tool_archive_path=os.path.abspath(r.newtarpath),
+                new_tool_name=r.tool_name, local_tool_dir=args.local_tools)
 
 if __name__ == "__main__":
     main()

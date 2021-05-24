@@ -126,3 +126,7 @@ Otherwise, CtrlC from the attached console will stop the services.
 3. Use `docker system prune` and respond `y` to the prompt to clean up any damaged containers.
 
 4. Remove all the docker images in the usual way.
+
+## Security - why this Appliance is not suitable for exposing on the public internet
+
+See [the notes on Appliance security considerations.](https://github.com/fubar2/toolfactory-galaxy-server/tree/main/compose#readme)
