@@ -18,8 +18,8 @@ If you do, please be mindful that it is possible to damage the appliance
 by writing to the wrong places. Normal Galaxy security restrictions are removed to different degrees by these techniques. They are extremely powerful and generalisable but also
 a risk if anyone hostile can access the server. Best to ensure that your Appliance is not exposed on the public internet.
 
-More importantly, **any tools written using the Appliance that use either the server or rsync will always fail on a normally secured Galaxy server**, so they are
-useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it.
+More importantly, **any tools written using the Appliance that use rpyc will always fail on a normal Galaxy server**, so they are
+useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it that offers a similar rpyc server.
 
 ### rpyc
 
@@ -98,8 +98,9 @@ with a blocking call to the Rpyc server such as:
 res = conn.root.planemo_lint_test(xmlin, collectionpath)
 ```
 
-The provided rpyc server exposes a single function that runs planemo test and lint on the tool passed as the parameter. It uses a dangerous generic command line
-runner but this dangerous generic function is not exposed to RPC callers directly.
+The provided rpyc server exposes one function that runs planemo test and lint on the tool passed as the parameter. It uses a dangerous generic command line
+runner but this dangerous generic function is not exposed to RPC callers directly. It also exposes a function used by the ToolFactory to update the
+`..config/tool_conf.xml` after writing the new tool to `tools/TFtools` - things no job running on a normal, secure Galaxy server is allowed to do.
 
 Planemo is run in the remote container and the outputs from the lint and test proceedures are written to
 export directories and the tool output collection, so they appear in the history in the usual way.
@@ -119,6 +120,6 @@ This is easy to configure for a production environment where this remote procedu
 ### The challenge of tools that will not run in a normally secured Galaxy
 
 This Appliance raises the question of how to quarantine tools that use resources not normally available on a public Galaxy server. Tools generated with the ToolFactory that
-do not use any of the rpyc or rsync tricks will run in any normal Galaxy so do not need to be restricted in any way.
+do not use any of the rpyc tricks will run in any normal Galaxy so do not need to be restricted in any way.
 
 Ross Lazarus May 2021
