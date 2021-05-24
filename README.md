@@ -100,10 +100,9 @@ Rerun the job and adjust the form. Rinse and repeat until ready.
 The generated tool has not been run to generate test outputs, so the archive is not complete although the installed tool may work fine.
 
 To generate a real, tested toolshed archive, use the companion `planemo_test` tool. Planemo will be run in a separate
-container. The generated test outputs and the newly updated tested toolshed archive will appear in the history when ready.
-
-The very first test in a fresh Appliance takes a few minutes as Conda installs some dependencies - only needed once.
-Subsequently more like a minute or two, depending on conda and the complexity of dependencies needed
+container. The generated test outputs and the newly updated tested toolshed archive will appear when the job is done. The very first test in a
+fresh Appliance takes a few minutes as Conda installs some dependencies - only needed once.
+Subsequently more like a minute or two, depending on Conda time to install all new dependencies needed
 for the tool to run.
 
 

@@ -72,12 +72,15 @@ RUN apt update && apt install --no-install-recommends libcurl4-openssl-dev libss
     && pip3 install drmaa psycopg2 pycurl pykube watchdog requests boltons watchdog \
     && pip3 install importlib-metadata importlib-resources pathlib2 ruamel.yaml.clib typing zipp \
     && deactivate \
+    && mv client clientx \
+    && mkdir -p client \
+    && cp clientx/.node_version client/.node_version \
     && rm -rf .ci .circleci .coveragerc .gitignore .travis.yml CITATION CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS.md \
             LICENSE.txt Makefile README.rst SECURITY_POLICY.md pytest.ini tox.ini  \
-            contrib doc \
-            # .venv/src/node-v10.15.3-linux-x64 \
-            # .venv/lib/node_modules  \
-            # .venv/include/node .venv/bin/node .venv/bin/nodeenv \
+            contrib doc clientx \
+            .venv/src/node-v10.15.3-linux-x64 \
+            .venv/lib/node_modules  \
+            .venv/include/node .venv/bin/node \
     && /usr/bin/common_cleanup.sh
 
 # --- Final image ---

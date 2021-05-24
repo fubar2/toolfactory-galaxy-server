@@ -3,25 +3,28 @@
 ## Some docker-galaxy-stable compose configuration notes
 
 base-config.yml is used to alter a number of Galaxy and in particular uwsgi settings. This is neat because the stock galaxy-server image can be used unaltered.
+Except that then there are directories deleted during cleanup that prevent Planemo from using that copy of Galaxy instead of a redundant one.
+
 The uwsgi process watches the touch-restart file so the configurator can reboot the server after making changes.
 This requires that it operate as `master` but that is a good idea anyway probably..
+
 Galaxy configuration includes turning on the tool change watchdog so Galaxy will update the tool panel after changes are noted.
 The ToolFactory configuration completes but the container continues to run, providing a service described in detail below.
+Users are advised to ignore these functions and write normal, portable tools.
 
+## How does the ToolFactory do things that are not possible in a normal Galaxy server?
 
-## Security disclosures
+They are described here because they may be useful to anyone wanting non-portable tools to have easy access to external functions in a private deployment.
 
-If you use the ToolFactory for ordinary scripts, it will work without endangering the Appliance. The details below explain how this is possible.
-
-The mechanisms used will not affect your work unless you write tools that use the methods described below.
-If you do, please be mindful that it is possible to damage the appliance
-by writing to the wrong places. Normal Galaxy security restrictions are removed to different degrees by these techniques. They are extremely powerful and generalisable but also
-a risk if anyone hostile can access the server. Best to ensure that your Appliance is not exposed on the public internet.
-
-More importantly, **any tools written using the Appliance that use rpyc will always fail on a normal Galaxy server**, so they are
+However, **any tools written to use rpyc will always fail on a normal Galaxy server**, so they are
 useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it that offers a similar rpyc server.
 
-### rpyc
+This will not affect your work, unless you choose to write tools that use the RPC method described below.
+If you do, please be mindful that it is possible to damage the appliance
+by writing to the wrong places. Normal Galaxy security restrictions are effectively bypassed by these techniques.
+
+
+### Security disclosure: rpyc is used in the Appliance
 
 Both the `ToolFactory` and the`planemo_test` tools call an rpyc (remote procedure call in python) server to do things a normal Galaxy server does not permit,
 described in more detail below. Two functions are (currently) exposed and some more generalised and powerful ones are hidden from callers.
@@ -43,29 +46,37 @@ hardware or specialised services such as data acquisition and preprocessing, tha
 The Galaxy framework runs tools in a highly constrained and secure way. The job runner creates a tool execution environment that is very restricted in terms of resource access,
 in order to protect the framework, data and database from accidental bugs overwriting critical files or even from malicious damage.
 
-There may be circumstances where it is useful for a tool to be able to do things that are ill-advised and not possible in a normal, secure Galaxy server job runner.
-A publicly accessible server is not suited to the methods described here. They introduce substantial security risks through deliberately impaired job security.
-On the other hand, in a completely private, dedicated Docker appliance used by a developer, those risks might be accepted in return for the functionality provided.
+The ToolFactory Appliance is an example illustrating that there may be circumstances where it is useful for a tool to be able to do things that are ill-advised and not possible
+in a normal, secure Galaxy server job runner. A publicly accessible server is not suited to the methods described here. They introduce substantial security risks through
+bypassing normal job file access limits.
+
+In a completely private, dedicated Docker appliance used by a developer, the small additional risk might be acceptable in return for the functionality available.
 The developer is unlikely to act maliciously. Even if they do accidentally damage the system, the Docker containers and associated local exported disk
 volumes can be rebuilt from scratch, at the cost of about 10 minutes and the loss any work done on the Appliance but not backed up.
-Before destroying a damaged local installation, tested tool archives can be found in the local `...compose/export/galaxy/tested_TF_tools` directory.
+Before destroying a damaged local installation, tested tool archives can be found in the local `...compose/export/galaxy/tested_TF_archives` directory.
 
 ### Why would anyone want to do this?
 
 The motivating use case for this deliberate security “work-around” is the requirement for the ToolFactory tool to immediately
 install newly generated tools into the running Galaxy, and to test them with Planemo.
+
 These are functions available in the ToolFactory appliance, a flavour of the docker-galaxy-stable core.
 The Appliance adds automated post-installation configuration by a specialised server container based on the normal docker-galaxy-stable server.
 As soon as the Galaxy server installation is completed, the additional container loads tools, demonstration data, history and workflows to provide the “flavour”.
+
 It also starts a minimal Rpyc server capable of accepting commands from tools running in the Galaxy server container.
 It is this rpyc server that is the key to running tasks independently of the normal Galaxy job runner system,
 but triggered by a specially configured running tool.
 
-### A generic RPC for tools
+### What uses could there be for a generic RPC for tools?
 
 The approach described here is a generic way to allow tools executing as normal Galaxy jobs to do things that
-Galaxy security, very wisely would normally not permit. These impossible things may have other interesting applications
-but the potential cost of associated insecurity must be taken into account outside private settings.
+Galaxy job security would normally not permit. These things may have other interesting applications
+but the potential cost of associated potential security risk of unlimited scripting must be taken into account outside private settings.
+
+The ToolFactory tool uses the rpyc server to invoke a function that installs a new tool by updating the tool_conf.xml configuration file and
+writing the new tool to the `tool` directory. Without the server, these steps are not possible after generating a new tool. While other tools might be
+written to call the function, that's all they can do so risk is low.
 
 The `planemo_test` tool uses the remote container server by making RPC calls.
 The server exposes a single highly specialised and restricted function to test and lint a tool.
