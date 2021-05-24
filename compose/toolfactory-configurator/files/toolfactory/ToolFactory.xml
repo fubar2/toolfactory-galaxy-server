@@ -261,7 +261,9 @@ python3 $__tool_directory__/ToolFactory.py
 --collection '{"name": "$collect.name", "kind": "$collect.kind", "discover": "$collect.discover", "label": "$collect.label"}'
      #end for
 --untested_tool_out "$generated_xml"
---install "$install"
+#if $install == "0":
+--install_flag
+#end if
 --galaxy_root "$__root_dir__"
 --tool_dir "$__tool_directory__"
  #end if

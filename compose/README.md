@@ -16,12 +16,13 @@ Users are advised to ignore these functions and write normal, portable tools.
 
 They are described here because they may be useful to anyone wanting non-portable tools to have easy access to external functions in a private deployment.
 
-However, **any tools written to use rpyc will always fail on a normal Galaxy server**, so they are
-useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it that offers a similar rpyc server.
-
 This will not affect your work, unless you choose to write tools that use the RPC method described below.
+
 If you do, please be mindful that it is possible to damage the appliance
 by writing to the wrong places. Normal Galaxy security restrictions are effectively bypassed by these techniques.
+Also remember that **tools written to use rpyc will always fail on a normal Galaxy server**, so they are
+useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it that offers a similar rpyc server. Tools written
+without rpyc will work in any Galaxy server.
 
 
 ### Security disclosure: rpyc is used in the Appliance
@@ -91,6 +92,9 @@ been called on a command line.
 There may be other situations where the model used here may be useful on a private desktop. Any desired function can be exposed by the
 rpyc server as shown below. Exposed functions are named with the prefix `exposed_` and can make use of more generalised and dangerous
 code like the command line runner, but that function is not visible to any calling tools.
+
+A desktop GPU might be used by a new generated tool using the rpyc model, to create a new, specialised Galaxy Appliance for example. There may be
+many applications where this flexibility is useful to add to all of the framework's existing features for developing complex analyses on a desktop.
 
 ### rpyc makes RPC trivially easy to implement.
 

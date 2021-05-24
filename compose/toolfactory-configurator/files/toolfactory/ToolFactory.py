@@ -866,7 +866,7 @@ def main():
     a("--galaxy_venv", default="/galaxy_venv")
     a("--collection", action="append", default=[])
     a("--include_tests", default=False, action="store_true")
-    a("--install", default="1")
+    a("--install_flag", action = "store_false", default=True)
     a("--admin_only", default=False, action="store_true")
     a("--untested_tool_out", default=None)
     a("--local_tools", default="tools")  # relative to $__root_dir__
@@ -883,7 +883,7 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
     tf.writeShedyml()
     tf.makeTool()
     tf.makeToolTar()
-    if args.install:  # always true except during toolfactory test - only works if the appliance rpyc server is running
+    if args.install_flag:  # always true except during toolfactory test - only works if the appliance rpyc server is running
             try:
                 conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
             except ConnectionRefusedError:
