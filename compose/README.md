@@ -21,30 +21,22 @@ a risk if anyone hostile can access the server. Best to ensure that your Applian
 More importantly, **any tools written using the Appliance that use either the server or rsync will always fail on a normally secured Galaxy server**, so they are
 useless for sharing on the Toolshed. They will only work in a copy of this Appliance or something derived from it.
 
-### Rsync
-
-The ToolFactory uses rsync to update the running Galaxy config/tool_conf.xml when a new tool is built. That will fail on a normal Galaxy installation or
-a secured cluster production system where rsync would need passwordless ssh to access the (remote) server disk. In the Appliance,
-rsync can write anywhere Galaxy can which is as handy as it is insecure. If you choose to use rsync for a tool, remember it will not work in other
-Galaxy servers and please, be careful where you write. If you do accidentally break the Appliance, it takes only a few minutes to delete and recreate the entire
-server from scratch if necessary.
-
-
 ### rpyc
 
-The `planemo_test` tool calls an rpyc (remote procedure call in python) server to run planemo, and to write tested archives to exported
-directories that tools should never be able to write, described in more detail below. It is far more restricted than the rsync method because only a single function
-is (currently) exposed. However, it is easy to change what the server exposes. It runs as root and has access to everything in the container so it is wise to
-expose only very specific and limited functions that cannot be exploited for malicious use of this powerful resource.
-The remote server only exposes specific exported functions, currently only useful for
-the `planemo_test` tool, so it will not be possible for a hostile user to damage the system without changing that server code running in the toolfactory-galaxy-server container.
+Both the `ToolFactory` and the`planemo_test` tools call an rpyc (remote procedure call in python) server to do things a normal Galaxy server does not permit,
+described in more detail below. Two functions are (currently) exposed and some more generalised and powerful ones are hidden from callers.
+It is easy to write code to change the functions exposed by the server.
+It runs as root and has access to everything in the container so it is wise to expose only very specific and limited functions that cannot be
+exploited for malicious use of this powerful resource. The remote server only exposes specific exported functions, currently only useful for
+the Appliance tool generator and tester, so it will not be possible for a hostile user to damage the system without changing
+that server code running in the toolfactory-configurator container.
 
 ### Risks and value proposition
 
-These techniques are completely unsupported by the Galaxy developers. They are handy for integrating the ToolFactory but not recommended for
-public internet exposure. They offer generalisable models for other
-potential private desktop Galaxy appliances. These might use locally generated ToolFactory tools modelled on the `planemo_lint` tool, integrated with GPU or other
-hardware or specialised services such as data acquisition and preprocessing, that are not otherwise readily available in Galaxy.
+This technique is completely unsupported by the Galaxy developers. It is handy for integrating the ToolFactory but not recommended for
+public internet exposure. It offers interesting and generalisable models for other possible private desktop Galaxy appliances. These might use
+locally generated ToolFactory tools modelled on the `planemo_lint` tool, but integrated with GPU or other
+hardware or specialised services such as data acquisition and preprocessing, that are not otherwise readily available to a tool in a normal Galaxy server.
 
 ## Details: Remote command execution for Galaxy tools in a private environment.
 

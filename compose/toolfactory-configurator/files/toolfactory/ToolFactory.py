@@ -879,19 +879,20 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
             % (args.bad_user, args.bad_user)
         )
     assert args.tool_name, "## Tool Factory expects a tool name - eg --tool_name=DESeq"
-    r = Tool_Factory(args)
-    r.writeShedyml()
-    r.makeTool()
-    r.makeToolTar()
-    if args.install:
+    tf = Tool_Factory(args)
+    tf.writeShedyml()
+    tf.makeTool()
+    tf.makeToolTar()
+    if args.install:  # always true except during toolfactory test - only works if the appliance rpyc server is running
             try:
                 conn = rpyc.connect("planemo-server", port=9999, config={'sync_request_timeout':1200})
             except ConnectionRefusedError:
-                print('### no remote rpyc server found on port 9999 - this only works in the ToolFactory Appliance with that server running...')
+                print('### Remote rpyc server not available - cannot install new tool %s. This only works in the ToolFactory Appliance with the server running' % args.tool_name)
                 sys.exit(1)
             res = conn.root.tool_updater(galaxy_root=args.galaxy_root,
-                tool_conf_path=args.tool_conf_path, new_tool_archive_path=os.path.abspath(r.newtarpath),
-                new_tool_name=r.tool_name, local_tool_dir=args.local_tools)
+                tool_conf_path=args.tool_conf_path, new_tool_archive_path=os.path.abspath(tf.newtarpath),
+                new_tool_name=tf.tool_name, local_tool_dir=args.local_tools)
+            # code all moved to the server. No need for rsync other than there now.
 
 if __name__ == "__main__":
     main()

@@ -28,14 +28,14 @@ else
   touch /export/galaxy/config/reload_uwsgi.touchme
   chown galaxy:galaxy /export/galaxy/config/reload_uwsgi.touchme
   bash -c ". /venv/bin/activate ; python /usr/local/bin/waitforquiet.py"
-  echo "configurator is installing the demonstration history"
+  echo "Configurator will install: the toolfactory and planemo_test tools, the demonstration history and workflows"
   sudo -H -u galaxy bash -c '. /venv/bin/activate ; shed-tools install -g "http://nginx" -a "fakekey" -t "/config/TFtools.yml"'
   sudo -H -u galaxy bash -c  '. /venv/bin/activate ; python3 /usr/local/bin/install-history.py'
 fi
 # run rpyc server to trigger planemo tests when requested by toolfactory
 
 chown -R galaxy:galaxy /home/galaxy
-echo "## All configuration done. Please wait for Conda to finish and only then, login and enjoy your ToolFactory Appliance"
+echo "## Configuration done. If this is the first run, please wait for Conda to finish and only then, login and enjoy your ToolFactory Appliance"
 bash -c "cd /planemo ; . /venv/bin/activate ; python3 /usr/local/bin/planemo_rpyc.py"
 # this needs root sadly.
 while [ 1 ]

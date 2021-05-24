@@ -1,4 +1,3 @@
-
 #!/usr/bin/python
 
 import argparse
@@ -20,10 +19,8 @@ def _parser():
         default=[ "/export/galaxy/config/TF_demo_history_May_21.tar.gz",])
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=[], action="append")
     parser.add_argument("-w", "--wfpaths", help='workflow(s) to install',
-        default=["/export/galaxy/workflows/TF_demo_make_tools_May_21.ga", "/export/galaxy/workflows/TF_demo_make_test_tools_May_21.ga"])  #
+        default=["/export/galaxy/workflows/TF_demo_make_tools_May_21.ga", "/export/galaxy/workflows/TF_demo_make_test_tools_May_21.ga"])
     return parser
-
-import requests
 
 ACTIVE = ['running', 'upload', 'waiting']
 
