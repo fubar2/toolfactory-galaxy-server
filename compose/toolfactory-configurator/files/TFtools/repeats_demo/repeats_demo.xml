@@ -1,0 +1,93 @@
+<tool name="repeats_demo" id="repeats_demo" version="2.00">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 29/05/2021 06:46:41 using the Galaxy Tool Factory.-->
+  <description>Repeated parameter demonstration</description>
+  <requirements/>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "2.00"]]></version_command>
+  <command><![CDATA[python
+$runme
+#for $rep in $R_mi:
+--mi "$rep.mi"
+#end for
+#for $rep in $R_mp:
+--mp "$rep.mp"
+#end for
+>
+$repeats_out]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+import argparse
+parser = argparse.ArgumentParser()
+a = parser.add_argument
+a("--mi", action="append")
+a("--mp", action="append")
+args = parser.parse_args()
+if args.mi:
+   print(" file and ".join(args.mi))
+if args.mp:
+   print(" string and ".join(args.mp))
+if not (args.mi or args.mp):
+   print('Nothing was selected')
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <repeat name="R_mi" title="Add as many Multiple input files from your history - as many as you like as needed">
+      <param name="mi" type="data" optional="false" label="Multiple input files from your history - as many as you like" help="" format="html,txt,xml" multiple="false"/>
+    </repeat>
+    <repeat name="R_mp" title="Add as many Multiple user supplied text strings - as many different ones as you like as needed">
+      <param name="mp" type="text" value="Multiple user supplied text strings - as many different ones as you like" label="Multiple user supplied text strings - as many different ones as you like" help=""/>
+    </repeat>
+  </inputs>
+  <outputs>
+    <data name="repeats_out" format="txt" label="repeats_out" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="repeats_out" value="repeats_out_sample" compare="diff" lines_diff="6"/>
+      <repeat name="R_mi">
+        <param name="mi" value="mi_sample"/>
+      </repeat>
+      <repeat name="R_mp">
+        <param name="mp" value="Multiple user supplied text strings - as many different ones as you like"/>
+      </repeat>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Simple python Argparse sample to echo repeated user selections - how to use repeated inputs and user parameters.
+
+Unpredictable or messy "repeated" outputs can use a collection if they are not useful downstream but otherwise require manual wrapping - see the GTN advanced tutorial.
+
+ 
+
+------
+
+
+Script::
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    a = parser.add_argument
+    a("--mi", action="append")
+    a("--mp", action="append")
+    args = parser.parse_args()
+    if args.mi:
+       print(" file and ".join(args.mi))
+    if args.mp:
+       print(" string and ".join(args.mp))
+    if not (args.mi or args.mp):
+       print('Nothing was selected')
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+
