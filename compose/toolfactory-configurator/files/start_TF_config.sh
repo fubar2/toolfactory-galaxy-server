@@ -3,21 +3,24 @@
 # should only return when the admin exists and no jobs running
 echo "slept well.."
 DONEONCE="0"
-if [ -f "/export/galaxy/tools/toolfactory/ToolFactory.xml" ]; then
+if [ -f "/export/galaxy/tools/TFtools/tacrev/tacrev.xml" ]; then
   DONEONCE="1"
   echo "configurator found the toolfactory already present so not installing anything"
 else
   echo "configurator found no toolfactory - loading sample history and overwriting configs as needed"
   mkdir /export/galaxy/tested_TF_archives
-  chown galaxy:galaxy /galaxy/tested_TF_archives
+  chown galaxy:galaxy  /export/galaxy/tested_TF_archives
   mkdir /export/galaxy/tested_TF_reports
   chown galaxy:galaxy /export/galaxy/tested_TF_reports
   mkdir -p /galaxy
   cp -r /tools/* /galaxy/tools/
   cp -r /config/* /galaxy/config/
-  cp /config/base.css /galaxy/static/dist/base.css
+  cp /files/*tar.gz /galaxy/config/
+  cp /files/base.css /galaxy/static/dist/base.css
+  # cp /files/mulled_build.py /galaxy/lib/galaxy/tool_util/deps/mulled/mulled_build.py
+  # cp /files/invfile.lua /galaxy/lib/galaxy/tool_util/deps/mulled/invfile.lua
   cp -r /workflows /export/galaxy/workflows
-  cp /config/welcome.html /galaxy/static/welcome.html
+  cp /files/welcome.html /galaxy/static/welcome.html
   chown -R galaxy:galaxy /galaxy/config
   chown -R galaxy:galaxy /galaxy/tools
   chown -R galaxy:galaxy /galaxy/static

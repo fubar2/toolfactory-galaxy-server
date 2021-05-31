@@ -16,10 +16,10 @@ def _parser():
     parser.add_argument("-e", "--email", help='admin email of target galaxy', default="admin@galaxy.org")
     parser.add_argument("-p", "--password", help='Galaxy admin password', default="password")
     parser.add_argument("-i", "--history_path", action="append", help='Paths to history gz files to be loaded',
-        default=[ "/export/galaxy/config/TF_demo_history_May_21.tar.gz",])
+        default=[ "/export/galaxy/config/TF_demo_history.tar.gz",])
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=[], action="append")
     parser.add_argument("-w", "--wfpaths", help='workflow(s) to install',
-        default=["/export/galaxy/workflows/TF_demo_make_tools_May_21.ga", "/export/galaxy/workflows/TF_demo_make_test_tools_May_21.ga"])
+        default=["/export/galaxy/workflows/TF_demo_make_tools.ga", "/export/galaxy/workflows/TF_demo_make_test_tools_May_21.ga"])
     return parser
 
 ACTIVE = ['running', 'upload', 'waiting']
@@ -76,7 +76,7 @@ def main():
     gi = galaxy.GalaxyInstance(url=args.galaxy, key=args.key)
     for tfid in args.toolid:
         try:
-            x = gi.tools.install_dependencies(tfid)
+            x = gi.tools.install_dependencies(tfid, resolver_type="singularity")
         except Exception:
             print('Attempt to install %s failed' % tfid)
         job_check(gi)

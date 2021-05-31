@@ -23,6 +23,8 @@ galaxy:
   brand: ToolFactory Appliance
   sanitize_all_html: false
   watch_tools: auto
+  cleanup_job: never
+  containers_resolvers_config_file: container_resolvers_conf.xml
 
 pulsar:
   conda_auto_init: True

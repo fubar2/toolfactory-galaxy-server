@@ -110,6 +110,7 @@ class Tool_Factory:
             print(
                 f"--output_files parameter {args.output_files} is malformed - should be a dictionary"
             )
+        assert (len(self.outfiles) + len(self.collections)) > 0, 'No outfiles or output collections specified. The Galaxy job runner will fail without an output of some sort'
         try:
             self.addpar = [
                 json.loads(x) for x in args.additional_parameters if len(x.strip()) > 1
@@ -750,14 +751,13 @@ class Tool_Factory:
             part2 = exml.split("</tests>")[1]
             fixed = "%s\n%s\n%s" % (part1, "\n".join(self.test_override), part2)
             exml = fixed
-        # exml = exml.replace('range="1:"', 'range="1000:"')
         with open("%s.xml" % self.tool_name, "w") as xf:
             xf.write(exml)
             xf.write("\n")
         with open(self.args.untested_tool_out, 'w') as outf:
             outf.write(exml)
             outf.write('\n')
-        # ready for the tarball
+        # galaxy history item
 
     def writeShedyml(self):
         """for planemo"""
@@ -788,8 +788,6 @@ class Tool_Factory:
         xreal = "%s.xml" % self.tool_name
         xout = os.path.join(self.tooloutdir, xreal)
         shutil.copyfile(xreal, xout)
-        #xout = os.path.join(self.repdir, xreal)
-        #shutil.copyfile(xreal, xout)
         for p in self.infiles:
             pth = p["name"]
             dest = os.path.join(self.testdir, "%s_sample" % p["infilename"])
@@ -892,6 +890,7 @@ admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
             res = conn.root.tool_updater(galaxy_root=args.galaxy_root,
                 tool_conf_path=args.tool_conf_path, new_tool_archive_path=os.path.abspath(tf.newtarpath),
                 new_tool_name=tf.tool_name, local_tool_dir=args.local_tools)
+            conn.close()
             # code all moved to the server. No need for rsync other than there now.
 
 if __name__ == "__main__":

@@ -30,13 +30,19 @@
         <destination id="local" runner="local">
             <env file="/galaxy/.venv/bin/activate" />
         </destination>
-        <destination id="{{ GALAXY_DEPENDENCY_RESOLUTION | default('conda') }}_{{ GALAXY_JOB_RUNNER | default('local') }}" runner="{{ GALAXY_JOB_RUNNER | default('local') }}">
+        <destination id="toolfactory" runner="local">
             {% if GALAXY_DEPENDENCY_RESOLUTION == 'singularity' -%}
               <env file="/galaxy/.venv/bin/activate" />
               <env id="HOME">/home/galaxy</env>
               <param id="singularity_enabled">true</param>
-              {% if GALAXY_JOB_RUNNER == 'local' -%}
-                <param id="singularity_volumes">{{ EXPORT_DIR | regex_replace("^.", "") }}/$galaxy_root:$galaxy_root:ro,{{ EXPORT_DIR | regex_replace("^.", "") }}/$tool_directory:$tool_directory:ro,{{ EXPORT_DIR | regex_replace("^.", "") }}/$job_directory:$job_directory:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$working_directory:$working_directory:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$default_file_path:$default_file_path:rw</param>
+            <!-- Ensuring a consistent collation environment is good for reproducibility. -->
+            <env id="LC_ALL">C</env>
+            <!-- The cache directory holds the docker containers that get converted. -->
+            <env id="SINGULARITY_CACHEDIR">/tmp/singularity</env>
+            <!-- Singularity uses a temporary directory to build the squashfs filesystem. -->
+            <env id="SINGULARITY_TMPDIR">/tmp</env>
+            {% if GALAXY_JOB_RUNNER == 'local' -%}
+                <param id="singularity_volumes">/galaxy:/galaxy:rw, /export/galaxy/testedTFarchives:/export/galaxy/testedTFarchives:rw, /export/galaxy/testedTFreports:/export/galaxy/testedTFreports:rw, /export/galaxy/config/tool_conf.xml:/export/galaxy/config/tool_conf.xml:rw, /export/galaxy/tools/TFtools/:/export/galaxy/tools/TFtools:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$job_directory:$job_directory:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$working_directory:$working_directory:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$default_file_path:$default_file_path:rw</param>
               {% endif -%}
             {% elif GALAXY_DEPENDENCY_RESOLUTION == 'docker' -%}
               <param id="docker_enabled">true</param>
@@ -44,7 +50,30 @@
               <param id="docker_set_user"></param>
               {% if GALAXY_JOB_RUNNER == 'local' -%}
                 #<param id="docker_volumes">{{ HOST_EXPORT_DIR }}/$galaxy_root:$galaxy_root:ro,{{ HOST_EXPORT_DIR }}/$tool_directory:$tool_directory:ro,{{ HOST_EXPORT_DIR }}/$job_directory:$job_directory:rw,{{ HOST_EXPORT_DIR }}/$working_directory:$working_directory:rw,{{ HOST_EXPORT_DIR }}/$default_file_path:$default_file_path:rw</param>
-                <param id="docker_volumes">{/export/$galaxy_root:$galaxy_root:ro, export/$tool_directory:$tool_directory:ro,/export/$job_directory:$job_directory:rw,/export/$working_directory:$working_directory:rw,/export/$default_file_path:$default_file_path:rw</param>
+                <param id="docker_volumes">{/galaxy:/galaxy:ro, /export/galaxy/testedTFarchives:/export/galaxy/testedTFarchives:rw, /export/galaxy/testedTFreports:/export/galaxy/testedTFreports:rw, /export/galaxy/config/tool_conf.xml:/export/galaxy/config/tool_conf.xml:rw, /export/galaxy/tools/TFtools/:/export/galaxy/tools/TFtools:rw, /export/$galaxy_root:$galaxy_root:ro, export/$tool_directory:$tool_directory:ro,/export/$job_directory:$job_directory:rw,/export/$working_directory:$working_directory:rw,/export/$default_file_path:$default_file_path:rw</param>
+              {% endif -%}
+            {% endif -%}
+        </destination>
+         <destination id="{{ GALAXY_DEPENDENCY_RESOLUTION | default('conda') }}_{{ GALAXY_JOB_RUNNER | default('local') }}" runner="{{ GALAXY_JOB_RUNNER | default('local') }}">
+            {% if GALAXY_DEPENDENCY_RESOLUTION == 'singularity' -%}
+              <env file="/galaxy/.venv/bin/activate" />
+              <env id="HOME">/home/galaxy</env>
+              <param id="singularity_enabled">true</param>
+            <!-- Ensuring a consistent collation environment is good for reproducibility. -->
+            <env id="LC_ALL">C</env>
+            <!-- The cache directory holds the docker containers that get converted. -->
+            <env id="SINGULARITY_CACHEDIR">/tmp/singularity</env>
+            <!-- Singularity uses a temporary directory to build the squashfs filesystem. -->
+            <env id="SINGULARITY_TMPDIR">/tmp</env>
+            {% if GALAXY_JOB_RUNNER == 'local' -%}
+                <param id="singularity_volumes">{{ EXPORT_DIR | regex_replace("^.", "") }}/$galaxy_root:$galaxy_root:ro,{{ EXPORT_DIR | regex_replace("^.", "") }}/$tool_directory:$tool_directory:ro,{{ EXPORT_DIR | regex_replace("^.", "") }}/$job_directory:$job_directory:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$working_directory:$working_directory:rw,{{ EXPORT_DIR | regex_replace("^.", "") }}/$default_file_path:$default_file_path:rw</param>
+              {% endif -%}
+            {% elif GALAXY_DEPENDENCY_RESOLUTION == 'docker' -%}
+              <param id="docker_enabled">true</param>
+              <param id="docker_sudo">false</param>
+              <param id="docker_set_user"></param>
+              {% if GALAXY_JOB_RUNNER == 'local' -%}
+                <param id="docker_volumes">{{ HOST_EXPORT_DIR }}/$galaxy_root:$galaxy_root:ro,{{ HOST_EXPORT_DIR }}/$tool_directory:$tool_directory:ro,{{ HOST_EXPORT_DIR }}/$job_directory:$job_directory:rw,{{ HOST_EXPORT_DIR }}/$working_directory:$working_directory:rw,{{ HOST_EXPORT_DIR }}/$default_file_path:$default_file_path:rw</param>
               {% endif -%}
             {% elif not GALAXY_JOB_RUNNER.startswith('pulsar') and GALAXY_JOB_RUNNER != 'k8s' -%}
               <env file="/galaxy/.venv/bin/activate" />
@@ -68,6 +97,8 @@
     </destinations>
     <tools>
         <tool id="upload1" destination="local" />
+       <!-- <tool id="planemo_test" destination="toolfactory" />
+        <tool id="rgtf2" destination="toolfactory" /> -->
         <tool id="__SET_METADATA__" destination="local" />
     </tools>
 </job_conf>

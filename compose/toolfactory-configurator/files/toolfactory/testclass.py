@@ -2,9 +2,12 @@ import argparse
 import json
 import os
 import requests
+import time
 
 
 from bioblend import galaxy
+
+ACTIVE = ['running', 'upload', 'waiting']
 
 class ToolTester():
     # test a newly installed tool using bioblend
@@ -45,6 +48,13 @@ if __name__ == '__main__':
         self.galaxy = args.galaxy
         self.key = args.key
         self.tool_id = args.tool_id
+        self.update_tool = args.update_tool
+
+
+    def update_tool(self, jobdetails):
+        if jobdetails['state'] == 'ok':
+            outs = jobdetails['outputs']
+
 
     def run_test(self):
         """
@@ -59,11 +69,10 @@ if __name__ == '__main__':
         #print('####chistory',chistory,'\n#### contents=',contents)
         #history = gi.histories.create_history(name=f"{self.tool_id}_test_history")
         #new_hist_id = history['id']
-        fapi = ''.join([self.galaxy, '/api/tools/', self.tool_id, '/build'])
-        build = gi.make_get_request(url=fapi,params={"history_id":chistory_id}).json()
-        fapi = ''.join([self.galaxy, '/api/tools/', self.tool_id, '/test_data'])
-        test_data = requests.get(fapi, params={'key':self.key, 'history_id':chistory_id})# gi.make_get_request(url=fapi,params={"history_id":chistory_id,'key':self.key}).json()
-        print(test_data)
+        build_api = ''.join([self.galaxy, '/api/tools/', self.tool_id, '/build'])
+        build = gi.make_get_request(url=build_api,params={"history_id":chistory_id}).json()
+        testdata_api = ''.join([self.galaxy, '/api/tools/', self.tool_id, '/test_data'])
+        test_data = requests.get(testdata_api, params={'key':self.key, 'history_id':chistory_id})# gi.make_get_request(url=fapi,params={"history_id":chistory_id,'key':self.key}).json()
         testinputs = test_data.json()[0].get('inputs',None)
         print('testinputs',testinputs)
         stateinputs = build.get('state_inputs',None) # 'input1': {'values': [{'id': '7b326180327c3fcc', 'src': 'hda'}]}}
@@ -92,12 +101,28 @@ if __name__ == '__main__':
         fapi = ''.join([self.galaxy, '/api/tools'])
         r = gi.tools.run_tool(chistory_id, self.tool_id, inputs, input_format='legacy')
         print(f"Called test on {self.tool_id} - got {r}")
+        jid = r.get('jobs',None)
+        if not jid or len(jid) == 0:
+            jobid = jid[0].get('id', None)
+            if jobid:
+                j = [x for x in gi.jobs.get_jobs() if x['id'] == jobid and x['state'] in ACTIVE]
+                while len(j) > 0:
+                    time.sleep(2)
+                    j = [x for x in gi.jobs.get_jobs() if x['id'] == jobid and x['state'] in ACTIVE]
+                jobdetails = gi.jobs.show_job(jobid, full_details=True)
+                if self.update_tool:
+                    self.update_tool(jobdetails)
+            else:
+                print('## no job id found in return from call. Something did not go well.')
+        else:
+            print('## no jobs found in return from call. Something did not go well.')
 
 def _parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--galaxy", help='URL of target galaxy',default="http://localhost:8080")
-    parser.add_argument("-a", "--key", help='Galaxy admin key', default="13073fde17d06591ce36e596e3c29904")
+    parser.add_argument("-g", "--galaxy", help='URL of target galaxy',default="http://nginx")
+    parser.add_argument("-a", "--key", help='Galaxy admin key', default="fakekey")
     parser.add_argument("-t", "--tool_id", help='Tool id to test', default="plotter")
+    parser.add_argument("-u", "--update_tool", help='Update the ToolFactory generated tool with the outputs', default=False, action="store_true")
     return parser
 
 

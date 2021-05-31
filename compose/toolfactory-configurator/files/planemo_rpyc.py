@@ -1,4 +1,4 @@
-
+from bioblend import galaxy
 import logging
 import lxml.etree as ET
 import os
@@ -14,7 +14,9 @@ import time
 class planemo_run(Service):
     """
     rpyc restricted server providing access to a very specific function exposed to lint and test a tool with planemo
-    uses an unrestricted command runner but does not expose it.
+    and another to update tool_conf.xml and tools with a newly generated tool
+    uses an unrestricted command runner and rsync runner but does not expose them to callers since they are too
+    dangerous.
     """
 
 
@@ -56,6 +58,14 @@ class planemo_run(Service):
             encoding="utf8",
             shell=False,
         )
+
+    def install_deps(self, tool_id):
+        gi = galaxy.GalaxyInstance(url='http://nginx', key='fakekey')
+        try:
+            res = gi.tools.install_dependencies(tool_id)
+        except Exception:
+            logging.warning('Attempt to install %s failed' % tool_id)
+        logging.info('Tried installing dependencies for %s. Got %s' % (tool_id,res))
 
 
     def exposed_tool_updater(self, galaxy_root,
@@ -106,10 +116,9 @@ class planemo_run(Service):
         tff.extractall()
         tff.close()
         self.run_rsync(ourdir, tool_dir)
-        #try:
         update_toolconf(tool_conf_path, out_section, tool_id, ourdir, ourxml)
-        #except Exception:
-        #   print('Cannot install the new tool. This is only possible in the ToolFactory appliance at https://github.com/fubar2/toolfactory-galaxy-server')
+
+
 
 
     def exposed_planemo_lint_test(self, xmlpath, collection):

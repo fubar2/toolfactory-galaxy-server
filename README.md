@@ -129,3 +129,12 @@ Otherwise, CtrlC from the attached console will stop the services.
 ## Security - why this Appliance is not suitable for exposing on the public internet
 
 See [the notes on Appliance security considerations.](https://github.com/fubar2/toolfactory-galaxy-server/tree/main/compose#readme)
+
+## Why is the Appliance complicated?
+
+The ToolFactory is a Galaxy tool, but it installs newly generated tools automatically into the local Galaxy server. This is not normally possible because a tool
+cannot normally escape Galaxy's job execution environment isolation in order to write to the server's configuration files so the new tool appears in the tool menu
+and is installed in the TFtools directory, in the normal Galaxy tools directory.
+
+The Appliance is configured so the ToolFactory and the Planemo test tool can use remote procedure calls to do what tools cannot normally do. It runs in a separate
+container. Without it, tool installation and testing are difficult to do inside Galaxy tools.  Use outside the privacy of a developer desktop is strongly discouraged for that reason.

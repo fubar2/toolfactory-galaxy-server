@@ -15,6 +15,7 @@
     <tool file="TFtools/prolog_demo/prolog_demo.xml"/>
     <tool file="TFtools/pyrev_argparse_test/pyrev_argparse_test.xml"/>
     <tool file="TFtools/pyrev_pos_test/pyrev_pos_test.xml"/>
+    <tool file="TFtools/repeats_demo/repeats_demo.xml"/>
     <tool file="TFtools/sedtest_toolshed/sedtest_toolshed.xml"/>
     <tool file="TFtools/select_test/select_test.xml"/>
     <tool file="TFtools/tacrev/tacrev.xml"/>

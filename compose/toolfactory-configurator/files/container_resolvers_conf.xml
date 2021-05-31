@@ -1,6 +1,6 @@
 <containers_resolvers>
   <explicit_singularity />
   <cached_mulled_singularity cache_directory="/export/galaxy/database/container_cache/singularity" />
-  <mulled_singularity auto_install="True" cache_directory="/export/galaxy/database/container_cache/singularity" />
+  <mulled_singularity auto_install="False" cache_directory="/export/galaxy/database/container_cache/singularity" />
   <build_mulled_singularity auto_install="True" cache_directory="/export/galaxy/database/container_cache/singularity" />
 </containers_resolvers>

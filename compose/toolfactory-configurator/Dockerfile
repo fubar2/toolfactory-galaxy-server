@@ -30,6 +30,7 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && mkdir -p /tools \
     && mkdir -p /config \
     && mkdir -p /workflows \
+    && mkdir -p /files \
     && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo rsync -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT"
@@ -52,15 +53,19 @@ COPY ./files/start_TF_config.sh /usr/local/bin/start_TF_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
 COPY ./files/TFtools.yml /config/TFtools.yml
-COPY ./files/TF_demo_history_May_21.tar.gz /config/TF_demo_history_May_21.tar.gz
-COPY ./files/TF-Demo-data-May-16.tar.gz /config/TF-Demo-data-May-16.tar.gz
-COPY ./files/TF_demo_make_tools_May_21.ga /workflows/TF_demo_make_tools_May_21.ga
+COPY ./files/TF_demo_history.tar.gz /files/TF_demo_history.tar.gz
+COPY ./files/TF-Demo-data-May-16.tar.gz /files/TF-Demo-data-May-16.tar.gz
+COPY ./files/TF_demo_make_tools.ga /workflows/TF_demo_make_tools.ga
 COPY ./files/TF_demo_make_test_tools_May_21.ga /workflows/TF_demo_make_test_tools_May_21.ga
 COPY ./files/install-history.py /usr/local/bin/install-history.py
 COPY ./files/datatypes_conf.xml /config/
+COPY ./files/dependency_resolvers_conf.xml /config/
 COPY ./files/tool_conf.xml /config/
-COPY ./files/base.css /config/
-COPY ./files/welcome.html /config/welcome.html
+COPY ./files/base.css /files/
+COPY ./files/welcome.html /files/welcome.html
+#COPY ./files/mulled_build.py /files/mulled_build.py
+#COPY ./files/invfile.lua /files/invfile.lua
+
 
 RUN chown -R galaxy:galaxy /tools /config
 
