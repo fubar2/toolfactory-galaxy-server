@@ -1,12 +1,12 @@
 galaxy_uwsgi:
   socket: :5555
   buffer-size: 16384
-  processes: 1
-  threads: 4
+  processes: 2
+  threads: 2
   offload-threads: 2
   static-map: /static=static
   static-map: /favicon.ico=static/favicon.ico
-  master: true
+  master: false
   virtualenv: .venv
   pythonpath: lib
   thunder-lock: true
@@ -14,7 +14,7 @@ galaxy_uwsgi:
   hook-master-start: unix_signal:2 gracefully_kill_them_all
   hook-master-start: unix_signal:15 gracefully_kill_them_all
   enable-threads: true
-  touch-reload: /export/galaxy/config/reload_uwsgi.touchme
+  # touch-reload: /export/galaxy/config/reload_uwsgi.touchme
 
 
 galaxy:

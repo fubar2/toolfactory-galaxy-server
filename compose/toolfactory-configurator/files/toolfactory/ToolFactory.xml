@@ -266,6 +266,7 @@ python3 $__tool_directory__/ToolFactory.py
 #end if
 --galaxy_root "$__root_dir__"
 --tool_dir "$__tool_directory__"
+--admin_only
  #end if
 ]]></command>
  <configfiles>

@@ -11,15 +11,15 @@ from bioblend import galaxy
 
 def _parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--galaxy", help='URL of target galaxy', default="http://nginx")
+    parser.add_argument("-g", "--galaxy", help='URL of target galaxy', default="http://galaxy-server")
     parser.add_argument("-k", "--key", help='Galaxy admin key', default="fakekey")
     parser.add_argument("-e", "--email", help='admin email of target galaxy', default="admin@galaxy.org")
     parser.add_argument("-p", "--password", help='Galaxy admin password', default="password")
     parser.add_argument("-i", "--history_path", action="append", help='Paths to history gz files to be loaded',
-        default=[ "/export/galaxy/config/TF_demo_history.tar.gz",])
+        default=[ "/galaxy-central/workflows/TF_demo_history.tar.gz",])
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=[], action="append")
-    parser.add_argument("-w", "--wfpaths", help='workflow(s) to install',
-        default=["/export/galaxy/workflows/TF_demo_make_tools.ga", "/export/galaxy/workflows/TF_demo_make_test_tools_May_21.ga"])
+    parser.add_argument("-w", "--wfpaths", help='workflow(s) to install', default=["/galaxy-central/workflows/TF_demo_make_tools.ga",
+      "/galaxy-central/workflows/TF_demo_make_test_tools_May_21.ga"])
     return parser
 
 ACTIVE = ['running', 'upload', 'waiting']

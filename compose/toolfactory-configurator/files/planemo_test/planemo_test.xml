@@ -4,7 +4,6 @@
   <description>Test and finalise a toolshed archive</description>
   <requirements>
     <requirement type="package" version="5.0.1">rpyc</requirement>
-    <requirement type="package" version="3.2.3">rsync</requirement>
     <requirement type="package" version="4.6.3">lxml</requirement>
   </requirements>
   <stdio>
@@ -28,21 +27,6 @@ import shutil
 import subprocess
 import sys
 
-
-def run_rsync(srcf, dstf):
-    src = os.path.abspath(srcf)
-    dst = os.path.abspath(dstf)
-    if os.path.isdir(src):
-        cll = ["rsync", "-r", src, dst]
-    else:
-        cll = ["rsync", src, dst]
-    subprocess.run(
-        cll,
-        capture_output=False,
-        encoding="utf8",
-        shell=False,
-    )
-
 def main():
     assert len(sys.argv) >= 3, 'Must have input xml and output archive paths on command line'
     xmlin = sys.argv[1]
@@ -64,8 +48,6 @@ def main():
     prepdir = os.path.join(pworkrep, toolname)
     galtooldir = os.path.join('/export/galaxy/tools/TFtools', toolname)
     res = conn.root.planemo_lint_test(xmlin, abscoll)
-    run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", ".")
-    run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", galtooldir)
     shutil.copy(f"{toolname}_tested.toolshed.gz", arcout)
 
 main()

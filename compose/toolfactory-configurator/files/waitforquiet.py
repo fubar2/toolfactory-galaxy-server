@@ -12,7 +12,7 @@ from bioblend import galaxy
 
 def _parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--galaxy", help='URL of target galaxy', default="http://nginx")
+    parser.add_argument("-g", "--galaxy", help='URL of target galaxy', default="http://galaxy-server")
     parser.add_argument("-k", "--key", help='Galaxy admin key', default="fakekey")
     parser.add_argument("-e", "--email", help='admin email of target galaxy', default="admin@galaxy.org")
     parser.add_argument("-p", "--password", help='Galaxy admin password', default="password")

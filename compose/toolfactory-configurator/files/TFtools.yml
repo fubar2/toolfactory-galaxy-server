@@ -44,6 +44,6 @@ tools:
   tool_panel_section_label: ToolFactory
   install_resolver_dependencies: True
 - name: planemo_test
-  owner: fubar_too
+  owner: fubar
   tool_panel_section_label: ToolFactory
   install_resolver_dependencies: True

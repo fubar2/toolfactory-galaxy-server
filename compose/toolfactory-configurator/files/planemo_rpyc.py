@@ -82,9 +82,8 @@ class planemo_run(Service):
             def sortchildrenby(parent, attr):
                 parent[:] = sorted(parent, key=lambda child: child.get(attr))
 
-            localconf = "./local_tool_conf.xml"
-            self.run_rsync(tool_conf_path, localconf)
-            tree = ET.parse(localconf)
+            tcpaths = ["/etc/galaxy/tool_conf.xml", "/galaxy-central/config/tool_conf.xml"]
+            tree = ET.parse(tcpaths[1])
             root = tree.getroot()
             hasTF = False
             TFsection = None
@@ -103,7 +102,8 @@ class planemo_run(Service):
             sortchildrenby(TFsection,"file")
             newconf = f"{tool_id}_conf"
             tree.write(newconf, pretty_print=True)
-            self.run_rsync(newconf, tool_conf_path)
+            for tcpath in tcpaths:
+                self.run_rsync(newconf, tcpath)
 
         tool_conf_path = os.path.join(galaxy_root, tool_conf_path)
         tool_dir = os.path.join(galaxy_root, local_tool_dir,'TFtools')
@@ -127,17 +127,18 @@ class planemo_run(Service):
         and log to the collection so they appear in the histories. The calling tool
         will write the tar to the history file.
         """
-        xmlin = os.path.join('/export', xmlpath[1:])
+        xmlin =  xmlpath
         print('xmlin=', xmlin, 'collection=', collection)
         tree = ET.parse(xmlin)
         root = tree.getroot()
         toolname = root.get('id')
         # safest way to get the toolid - for the TF, this determines the tool path
-        pwork = os.path.join("/export", "galaxy", "tested_TF_archives")
+        pwork = os.path.join("/export", "galaxy-central", "tested_TF_archives")
         ptooldir =  os.path.join(pwork,toolname)
-        pworkrep = os.path.join("/export", "galaxy", "tested_TF_reports")
+        pworkrep = os.path.join("/export", "galaxy-central", "tested_TF_reports")
         prepdir = os.path.join(pworkrep, toolname)
-        galtooldir = os.path.join('/export/galaxy/tools/TFtools', toolname)
+        galtooldir = os.path.join('/galaxy-central/tools/TFtools', toolname)
+        toolwork = os.path.sep.join(os.path.split(collection)[:-1])
         allres = []
         for maked in [prepdir, ptooldir]:
             if not os.path.isdir(maked):
@@ -153,7 +154,7 @@ class planemo_run(Service):
         planemo_rep = os.path.join(prepdir, "%s_planemo_test_report.html" % toolname)
         planemo_json = os.path.join(prepdir, "%s_planemo_test_report.json" % toolname)
         planemo_log = os.path.join(prepdir, "%s_planemo_test_log.txt" % toolname)
-        res = self.run_cmd("planemo --directory /planemo/work test --test_output_json %s --galaxy_root /galaxy \
+        res = self.run_cmd("planemo --directory /planemo/work test --test_output_json %s --galaxy_root /galaxy-central \
            --conda_prefix /planemo/con --update_test_data --test_output %s %s" % (planemo_json, planemo_rep, toolxml))
         if not res:
             res="no response from planemo test...."
@@ -163,13 +164,15 @@ class planemo_run(Service):
                 replog.write(res)
         res = self.run_cmd(f"tar -cvz -f {ptooldir}/{toolname}_tested.toolshed.gz --directory {pwork} {toolname}")
         allres.append(res)
-        res = self.run_cmd(f"cp -r  {ptooldir} /export/galaxy/tools/TFtools/")
+        res = self.run_cmd(f"cp -r  {ptooldir} /galaxy-central/tools/TFtools/")
         allres.append(res)
         for fname in os.listdir(prepdir):
             print('fname', fname, collection)
             if fname.endswith('.json'): # if this is included, the html disappears. Go figure.
                 continue
             res = self.run_cmd(f"cp {prepdir}/{fname} {collection}/{fname}")
+        self.run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", toolwork)
+        self.run_rsync(f"{ptooldir}/{toolname}_tested.toolshed.gz", galtooldir)
         res = self.run_cmd(f"chown -R galaxy:galaxy {pwork} {pworkrep} {galtooldir} {collection}")
         allres.append(res)
         return '\n'.join([x for x in allres if len(x) > 0])

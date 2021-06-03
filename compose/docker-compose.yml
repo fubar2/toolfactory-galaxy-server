@@ -3,8 +3,8 @@ services:
   galaxy-server:
     # galaxy-server Dockerfile adjusted for ToolFactory appliance to preserve client/.node_version - without which planemo will not run
     # in a "shared_galaxy" volume used by the Planemo container to save space from duplicated Galaxy code.
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-fubar2}/toolfactory-galaxy-server:${IMAGE_TAG:-latest}
-    build: toolfactory-galaxy-server
+    image: quay.io/fubar2/toolfactory-galaxy:latest
+    build: toolfactory-galaxy
     environment:
       - GALAXY_DEFAULT_ADMIN_USER=admin
       - GALAXY_DEFAULT_ADMIN_EMAIL=admin@galaxy.org
@@ -12,42 +12,19 @@ services:
       - GALAXY_DEFAULT_ADMIN_KEY=fakekey
     privileged: True
     ports:
-      - 5555:5555
+      - 21:21
+      - 8080:80
+      - 443:443
+      - 8800:8800
+      - 9002:9002
     hostname: galaxy-server
     volumes:
       # This is the directory where all your files from Galaxy will be stored
       # on your host system
       - ${EXPORT_DIR:-./export}/:/export/:delegated
       - /var/run/docker.sock:/var/run/docker.sock
-      - shared_galaxy:/galaxy
-    depends_on:
-      - postgres
-      - rabbitmq
-      - galaxy-configurator
-  # The galaxy-configurator is responsible for the whole configuration of
-  # your setup and should be the central place of configuration.
-  galaxy-configurator:
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-bgruening}/galaxy-configurator:${IMAGE_TAG:-latest}
-    build: galaxy-configurator
-    environment:
-      - EXPORT_DIR=${EXPORT_DIR:-./export}
-      - HOST_PWD=$PWD
-      - GALAXY_OVERWRITE_CONFIG=true
-      - GALAXY_DEPENDENCY_RESOLUTION=singularity
-      - GALAXY_JOB_RUNNER=local
-      - GALAXY_CONFIG_ADMIN_USERS=admin@galaxy.org
-      - GALAXY_CONFIG_DATABASE_CONNECTION=postgresql://galaxy:chaopagoosaequuashie@postgres/galaxy
-      - GALAXY_CONFIG_GALAXY_INFRASTRUCTURE_URL=${GALAXY_CONFIG_GALAXY_INFRASTRUCTURE_URL:-http://localhost}
-      - GALAXY_CONFIG_CONDA_AUTO_INSTALL=false
-      - GALAXY_CONFIG_AMQP_INTERNAL_CONNECTION=amqp://galaxy:vaiJa3ieghai2ief0jao@rabbitmq/galaxy
-      - GALAXY_PROXY_PREFIX=${GALAXY_PROXY_PREFIX:-}
-      - GALAXY_CONFIG_CLEANUP_JOB=never
-      - NGINX_OVERWRITE_CONFIG=true
-    volumes:
-      - ${EXPORT_DIR:-./export}/galaxy/config:/galaxy/config
-      - ${EXPORT_DIR:-./export}/nginx:/etc/nginx
-      - ./base_config.yml:/base_config.yml
-      - ./galaxy-configurator/templates:/templates
+      - shared_galaxy:/galaxy-central
+      - config:/etc/galaxy
   #post install configution with tools, history and planemo tester triggered by an exposed rpyc server function
   toolfactory-configurator:
     image: quay.io/fubar2/toolfactory-configurator:latest
@@ -59,50 +36,16 @@ services:
       - GALAXY_CONFIG_ADMIN_USERS=admin@galaxy.org
     depends_on:
       - galaxy-server
-      - nginx
-      - postgres
     volumes:
       - ${EXPORT_DIR:-./export}/:/export/:delegated
       - /var/run/docker.sock:/var/run/docker.sock
-      - shared_galaxy:/galaxy
-  # The database for Galaxy
-  postgres:
-    image: postgres:12
-    hostname: postgres
-    environment:
-      - POSTGRES_PASSWORD=chaopagoosaequuashie
-      - POSTGRES_USER=galaxy
-      - POSTGRES_DB=galaxy
-    volumes:
-      - ${EXPORT_DIR:-./export}/postgres/:/var/lib/postgresql/data:delegated
-  # The proxy server. All web-traffic is going through here, so we can
-  # offload static file serving
-  # (https://docs.galaxyproject.org/en/master/admin/production.html#using-a-proxy-server)
-  nginx:
-    image: ${DOCKER_REGISTRY:-quay.io}/${DOCKER_REGISTRY_USERNAME:-bgruening}/galaxy-nginx:${IMAGE_TAG:-latest}
-    build: galaxy-nginx
-    ports:
-      - 8080:80
-    volumes:
-      - ${EXPORT_DIR:-./export}/nginx:/config:ro
-      - ${EXPORT_DIR:-./export}/galaxy/static:/export/galaxy/static:ro
-      - ${EXPORT_DIR:-./export}/galaxy/config/plugins:/galaxy/config/plugins:ro
-    depends_on:
-      - galaxy-server
-  # Message queue for better performance
-  rabbitmq:
-    image: rabbitmq:alpine
-    container_name: galaxy-rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=galaxy
-      - RABBITMQ_DEFAULT_PASS=vaiJa3ieghai2ief0jao
-      - RABBITMQ_DEFAULT_VHOST=galaxy
-    volumes:
-      - ${EXPORT_DIR:-./export}/rabbitmq:/var/lib/rabbitmq:delegated
+      - shared_galaxy:/galaxy-central
+      - config:/etc/galaxy
 networks:
   default:
     driver: bridge
     attachable: true
 volumes:
   shared_galaxy:
+  config:
 

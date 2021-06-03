@@ -1,12 +1,10 @@
 
-# container with planemo with a galaxy dist for it to use - need to use the one in the galaxy-server container really
-# runs an rpyc server in a totally insecure way.
+# container with planemo
+# runs an rpyc server in a secure-ish way.
 # planemo does not play nicely when run as a tool....
-ARG DOCKER_REGISTRY=quay.io
-ARG DOCKER_REGISTRY_USERNAME=bgruening
-ARG IMAGE_TAG=latest
-FROM $DOCKER_REGISTRY/$DOCKER_REGISTRY_USERNAME/galaxy-container-base:$IMAGE_TAG as final
+FROM buildpack-deps:20.04 as final
 
+MAINTAINER ross.lazarus@gmail.com
 
 ARG GALAXY_RELEASE="release_21.01"
 ARG GALAXY_REPO="https://github.com/galaxyproject/galaxy"
@@ -19,7 +17,7 @@ ENV GALAXY_USER=galaxy \
     GALAXY_UID=1450 \
     GALAXY_GID=1450 \
     GALAXY_HOME=/home/galaxy \
-    GALAXY_ROOT=/galaxy \
+    GALAXY_ROOT=/galaxy-central \
     PLANEMO_ROOT=/planemo
 
 RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
@@ -27,46 +25,30 @@ RUN groupadd -r $GALAXY_USER -g $GALAXY_GID \
     && mkdir -p $GALAXY_HOME \
     && mkdir -p $PLANEMO_ROOT \
     && mkdir -p $PLANEMO_ROOT/work \
-    && mkdir -p /tools \
-    && mkdir -p /config \
-    && mkdir -p /workflows \
     && mkdir -p /files \
     && apt update && apt install python3 python-dev git python3-pip python3-wheel python3-venv git nano curl sudo rsync -y \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3 9 \
     && mkdir -p "$GALAXY_ROOT"
 
-COPY ./files/TFtools /tools/TFtools
-COPY ./files/TFtools/planemo_lint_python /tools/TFtools/planemo_lint_python
-
 RUN python3 -m venv /venv \
-&& . /venv/bin/activate \
-&& pip3 install -U pip \
-&& pip3 install planemo bioblend ephemeris parsec requests wheel rpyc \
-&& mkdir -p /export/galaxy/config \
-&& touch /export/galaxy/config/reload_uwsgi.touchme \
-&& export HOME="$PLANEMO_ROOT" \
-&& planemo conda_init --conda_prefix $PLANEMO_ROOT/con \
-&& apt-get clean && apt-get purge \
-&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && . /venv/bin/activate \
+    && pip3 install -U pip \
+    && pip3 install planemo bioblend ephemeris parsec requests wheel rpyc \
+    && mkdir -p $GALAXY_ROOT \
+    && mkdir -p $GALAXY_ROOT/config \
+    && export HOME="$PLANEMO_ROOT" \
+    && planemo conda_init --conda_prefix $PLANEMO_ROOT/con \
+    && apt-get clean && apt-get purge \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./files/start_TF_config.sh /usr/local/bin/start_TF_config.sh
 COPY ./files/waitforquiet.py /usr/local/bin/waitforquiet.py
 COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
-COPY ./files/TFtools.yml /config/TFtools.yml
 COPY ./files/TF_demo_history.tar.gz /files/TF_demo_history.tar.gz
 COPY ./files/TF-Demo-data-May-16.tar.gz /files/TF-Demo-data-May-16.tar.gz
-COPY ./files/TF_demo_make_tools.ga /workflows/TF_demo_make_tools.ga
-COPY ./files/TF_demo_make_test_tools_May_21.ga /workflows/TF_demo_make_test_tools_May_21.ga
+COPY ./files/TF_demo_make_tools.ga /files/TF_demo_make_tools.ga
+COPY ./files/TF_demo_make_test_tools_May_21.ga /files/TF_demo_make_test_tools_May_21.ga
 COPY ./files/install-history.py /usr/local/bin/install-history.py
-COPY ./files/datatypes_conf.xml /config/
-COPY ./files/dependency_resolvers_conf.xml /config/
-COPY ./files/tool_conf.xml /config/
-COPY ./files/base.css /files/
-COPY ./files/welcome.html /files/welcome.html
-#COPY ./files/mulled_build.py /files/mulled_build.py
-#COPY ./files/invfile.lua /files/invfile.lua
 
-
-RUN chown -R galaxy:galaxy /tools /config
 
 ENTRYPOINT /usr/bin/bash /usr/local/bin/start_TF_config.sh
