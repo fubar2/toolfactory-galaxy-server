@@ -1,11 +1,13 @@
 # Galaxy ToolFactory Appliance
 
-This is a ToolFactory flavoured developer appliance in Docker extending the basic `docker-galaxy-stable` composition.
+This is a ToolFactory flavoured developer appliance in Docker extending the basic `docker-galaxy-stable` Galaxy.
 
 1.    The ToolFactory - a form driven code generator to make new Galaxy tools from scripts - is installed with a testing tool.
+
 2.    A container for post-install configuration is added to create the ToolFactory flavour. The new container then runs a planemo server
 outside the Galaxy tool execution environment to test tools, returning the planemo test
 reports, log and updated archive to the user's current history.
+
 3.    A history containing 15 demonstration tool generation jobs to rerun and build on. Samples use bash, python, perl (yes, even perl. Galaxy is a very welcoming community..),
 Rscript and for more discerning users, prolog and lisp. Any scriptable language in Conda should work.
 
@@ -13,13 +15,13 @@ Rscript and for more discerning users, prolog and lisp. Any scriptable language 
 
 This flavour of the docker-compose infrastructure is based on https://github.com/bgruening/docker-galaxy-stable - there is excellent documentation at
 that site. Respect. A few minor pointers only are provided below - please refer to the original documentation for details about this extensive infrastructure for Galaxy flavours including
-(untested) cluster and other deployment options.
+cluster and other deployment options.
 
 ## A standalone, pop-up desktop Galaxy appliance
 
 The Appliance supporting the ToolFactory is a fully featured `docker-galaxy-stable` Galaxy server, ideal for scientists and developers
 who can use a private pop-up desktop server for learning how Galaxy works, building new tools, using interactive environments and any available toolshed tools to do real work,
-potentially at scale. The Appliance adds only one specific container. The others are all pulled from Björn's docker-galaxy-stable quay.io containers.
+potentially at scale.
 
 
 ## Private desktop use only is recommended.
@@ -29,19 +31,19 @@ It is safe to run on a private Linux laptop or workstation.
 
 **Running it on any server accessible from the public internet exposes it to potential miscreants. This is strongly discouraged**.
 
-Although Galaxy's job execution security is very tight and safe, allowing potentially hostile users to build and then immediately run their own tools exposes any production server
+Although Galaxy's job execution security is very good, allowing potentially hostile users to build and then immediately run their own tools exposes any production server
 to unwelcome security risk.
 
-The Appliance runs as a set of Docker containers, so it is secured to that extent from the host system. ToolFactory and other related source code is
+The Appliance runs as two composed Docker containers, so it is secured to that extent from the host system. ToolFactory and other related source code is
 included in this repository for the curious or the dubious. Specific security disclosure details are discussed in the compose documentation. The mechanisms described offer a
 convenient way for tools to remotely execute tasks outside the Galaxy job execution environment in suitably private environments such as this Appliance.
 This may open up interesting uses for Galaxy on the desktop with specialised tools accessing GPU or other local resources.
 
 ## Tutorial and documentation
 
-There is an accompanying GTN ToolFactory developer tutorial PR in beta test.
-[It is temporarily available here on a private server](https://training.galaxy.lazarus.name/training-material/topics/dev/tutorials/tool-generators/tutorial.html)
-to help explain how this Appliance can be used to generate Galaxy tools from working command line scripts. There is a linked advanced tutorial.
+There are
+[accompanying GTN ToolFactory developer tutorials](https://training.galaxyproject.org/training-material/topics/dev/tutorials/tool-generators/tutorial.html)
+to help explain how this Appliance can be used to generate Galaxy tools from working command line scripts. There are two linked tutorials - introductory and advanced.
 
 
 ## Installation and startup
@@ -49,6 +51,7 @@ to help explain how this Appliance can be used to generate Galaxy tools from wor
 ```
 git clone https://github.com/fubar2/toolfactory-galaxy-server
 cd toolfactory-galaxy-server/compose
+mkdir export
 docker-compose pull
 docker-compose up
 ```
@@ -56,7 +59,7 @@ docker-compose up
  - Your appliance should be running with a local Galaxy on localhost:8080 after a fair bit of activity and about 5-10 minutes. Wait until all is done before logging in.
  - Watch the logs as they scroll by on the terminal. They are very instructive and informative for those who need to understand how Galaxy actually works.
  - Keep an eye out for Conda processes on your machine.
- - Wait until they **all** stop.
+ - Wait until **all** activity ceases.
  - Restarting is much faster.
 
 - Out of the box login is `admin@galaxy.org` and the password is `password`
@@ -67,7 +70,7 @@ the appliance is exposed at all.
   - The API key is the administrative key for the appliance Galaxy so if the Appliance is accessible on a network, it is
 exposed to easy API based remote mischief until a new API key is generated. Another good reason not to expose the Appliance anywhere.
 
-The container `/export` directory is mounted locally at `...compose/export` .
+The container `/export` directory is mounted locally at `...compose/export` if you made a directory.
 
 ## Demonstration tools are the functional documentation
 
