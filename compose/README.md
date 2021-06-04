@@ -2,12 +2,6 @@
 
 ## Some docker-galaxy-stable compose configuration notes
 
-base-config.yml is used to alter a number of Galaxy and in particular uwsgi settings. This is neat because the stock galaxy-server image can be used unaltered.
-Except that then there are directories deleted during cleanup that prevent Planemo from using that copy of Galaxy instead of a redundant one.
-
-The uwsgi process watches the touch-restart file so the configurator can reboot the server after making changes.
-This requires that it operate as `master` but that is a good idea anyway probably..
-
 Galaxy configuration includes turning on the tool change watchdog so Galaxy will update the tool panel after changes are noted.
 The ToolFactory configuration completes but the container continues to run, providing a service described in detail below.
 Users are advised to ignore these functions and write normal, portable tools.
