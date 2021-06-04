@@ -1,0 +1,62 @@
+<tool name="lisp_demo" id="lisp_demo" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 29/05/2021 05:50:23 using the Galaxy Tool Factory.-->
+  <description>ToolFactory demonstration using Lisp for the nostalgic.</description>
+  <requirements>
+    <requirement type="package">sbcl</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[bash
+$runme
+$SBCL_Lisp_script_to_execute
+>
+$lisp_out]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+sbcl --script $1
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="SBCL_Lisp_script_to_execute" type="data" optional="false" label="SBCL Lisp script to execute" help="Provide a script in lisp to be interpreted by SBCL" format="txt" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="lisp_out" format="txt" label="lisp_out" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="lisp_out" value="lisp_out_sample" compare="diff" lines_diff="0"/>
+      <param name="SBCL_Lisp_script_to_execute" value="SBCL_Lisp_script_to_execute_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Says hello world using a trivial lisp script.
+
+It will actually try to run any text file you like from your history but likely fail unless they happen to be valid lisp according to the interpreter dependency.
+
+These demonstrations show what is possible, not what is sensible.
+
+Please don't expose this anywhere.
+
+ 
+
+------
+
+
+Script::
+
+    sbcl --script $1
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

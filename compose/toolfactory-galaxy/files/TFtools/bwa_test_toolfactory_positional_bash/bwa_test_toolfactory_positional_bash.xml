@@ -1,0 +1,78 @@
+<tool name="bwa_test_toolfactory_positional_bash" id="bwa_test_toolfactory_positional_bash" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:13 using the Galaxy Tool Factory.-->
+  <description>Bash script equivalent of the bwa command over-ride.</description>
+  <requirements>
+    <requirement version="0.7.17" type="package">bwa</requirement>
+    <requirement version="1.13" type="package">samtools</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[bash
+$runme
+$Reference_sequence_to_map_reads_against
+$Reads_to_map
+$bwa_test_bash_output]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+REFFILE=$1
+FASTQ=$2
+BAMOUT=$3
+rm -f "refalias"
+ln -s "$REFFILE" "refalias"
+bwa index -a is "refalias"
+bwa mem -t "2"  -v 1 "refalias" "$FASTQ"  > tempsam
+samtools view -Sb tempsam > temporary_bam_file.bam
+samtools sort -o "$BAMOUT" temporary_bam_file.bam
+
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs>
+    <param name="Reference_sequence_to_map_reads_against" type="data" optional="false" label="Reference sequence to map reads against" help="" format="fasta" multiple="false"/>
+    <param name="Reads_to_map" type="data" optional="false" label="Reads to map" help="" format="fastq" multiple="false"/>
+  </inputs>
+  <outputs>
+    <data name="bwa_test_bash_output" format="bam" label="bwa_test_bash_output" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="bwa_test_bash_output" value="bwa_test_bash_output_sample" compare="sim_size" delta_frac="0.1"/>
+      <param name="Reference_sequence_to_map_reads_against" value="Reference_sequence_to_map_reads_against_sample"/>
+      <param name="Reads_to_map" value="Reads_to_map_sample"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+Same thing as the command over-ride version but using a bash script and passing parameters.
+
+Probably more familiar to many non-Galaxy developers.
+
+ 
+
+------
+
+
+Script::
+
+    REFFILE=$1
+    FASTQ=$2
+    BAMOUT=$3
+    rm -f "refalias"
+    ln -s "$REFFILE" "refalias"
+    bwa index -a is "refalias"
+    bwa mem -t "2"  -v 1 "refalias" "$FASTQ"  > tempsam
+    samtools view -Sb tempsam > temporary_bam_file.bam
+    samtools sort -o "$BAMOUT" temporary_bam_file.bam
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+

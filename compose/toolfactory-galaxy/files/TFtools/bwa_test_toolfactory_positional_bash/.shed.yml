@@ -1,0 +1,6 @@
+category: TF Generated Tools
+description: Bash script equivalent of the bwa command over-ride.
+name: bwa_test_toolfactory_positional_bash
+owner: admin
+synopsis: Bash script equivalent of the bwa command over-ride.
+type: unrestricted

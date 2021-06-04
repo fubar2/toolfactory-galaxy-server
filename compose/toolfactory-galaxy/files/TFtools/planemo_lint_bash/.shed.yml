@@ -1,0 +1,6 @@
+category: TF Generated Tools
+description: Runs Planemo lint on a tool XML
+name: planemo_lint_simple
+owner: admin
+synopsis: Runs Planemo lint on a tool XML
+type: unrestricted

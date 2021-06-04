@@ -1,0 +1,74 @@
+<tool name="prolog_demo" id="prolog_demo" version="0.01">
+  <!--Source in git at: https://github.com/fubar2/toolfactory-->
+  <!--Created by admin@galaxy.org at 15/05/2021 06:15:06 using the Galaxy Tool Factory.-->
+  <description></description>
+  <requirements>
+    <requirement type="package">swi-prolog</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command><![CDATA[echo "0.01"]]></version_command>
+  <command><![CDATA[swipl
+-q
+-g
+main
+-s
+
+$runme
+>
+$prolog_out]]></command>
+  <configfiles>
+    <configfile name="runme"><![CDATA[#raw
+
+parent(pam,bob).
+parent(tom,bob).
+parent(tom,liz).
+parent(bob,ann).
+parent(bob,pat).
+parent(pat,jim).
+
+main :-
+    parent(X,jim),
+    format('~a is the parent of jim~n', [X]),
+    halt.
+
+#end raw]]></configfile>
+  </configfiles>
+  <inputs/>
+  <outputs>
+    <data name="prolog_out" format="txt" label="prolog_out" hidden="false"/>
+  </outputs>
+  <tests>
+    <test>
+      <output name="prolog_out" value="prolog_out_sample" compare="diff" lines_diff="0"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+**What it Does**
+
+ 
+
+------
+
+
+Script::
+
+    parent(pam,bob).
+    parent(tom,bob).
+    parent(tom,liz).
+    parent(bob,ann).
+    parent(bob,pat).
+    parent(pat,jim).
+    main :-
+        parent(X,jim),
+        format('~a is the parent of jim~n', [X]),
+        halt.
+
+]]></help>
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/bts573</citation>
+  </citations>
+</tool>
+
