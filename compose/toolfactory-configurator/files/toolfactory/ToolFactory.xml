@@ -19,7 +19,7 @@
             <param name="falsevalue" type="boolean" value="True" label="Command line value to emit when False" />
       </xml>
       <xml name="selectText">
-          <repeat name="selectTexts" title="Add each option to be presented in a text select box" min="2" default="2"
+          <repeat name="selectTexts" title="Add each option to be presented in a text select box" min="2"
              help="Each text added here will also have  a value to be emitted on the command line when the text is chosen">
             <param name="select_text" type="text" value="" label="Enter the explanatory text the user will see for this choice" >
           </param>
@@ -31,10 +31,15 @@
         <param name="tool_version" label="Tool Version - bump this to warn users trying to redo old analyses" type="text" value="0.01"
             help="If you change your script and regenerate the 'same' tool, you should inform Galaxy (and users) by changing (bumping is traditional) this number"/>
         <param name="tool_desc" label="Tool Synopsis" type="text" value=""
-            help="Supply a brief tool description for the Galaxy tool menu entry" />
+            help="Supply a brief tool description for the Galaxy tool menu entry">
+            <sanitizer>
+                <valid initial="string.printable" />
+                <mapping initial="none"/>
+            </sanitizer>
+        </param>
         <param name="install" label="Attempt to install in the host Galaxy"
             help="This may/should fail unless running in a lax security environment (your own laptop perhaps) or the specialised ToolFactory Docker container"
-            type="hidden" default="1" />
+            type="hidden"  />
          <param name="run_test" label="Finalise new archive with test outputs. Runs externally. Outputs will appear in history when ready"
             help="Archives must be run and updated using planemo to populate all the test outputs. May take a long time depending on dependencies"
             type="hidden" checked="False" truevalue="1"  falsevalue="" />
@@ -112,10 +117,10 @@
                 value="diff:0"/>
         </repeat>
         <repeat name="collection_outputs" title="Output Collections" min="0"
-             help="New history collections to appear in the user history after the tool runs. Hides outputs not needed for downstream tools such as images and intermediate reports." default="0">
+             help="New history collections to appear in the user history after the tool runs. Hides outputs not needed for downstream tools such as images and intermediate reports." >
             <param name="name" type="text" label="Name"
               help="for new collection with all outputs not individually passed to history outputs. No spaces! Script MUST create and fill a directory with the same name and the tool test MUST be overwritten - see the plotter example for hints">
-              <sanitizer invalid_char="_">
+              <sanitizer invalid_char=" ">
                 <valid initial="string.ascii_letters,string.digits" >
                    <add value="_" />
                 </valid>
@@ -135,18 +140,19 @@
      </xml>
      <xml name="additparam">
      <section name="addparam" title="Arguments" help="Executable or script settings passed on the command line other than I/O files" expanded="true">
-        <param name="edit_params" type="select" display="radio" label="Make these settings on the generated tool form user editable?"
+        <param name="edit_params" type="hidden" display="radio" label="Make these settings on the generated tool form user editable?"
              help="If no, users will NOT be able to alter any additional parameters. If yes, these will appear on the tool form as text fields with no validation or sanitizing">
             <option value="yes" selected="true">Yes, allow user to edit all additional parameters on the generated tool form</option>
             <option value="no">No - use the fixed values for all additional parameters - no user editing</option>
         </param>
-        <repeat name="additional_parameters" title="Command Line Paramters" min="0"
-             help="Command line settings for the user to pass to the executable. See examples below to see how these can be parsed by scripts in the various languages">
+        <repeat name="additional_parameters" title="User supplied parameters" min="0"
+             help="Settings for the user to adjust. Passed to the executable on the command line. See examples below to see how these can be parsed by scripts in various languages">
           <param name="param_name" type="text" value="" label="Choose the name for this parameter - MUST not be blank!">
-            <sanitizer invalid_char="">
-              <valid initial="string.ascii_letters,string.digits"/>
-              <mapping initial="none"/>
-            </sanitizer>
+              <sanitizer invalid_char=" ">
+                <valid initial="string.ascii_letters,string.digits" >
+                   <add value="_" />
+                </valid>
+              </sanitizer>
           </param>
           <conditional name="ap_type">
           <param name="param_type" type="select" label="Select the type for this parameter">
@@ -196,7 +202,7 @@
 #import os
 #set dev_env = os.environ.get('GALAXY_DEVELOPMENT_ENVIRONMENT', '0') == '1'
 #if not $dev_env and ( $__user_email__ not in $__admin_users__ ):
-python3 $__tool_directory__/rgToolFactory2.py --bad_user $__user_email__
+python3 $__tool_directory__/ToolFactory.py --bad_user $__user_email__
  #else:
 python3 $__tool_directory__/ToolFactory.py
     #if len(str($cl_suffix)) > 0:
@@ -222,9 +228,6 @@ python3 $__tool_directory__/ToolFactory.py
 --tool_version "$tool_version"
 --help_text "$helpme"
    #if $io_param.ppass.parampass != '0':
-     #if str($io_param.ppass.addparam.edit_params) == "yes":
---edit_additional_parameters
-     #end if
      #for $apar in $io_param.ppass.addparam.additional_parameters:
         #if $apar.ap_type.param_type=="selecttext":
 --selecttext_parameters '{"name":"$apar.param_name", "label":"$apar.param_label", "help":"$apar.param_help",
@@ -303,7 +306,7 @@ ${help_text}
   <inputs>
    <param name="tool_name" type="text" value="my_tool"   label="New tool ID and title for outputs"
          help="Toolshed repository name. Choose thoughtfully to avoid namespace clashes with other tool writers. Lower case, digits and underscores only">
-        <sanitizer invalid_char="">
+        <sanitizer invalid_char=" ">
             <valid initial="string.ascii_lowercase,string.digits">
                 <add value="_"/>
             </valid>
@@ -456,7 +459,7 @@ Admin_users will have the power to do anything they want as the Galaxy user if y
 
 .. class:: warningmark
 
-**Use on public servers**  is STRONGLY discouraged for obvious reasons
+**Use on public servers**  is STRONGLY discouraged - allowing potentially malicious users to install and run any code they like is asking for trouble.
 
 The tools generated by this tool will run just as securely as any other normal installed Galaxy tool but like any other new tools, should always be checked carefully before installation.
 We recommend that you follow the good code hygiene practices associated with safe toolshed practices.

@@ -8,7 +8,6 @@ ENV GALAXY_CONFIG_BRAND="ToolFactory" ENABLE_TTS_INSTALL=True GALAXY_ROOT="/gala
  GALAXY_CONFIG_TOOL_PATH="/galaxy-central/tools/" \
  GALAXY_CONFIG_WATCH_TOOLS=True\
  UWSGI_MASTER=True \
- #UWSGI_TOUCH_RELOAD="$GALAXY_ROOT/config/reload_uwsgi.touchme" \
  UWSGI_ENABLE_THREADS=True
 
 # Install tools

@@ -1,8 +1,11 @@
 # ToolFactory Appliance
 
-## Some docker-galaxy-stable compose configuration notes
+## Some docker-galaxy-stable configuration notes
 
-Galaxy configuration includes turning on the tool change watchdog so Galaxy will update the tool panel after changes are noted.
+Docker-galaxy-stable runs in one container. Another runs a configurator that supplies most of the flavour after the server settles down. It
+installs workflows and the sample history then runs a server listening for RPC calls.
+
+Configuration includes turning on the tool change watchdog so Galaxy will update the tool panel after changes are noted.
 The ToolFactory configuration completes but the container continues to run, providing a service described in detail below.
 Users are advised to ignore these functions and write normal, portable tools.
 
@@ -47,7 +50,7 @@ bypassing normal job file access limits.
 
 In a completely private, dedicated Docker appliance used by a developer, the small additional risk might be acceptable in return for the functionality available.
 The developer is unlikely to act maliciously. Even if they do accidentally damage the system, the Docker containers and associated local exported disk
-volumes can be rebuilt from scratch, at the cost of about 10 minutes and the loss any work done on the Appliance but not backed up.
+volumes can be rebuilt from scratch, at the cost of about 10 minutes and the loss any unsaved work done on the Appliance.
 Before destroying a damaged local installation, tested tool archives can be found in the local `...compose/export/galaxy/tested_TF_archives` directory.
 
 ### Why would anyone want to do this?
@@ -59,9 +62,9 @@ These are functions available in the ToolFactory appliance, a flavour of the doc
 The Appliance adds automated post-installation configuration by a specialised server container based on the normal docker-galaxy-stable server.
 As soon as the Galaxy server installation is completed, the additional container loads tools, demonstration data, history and workflows to provide the “flavour”.
 
-It also starts a minimal Rpyc server capable of accepting commands from tools running in the Galaxy server container.
+It also starts a minimal `rpyc` server capable of accepting commands from tools running in the Galaxy server container.
 It is this rpyc server that is the key to running tasks independently of the normal Galaxy job runner system,
-but triggered by a specially configured running tool.
+when triggered by a specially configured running tool.
 
 ### What uses could there be for a generic RPC for tools?
 
@@ -70,8 +73,8 @@ Galaxy job security would normally not permit. These things may have other inter
 but the potential cost of associated potential security risk of unlimited scripting must be taken into account outside private settings.
 
 The ToolFactory tool uses the rpyc server to invoke a function that installs a new tool by updating the tool_conf.xml configuration file and
-writing the new tool to the `tool` directory. Without the server, these steps are not possible after generating a new tool. While other tools might be
-written to call the function, that's all they can do so risk is low.
+writing the new tool to the `tools` directory. Without that server, these steps are not normally possible. While other tools might be
+written to call the exposed functions, that's all they can do so risk is low.
 
 The `planemo_test` tool uses the remote container server by making RPC calls.
 The server exposes a single highly specialised and restricted function to test and lint a tool.
@@ -90,7 +93,7 @@ code like the command line runner, but that function is not visible to any calli
 A desktop GPU might be used by a new generated tool using the rpyc model, to create a new, specialised Galaxy Appliance for example. There may be
 many applications where this flexibility is useful to add to all of the framework's existing features for developing complex analyses on a desktop.
 
-### rpyc makes RPC trivially easy to implement.
+### rpyc makes RPC trivially easy to implement using python functions.
 
 The running tool sets up a connection to the rpyc server running in the dedicated container (code below) after rpyc is imported with:
 
@@ -100,15 +103,15 @@ conn = rpyc.connect('planemo-server', port=9999, config={'sync_request_timeout':
 
 Default docker bridge networking is used by the ToolFactory appliance, so the planemo server can be accessed using the container hostname.
 Docker default bridge networking permits the RPC calls to pass between the two containers.
-After the connection is established, rpyc allows the tool code to run shell commands on the remote container and receive the outputs as a response,
+After the connection is established, rpyc allows the tool code to call explicitly exported functions on the remote server and receive the outputs as a response,
 with a blocking call to the Rpyc server such as:
 
 ```python
 res = conn.root.planemo_lint_test(xmlin, collectionpath)
 ```
 
-The provided rpyc server exposes one function that runs planemo test and lint on the tool passed as the parameter. It uses a dangerous generic command line
-runner but this dangerous generic function is not exposed to RPC callers directly. It also exposes a function used by the ToolFactory to update the
+The provided rpyc server exposes one function that runs planemo test and lint on the tool passed as the parameter. It uses a generic command line
+runner but this function is not exposed to RPC callers directly. It also exposes a function used by the ToolFactory to update the
 `..config/tool_conf.xml` after writing the new tool to `tools/TFtools` - things no job running on a normal, secure Galaxy server is allowed to do.
 
 Planemo is run in the remote container and the outputs from the lint and test proceedures are written to
