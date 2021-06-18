@@ -36,8 +36,8 @@ that server code running in the toolfactory-configurator container.
 
 This technique is completely unsupported by the Galaxy developers. It is handy for integrating the ToolFactory but not recommended for
 public internet exposure. It offers interesting and generalisable models for other possible private desktop Galaxy appliances. These might use
-locally generated ToolFactory tools modelled on the `planemo_lint` tool, but integrated with GPU or other
-hardware or specialised services such as data acquisition and preprocessing, that are not otherwise readily available to a tool in a normal Galaxy server.
+locally generated ToolFactory tools modelled on the included `planemo_test` tool, but with rpyc functions that expose a GPU or other
+hardware or specialised services such as data acquisition and preprocessing to calling tools that are not otherwise readily available to a tool in a normal Galaxy server.
 
 ## Details: Remote command execution for Galaxy tools in a private environment.
 
@@ -95,7 +95,7 @@ many applications where this flexibility is useful to add to all of the framewor
 
 ### rpyc makes RPC trivially easy to implement using python functions.
 
-The running tool sets up a connection to the rpyc server running in the dedicated container (code below) after rpyc is imported with:
+The running tool sets up a connection to the rpyc server running in the dedicated container after rpyc is imported with:
 
 ```python
 conn = rpyc.connect('planemo-server', port=9999, config={'sync_request_timeout':1200})

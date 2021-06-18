@@ -1,8 +1,6 @@
 version: "3.7"
 services:
   galaxy-server:
-    # galaxy-server Dockerfile adjusted for ToolFactory appliance to preserve client/.node_version - without which planemo will not run
-    # in a "shared_galaxy" volume used by the Planemo container to save space from duplicated Galaxy code.
     image: quay.io/fubar2/toolfactory-galaxy:latest
     build: toolfactory-galaxy
     environment:

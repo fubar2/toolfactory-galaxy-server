@@ -22,9 +22,9 @@
             class="btn btn-primary btn-lg">ToolFactory advanced Tutorial »</a></td>&nbsp;&nbsp;&nbsp;<td><a target="_blank"
             href="https://github.com/fubar2/toolfactory-galaxy-server"
             class="btn btn-primary btn-lg">ToolFactory Appliance Repository »</a></td></tr></table>
+            </p>
             </center>
           <p class="lead">
-         </p>
             <font size="3" color="darkblue">Demonstrations are in the ToolFactory sample history. It should appear when you login.</font></br>
             If it is not visible in the right panel when you login, check the history list and if necessary, install it:
             <ol>
@@ -32,29 +32,30 @@
             <li>Select the "User" tab of the top bar; Select Histories; Select Import; Paste that URL into the History import upload box</li>
             <li>Switch to the imported history for sample ToolFactory jobs to illustrate some of the kinds of tools and features. </li>
             </ol>
-             <font size="3" color="maroon">Learning to use the ToolFactory: Make changes to the samples and try the resulting new tools</font></br>
+            </p>
+            <font size="3" color="maroon">Learning to use the ToolFactory: Make changes to the samples and try the resulting new tools</font></br>
             Re-run a tool generation job using the generated XML wrappers using the circular arrow "Rerun" button to begin exploring.
             The ToolFactory form that generated that tool will appear, filled in the way it was when the sample (installed in the ToolFactory Generated Tools section) was generated.</br>
             Change the script, the wording of prompts and add i/o files. The updated tool is immediately available to run so you can see how they change for users.
             Experimenting with the examples may help you figure out how to use it for your work.</br>
             The Hello World example is a useful base model. Any working bash script with a few parameters can be substituted starting with that example as a model.
             Add parameters and outputs/inputs as needed.</br>
-            Generated tools are ordinary Galaxy tools. They work for any user and in workflows.<br/>
+            Generated tools are ordinary Galaxy tools. They work for any user and in workflows.</br>
             Generating a tool takes a few seconds. Testing takes longer when it is requested. Testing with Planemo runs in a separate container for technical reasons.
             Planemo is run twice and a Galaxy is built and torn down each time. The first run is to generate
             test outputs that are added to the new testedtool archive. The second time those sample outputs are tested.
             Conda adds time to install the dependencies and then there's the actual runtime for the test data</br>
             Tested tools and reports are in the exported <i>../compose/export/galaxy/tested_TF_archives and ../tested_TF_reports</i> directories on the local machine.
-           </br>
-            Examples in the history and installed in the Appliance. <br/>
+            </br>
+            <font size="3" color="maroon">Examples in the history and installed in the Appliance.</font>
             </br>
             <ul><li>Hello_toolfactory runs a bash script with a single user supplied parameter - "World" for example. STDOUT goes to the history</li>
             <li>Tacrev uses STDOUT and STDIN without parameters.</li>
             <li>Two python scripts to reverse lines in a text file use (pyrevargparse) argparse style and with (pyrevpos) positional parameters</li>
             <li>The perl GC counter takes positional parameters and is taken straight from the Planemo documentation tool examples</li>
             <li>The bwa example is from the Planemo documentation. There are 2 implementations. One uses the Planemo tutorial templating code to demonstrate a <b>command
-            over-ride</b>. An equivalent tool uses bash and positional parameters. Python or bash scripting will allow some tool builders to script the same
-            logic as a skilled developer using Galaxy tool templating for complicated pre-processing.</li>
+            over-ride</b>. An equivalent tool uses bash and positional parameters. Python or bash scripting will allow some tool builders to script some of the
+            logic needed. Otherwise it will need a skilled developer using Galaxy tool templating for complicated processing.</li>
             <li>The Sed example shows how unix utilities like sed - or similar Conda package - can be driven using positional parameters</li>
             <li>The plotter tool illustrates the use of collections for messy outputs.</li>
             <li>The repeats demonstration shows how any number of repeating parameters can be selected and used in a tool</li>

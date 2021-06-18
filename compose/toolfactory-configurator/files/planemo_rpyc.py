@@ -13,9 +13,9 @@ import time
 
 class planemo_run(Service):
     """
-    rpyc restricted server providing access to a very specific function exposed to lint and test a tool with planemo
-    and another to update tool_conf.xml and tools with a newly generated tool
-    uses an unrestricted command runner and rsync runner but does not expose them to callers since they are too
+    rpyc restricted server providing access to 2 very specific ToolFactory functions exposed to lint and test a tool with planemo
+    and to update tool_conf.xml and tools with a newly generated tool.
+    Uses an unrestricted command runner and rsync runner but does not expose them to callers - far too generic and
     dangerous.
     """
 

@@ -31,7 +31,8 @@
             Try re-running a tool generation job on any of the toolshed tarball history objects, using the circular arrow "Rerun" button.
             The ToolFactory form that generated the tool will appear, filled in the way it was when the sample was generated.</br>
             Change the wording of prompts to see how they change. Experimenting with the examples may help you figure out how to use it for your work.</br>
-            The Hello World example is a useful base model. Any working bash script with a few parameters can be substituted starting with that example as a model. Add parameters and outputs/inputs as needed.</br>
+            The Hello World example is a useful base model. Any working bash script with a few parameters can be substituted starting with that example as a model.
+            Add parameters and outputs/inputs as needed.</br>
             Generated tools are just ordinary Galaxy tools. They work for any user and in workflows.<br/>
             Generating a tool takes a few seconds. Testing takes longer when it is requested. Testing with Planemo runs in a separate container for technical reasons.
             Planemo is run twice and a Galaxy is built and torn down each time. The first run is to generate
@@ -51,7 +52,8 @@
             <li>The Sed example shows how unix utilities like sed - or similar Conda package - can be driven using positional parameters</li>
             <li>The plotter tool illustrates the use of collections for messy outputs.</li>
             <li>The repeats demonstration shows how any number of repeating parameters can be selected and used in a tool</li>
-            <li>There are two versions of a planemo lint tool - a simple bash script and a much more complex python script to show how some Conda dependencies can be used with a script to take care of complexities</li>
+            <li>There are two versions of a planemo lint tool - a simple bash script and a much more complex python script to show how some Conda dependencies can be used with a
+            script to take care of complexities</li>
             <li>The Evil_script_that_fails example tries to create a file where it should not. It should build ok but an error should be noted in the history tgz after it runs. Note that it can do
 evil under docker because it runs as root - but only evil within the docker container itself. We hope. </li>
              </ul>

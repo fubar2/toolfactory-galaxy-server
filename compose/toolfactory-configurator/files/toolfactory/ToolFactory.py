@@ -134,7 +134,7 @@ class Tool_Factory:
         self.is_positional = self.args.parampass == "positional"
         if self.args.sysexe:
             if " " in self.args.sysexe:
-                self.executeme = self.args.sysexe.split(" ")
+                self.executeme = shlex.split(self.args.sysexe)
             else:
                 self.executeme = [
                     self.args.sysexe,
@@ -865,7 +865,7 @@ def main():
     a("--collection", action="append", default=[])
     a("--include_tests", default=False, action="store_true")
     a("--install_flag", action = "store_false", default=True)
-    a("--admin_only", default=False, action="store_true")
+    a("--admin_only", default=True, action="store_true")
     a("--untested_tool_out", default=None)
     a("--local_tools", default="tools")  # relative to $__root_dir__
     a("--tool_conf_path", default="config/tool_conf.xml")  # relative to $__root_dir__
@@ -876,7 +876,7 @@ def main():
 admin adds %s to "admin_users" in the galaxy.yml Galaxy configuration file'
             % (args.bad_user, args.bad_user)
         )
-    assert args.tool_name, "## Tool Factory expects a tool name - eg --tool_name=DESeq"
+    assert args.tool_name, "## This ToolFactory cannot build a tool without a tool name. Please supply one."
     tf = Tool_Factory(args)
     tf.writeShedyml()
     tf.makeTool()

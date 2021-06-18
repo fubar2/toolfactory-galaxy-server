@@ -270,6 +270,8 @@ python3 $__tool_directory__/ToolFactory.py
 --galaxy_root "$__root_dir__"
 --tool_dir "$__tool_directory__"
 --admin_only
+--history_id $__app__.security.encode_id($output_dataset.creating_job.history.id)
+--history_name $output_dataset.creating_job.history.name
  #end if
 ]]></command>
  <configfiles>

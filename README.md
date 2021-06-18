@@ -1,6 +1,6 @@
 # Galaxy ToolFactory Appliance
 
-This is a ToolFactory flavoured developer appliance in Docker extending the basic `docker-galaxy-stable` Galaxy.
+This is a ToolFactory flavoured developer appliance in Docker extending the basic `docker-galaxy-stable` Galaxy. Included are:
 
 1.    The ToolFactory - a form driven code generator to make new Galaxy tools from scripts - is installed with a testing tool.
 
@@ -8,26 +8,28 @@ This is a ToolFactory flavoured developer appliance in Docker extending the basi
 outside the Galaxy tool execution environment to test tools, returning the planemo test
 reports, log and updated archive to the user's current history.
 
-3.    A history containing 15 demonstration tool generation jobs to rerun and build on. Samples use bash, python, perl (yes, even perl. Galaxy is a very welcoming community..),
-Rscript and for more discerning users, prolog and lisp. Any scriptable language in Conda should work.
+3.    A history containing [15 demonstration tool generation jobs](https://github.com/fubar2/toolfactory-galaxy-server/tree/main/compose/toolfactory-configurator/files/TFtools) to rerun and build on. Samples use bash, python, perl (yes, even perl. Galaxy is a very welcoming community..),
+Rscript and even in prolog and lisp to show that just about any scriptable language in Conda should work.
 
 ## Built on docker-galaxy-stable
 
-This flavour of the docker-compose infrastructure is based on https://github.com/bgruening/docker-galaxy-stable - there is excellent documentation at
-that site. Respect. A few minor pointers only are provided below - please refer to the original documentation for details about this extensive infrastructure for Galaxy flavours including
+This flavour of the docker-compose infrastructure is based on [https://github.com/bgruening/docker-galaxy-stable](https://github.com/bgruening/docker-galaxy-stable).
+There is excellent documentation at
+that site. Respect. A few minor pointers only are provided below - please refer to the original documentation for details
+about this extensive infrastructure for Galaxy including
 cluster and other deployment options.
 
 ## A standalone, pop-up desktop Galaxy appliance
 
-The Appliance supporting the ToolFactory is a fully featured `docker-galaxy-stable` Galaxy server, ideal for scientists and developers
-who can use a private pop-up desktop server for learning how Galaxy works, building new tools, using interactive environments and any available toolshed tools to do real work,
-potentially at scale.
+The Appliance supporting the ToolFactory includes a fully featured Galaxy server, ideal for developers and programmer/analysts from any quantitative discipline
+new to Galaxy. It is a private disposable "pop-up" desktop server for learning how Galaxy works, building new tools, using interactive environments and
+any available toolshed tools for development.
 
 
 ## Private desktop use only is recommended.
 
-This Appliance has been configured to weaken some of Galaxy's strict job-runner isolation features so it can install and test tools conveniently.
-It is safe to run on a private Linux laptop or workstation.
+This Appliance has been configured to weaken some of Galaxy's strict job-runner isolation features so tools can be installed and tested by tools.
+It is safe to run on a private Linux laptop or workstation where there are no potentially hostile users.
 
 **Running it on any server accessible from the public internet exposes it to potential miscreants. This is strongly discouraged**.
 
@@ -45,6 +47,7 @@ There are
 [accompanying GTN ToolFactory developer tutorials](https://training.galaxyproject.org/training-material/topics/dev/tutorials/tool-generators/tutorial.html)
 to help explain how this Appliance can be used to generate Galaxy tools from working command line scripts. There are two linked tutorials - introductory and advanced.
 
+Please see either of those tutorials for details. Brief notes copied here for the impatient.
 
 ## Installation and startup
 
@@ -121,23 +124,25 @@ Otherwise, CtrlC from the attached console will stop the services.
 
 ## If things go wrong or if the Appliance is no longer needed
 
-1. Delete the `...compose/export` directory - you will need `sudo rm -rf export/*`
+1. Delete the `...compose/export` directory - you will need `sudo rm -rf export/*` and perhaps `sudo rm -rf export/.d*`
 
-2. Then you can delete the parent git or wget `toolfactory-galaxy-server` directory
+2. Then you can delete the parent `toolfactory-galaxy-server` directory
 
-3. Use `docker system prune` and respond `y` to the prompt to clean up any damaged containers.
+3. Use `docker system prune` and respond `y` to the prompt to clean up any damaged or dangling images and containers.
 
-4. Remove all the docker images in the usual way.
+4. Remove all the `quay.io/fubar2/toolfactory*` docker images in the usual way.
 
-## Security - why this Appliance is not suitable for exposing on the public internet
+5. Use `docker volume prune` and respond `y` to the prompt to remove the shared galaxy-central and /etc/galaxy volumes.
+
+
+## Security - why this Appliance does not belong on the public internet
 
 See [the notes on Appliance security considerations.](https://github.com/fubar2/toolfactory-galaxy-server/tree/main/compose#readme)
 
 ## Why is the Appliance complicated?
 
 The ToolFactory is a Galaxy tool, but it installs newly generated tools automatically into the local Galaxy server. This is not normally possible because a tool
-cannot normally escape Galaxy's job execution environment isolation in order to write to the server's configuration files so the new tool appears in the tool menu
-and is installed in the TFtools directory, in the normal Galaxy tools directory.
-
-The Appliance is configured so the ToolFactory and the Planemo test tool can use remote procedure calls to do what tools cannot normally do. It runs in a separate
+cannot escape Galaxy's job execution environment isolation. The ToolFactory needs to write to the normally forbidden server's configuration so the new tool appears in the tool menu
+and is installed in the TFtools directory which is a subdirectory of the Galaxy tools directory. The Appliance is configured so the ToolFactory and the Planemo test tool
+use remote procedure calls (RPC using rpyc) to do what tools cannot normally do. The rpyc server runs in a separate
 container. Without it, tool installation and testing are difficult to do inside Galaxy tools.  Use outside the privacy of a developer desktop is strongly discouraged for that reason.
