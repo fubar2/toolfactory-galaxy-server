@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import json
 import os
 import requests
@@ -65,15 +66,15 @@ if __name__ == '__main__':
         gi = galaxy.GalaxyInstance(url=self.galaxy, key=self.key, verify=False)
         chistory = gi.histories.get_most_recently_used_history()
         chistory_id = chistory['id']
-        #contents = gi.histories.show_history(chistory_id, contents=True)
-        #print('####chistory',chistory,'\n#### contents=',contents)
-        #history = gi.histories.create_history(name=f"{self.tool_id}_test_history")
-        #new_hist_id = history['id']
+        contents = gi.histories.show_history(chistory_id, contents=True)
+        print('####chistory',chistory,'\n#### contents=',contents)
+        history = gi.histories.create_history(name=f"{self.tool_id} test history at {datetime.datetime.now()}")
+        nhistory_id = history['id']
         fapi = ''.join([self.galaxy, '/api/tools/', self.tool_id, '/build'])
         build = gi.make_get_request(url=fapi,params={"history_id":chistory_id}).json()
         fapi = ''.join([self.galaxy, '/api/tools/', self.tool_id, '/test_data'])
         test_data = requests.get(fapi, params={'key':self.key, 'history_id':chistory_id})# gi.make_get_request(url=fapi,params={"history_id":chistory_id,'key':self.key}).json()
-        print(test_data)
+        print(test_data.json())
         testinputs = test_data.json()[0].get('inputs',None)
         print('testinputs',testinputs)
         stateinputs = build.get('state_inputs',None) # 'input1': {'values': [{'id': '7b326180327c3fcc', 'src': 'hda'}]}}
@@ -93,24 +94,24 @@ if __name__ == '__main__':
                     if inp.get('values',None):
                          for anin in inp['values']:
                             if anin.get('id', None) and anin.get('src', None):
-                                gi.histories.copy_dataset(chistory_id, anin['id'], source=anin['src'])
-                                print('******copied id', anin['id'])
+                                res = gi.histories.copy_dataset(nhistory_id, anin['id'], source=anin['src'])
+                                print('******copied id', anin['id'], 'got', res)
                                 up = {k:anin}
                                 print(up)
                                 inputs.update(up) # replace the input def
         print('after state inputs', inputs)
         fapi = ''.join([self.galaxy, '/api/tools'])
-        r = gi.tools.run_tool(chistory_id, self.tool_id, inputs, input_format='legacy')
+        r = gi.tools.run_tool(nhistory_id, self.tool_id, inputs, input_format='legacy')
         print(f"Called test on {self.tool_id} - got {r}")
-        job_wait(gi)
+        job_check(gi)
         print(f"Test completed {self.tool_id}")
 
 
 def _parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--galaxy", help='URL of target galaxy',default="http://nginx")
+    parser.add_argument("-g", "--galaxy", help='URL of target galaxy',default="http://localhost:8080")
     parser.add_argument("-a", "--key", help='Galaxy admin key', default="fakekey")
-    parser.add_argument("-t", "--tool_id", help='Tool id to test', default="planemo_lint")
+    parser.add_argument("-t", "--tool_id", help='Tool id to test', default="lisp_demo")
     return parser
 
 

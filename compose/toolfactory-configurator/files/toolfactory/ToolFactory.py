@@ -473,7 +473,7 @@ class Tool_Factory:
             if self.is_positional:
                 if p["origCL"].upper() == "STDIN":
                     aninput.positional = 9999998
-                    aninput.command_line_override = "> $%s" % newname
+                    aninput.command_line_override = "< $%s" % newname
                 else:
                     aninput.positional = int(p["origCL"])
                     aninput.command_line_override = "$%s" % newname

@@ -21,6 +21,7 @@ $lint_output]]></command>
 
 import lxml.etree as ET
 import os
+import shutil
 import subprocess
 import sys
 
@@ -30,15 +31,15 @@ def main():
     tree = ET.parse(xmlin)
     root = tree.getroot()
     toolname = root.get('id')
-    toolxml = os.path.join('/export/galaxy/tools/TFtools', toolname, '%s.xml' % toolname)
-    cl = ['planemo', 'lint', toolxml]
+    xmlf = f"{toolname}.xml"
+    shutil.copy(xmlin, xmlf)
+    cl = ['planemo', 'lint', xmlf]
     p = subprocess.run(cl, shell=False)
     if p.returncode > 0:
          print('Planemo lint call returned error %d')
     else:
          print('Lint report ends')
 main()
-
 
 #end raw]]></configfile>
   </configfiles>
@@ -67,24 +68,29 @@ ToolFactory demonstration script using bash to run planemo lint from a history X
 
 Script::
 
+
     import lxml.etree as ET
     import os
+    import shutil
     import subprocess
     import sys
+
     def main():
         assert len(sys.argv) >= 2, 'Must have input xml on command line'
         xmlin = sys.argv[1]
         tree = ET.parse(xmlin)
         root = tree.getroot()
         toolname = root.get('id')
-        toolxml = os.path.join('/export/galaxy/tools/TFtools', toolname, '%s.xml' % toolname)
-        cl = ['planemo', 'lint', toolxml]
+        xmlf = f"{toolname}.xml"
+        shutil.copy(xmlin, xmlf)
+        cl = ['planemo', 'lint', xmlf]
         p = subprocess.run(cl, shell=False)
         if p.returncode > 0:
-             print('Planemo lint call returned error %d')
+            print('Planemo lint call returned error %d')
         else:
-             print('Lint report ends')
+            print('Lint report ends')
     main()
+
 
 ]]></help>
   <citations>

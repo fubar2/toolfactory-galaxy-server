@@ -19,7 +19,7 @@ def _parser():
         default=[ "/galaxy-central/workflows/TF_demo_history.tar.gz",])
     parser.add_argument("-t", "--toolid", help='tool(s) to install dependencies', default=[], action="append")
     parser.add_argument("-w", "--wfpaths", help='workflow(s) to install', default=["/galaxy-central/workflows/TF_demo_make_tools.ga",
-      "/galaxy-central/workflows/TF_demo_make_test_tools_June_3.ga"])
+      "/galaxy-central/workflows/TF_demo_make_test_tools.ga"])
     return parser
 
 ACTIVE = ['running', 'upload', 'waiting']

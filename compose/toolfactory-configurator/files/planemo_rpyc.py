@@ -60,12 +60,12 @@ class planemo_run(Service):
         )
 
     def install_deps(self, tool_id):
-        gi = galaxy.GalaxyInstance(url='http://nginx', key='fakekey')
+        gi = galaxy.GalaxyInstance(url='http://galaxy-server', key='fakekey')
         try:
             res = gi.tools.install_dependencies(tool_id)
+            logging.info('Tried installing dependencies for %s. Got %s' % (tool_id,res))
         except Exception:
             logging.warning('Attempt to install %s failed' % tool_id)
-        logging.info('Tried installing dependencies for %s. Got %s' % (tool_id,res))
 
 
     def exposed_tool_updater(self, galaxy_root,
@@ -117,6 +117,7 @@ class planemo_run(Service):
         tff.close()
         self.run_rsync(ourdir, tool_dir)
         update_toolconf(tool_conf_path, out_section, tool_id, ourdir, ourxml)
+        self.install_deps(tool_id)
 
 
 

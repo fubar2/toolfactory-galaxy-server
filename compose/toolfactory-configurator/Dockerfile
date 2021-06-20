@@ -47,7 +47,7 @@ COPY ./files/planemo_rpyc.py /usr/local/bin/planemo_rpyc.py
 COPY ./files/TF_demo_history.tar.gz /files/TF_demo_history.tar.gz
 COPY ./files/TF-Demo-data-May-16.tar.gz /files/TF-Demo-data-May-16.tar.gz
 COPY ./files/TF_demo_make_tools.ga /files/TF_demo_make_tools.ga
-COPY ./files/TF_demo_make_test_tools_May_21.ga /files/TF_demo_make_test_tools_May_21.ga
+COPY ./files/TF_demo_make_test_tools.ga /files/TF_demo_make_test_tools.ga
 COPY ./files/install-history.py /usr/local/bin/install-history.py
 
 
