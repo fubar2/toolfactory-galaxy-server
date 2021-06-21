@@ -20,14 +20,14 @@
             "name": "Input dataset",
             "outputs": [],
             "position": {
-                "bottom": -248.1999969482422,
+                "bottom": -162.1999969482422,
                 "height": 61.80000305175781,
-                "left": -195.5,
-                "right": 4.5,
-                "top": -310,
+                "left": -275.5,
+                "right": -75.5,
+                "top": -224,
                 "width": 200,
-                "x": -195.5,
-                "y": -310
+                "x": -275.5,
+                "y": -224
             },
             "tool_id": null,
             "tool_state": "{\"optional\": false}",
@@ -38,53 +38,15 @@
                 {
                     "label": null,
                     "output_name": "output",
-                    "uuid": "55b01eb3-55a3-4d10-9ee0-196f05c33ec8"
+                    "uuid": "26b5bfc7-4658-4705-8e1f-33b91e052fde"
                 }
             ]
         },
         "1": {
             "annotation": "",
-            "content_id": null,
-            "errors": null,
-            "id": 1,
-            "input_connections": {},
-            "inputs": [
-                {
-                    "description": "",
-                    "name": "rgToolFactory2.py"
-                }
-            ],
-            "label": "rgToolFactory2.py",
-            "name": "Input dataset",
-            "outputs": [],
-            "position": {
-                "bottom": 456.1999969482422,
-                "height": 82.19999694824219,
-                "left": -185.5,
-                "right": 14.5,
-                "top": 374,
-                "width": 200,
-                "x": -185.5,
-                "y": 374
-            },
-            "tool_id": null,
-            "tool_state": "{\"optional\": false}",
-            "tool_version": null,
-            "type": "data_input",
-            "uuid": "bff74fa6-93d2-4a51-ae59-ee9ea8e93d76",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "output",
-                    "uuid": "1f5756dd-8fbe-460b-804d-b909022a4206"
-                }
-            ]
-        },
-        "2": {
-            "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
             "errors": null,
-            "id": 2,
+            "id": 1,
             "input_connections": {},
             "inputs": [],
             "label": null,
@@ -96,14 +58,14 @@
                 }
             ],
             "position": {
-                "bottom": -485.8000030517578,
+                "bottom": -399.8000030517578,
                 "height": 82.19999694824219,
-                "left": 82.5,
-                "right": 282.5,
-                "top": -568,
+                "left": 2.5,
+                "right": 202.5,
+                "top": -482,
                 "width": 200,
-                "x": 82.5,
-                "y": -568
+                "x": 2.5,
+                "y": -482
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -121,7 +83,45 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "d52a352d-b57f-4afe-bdbb-ae25763d656b"
+                    "uuid": "5339a8c7-fddc-4ae7-9e45-cec15bb057a7"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "rgToolFactory2.py"
+                }
+            ],
+            "label": "rgToolFactory2.py",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 542.1999969482422,
+                "height": 82.19999694824219,
+                "left": -265.5,
+                "right": -65.5,
+                "top": 460,
+                "width": 200,
+                "x": -265.5,
+                "y": 460
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "bff74fa6-93d2-4a51-ae59-ee9ea8e93d76",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "e2b8c8c1-53dc-49ba-8d60-ab73c5e51542"
                 }
             ]
         },
@@ -141,14 +141,14 @@
                 }
             ],
             "position": {
-                "bottom": -485.8000030517578,
+                "bottom": 542.1999969482422,
                 "height": 82.19999694824219,
-                "left": -473.5,
-                "right": -273.5,
-                "top": -568,
+                "left": 568.5,
+                "right": 768.5,
+                "top": 460,
                 "width": 200,
-                "x": -473.5,
-                "y": -568
+                "x": 568.5,
+                "y": 460
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -158,15 +158,15 @@
                 "owner": "fubar_too",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"# pathetic attempt at a malicious script in Galaxy\\n# it fails because the job execution environment gives write access to few places\\necho \\\"ls -la\\\"\\nls -la\\ncd /\\necho \\\"ls -la after changing to /\\\"\\nls -la\\ntouch \\\"foo_was.here\\\"\\necho \\\"ls -la in root after touch foo_was.here - foo_was_not.here more like it\\\"\\nls -la\\n\"}}, \"help_text\": \"**What it Does**\\nShows what you can't do with a bash script\\nCheck the tool stderr - it isn't captured but should be. Send code.\\nResults vary - in a biocontainer, you are root so can do anything.\\nIn a normal Galaxy, not so much.\\nThis is a very interesting way to see what a tool can do on your machine.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"evil_script_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"sim_size:0.05\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Tries some naughty things\", \"tool_name\": \"evil_script_that_fails\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"echo \\\"Hello $1\\\"\"}}, \"help_text\": \"**What it Does**\\nA bash script Hello World in Galaxy generated by the ToolFactory\", \"install\": \"false\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"Hello_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": [{\"__index__\": 0, \"param_name\": \"say_hello_to\", \"ap_type\": {\"param_type\": \"text\", \"__current_case__\": 0, \"param_value\": \"ToolFactory!!\"}, \"param_label\": \"Say hello to\", \"param_help\": \"\", \"param_CL\": \"1\", \"param_CLprefixed\": \"\", \"param_repeat\": \"false\"}]}}}, \"run_test\": \"true\", \"tool_desc\": \"Says Hello!\", \"tool_name\": \"hello_toolshed\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "2.00",
             "type": "tool",
-            "uuid": "8f7eb11c-6c2b-4a1f-be54-bfaef7145961",
+            "uuid": "4eaa146f-2d86-4295-a0e1-a21cd19f6f4e",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "e752621b-3e73-40ff-b84e-a597d7ad249e"
+                    "uuid": "f7f9c35c-cf99-46fc-9b60-7984b4c6fe24"
                 }
             ]
         },
@@ -186,14 +186,14 @@
                 }
             ],
             "position": {
-                "bottom": 456.1999969482422,
+                "bottom": -399.8000030517578,
                 "height": 82.19999694824219,
-                "left": 648.5,
-                "right": 848.5,
-                "top": 374,
+                "left": -553.5,
+                "right": -353.5,
+                "top": -482,
                 "width": 200,
-                "x": 648.5,
-                "y": 374
+                "x": -553.5,
+                "y": -482
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -203,15 +203,15 @@
                 "owner": "fubar_too",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"echo \\\"Hello $1\\\"\"}}, \"help_text\": \"**What it Does**\\nA bash script Hello World in Galaxy generated by the ToolFactory\", \"install\": \"false\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"Hello_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": [{\"__index__\": 0, \"param_name\": \"say_hello_to\", \"ap_type\": {\"param_type\": \"text\", \"__current_case__\": 0, \"param_value\": \"ToolFactory!!\"}, \"param_label\": \"Say hello to\", \"param_help\": \"\", \"param_CL\": \"1\", \"param_CLprefixed\": \"\", \"param_repeat\": \"false\"}]}}}, \"run_test\": \"true\", \"tool_desc\": \"Says Hello!\", \"tool_name\": \"hello_toolshed\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"# pathetic attempt at a malicious script in Galaxy\\n# it fails because the job execution environment gives write access to few places\\necho \\\"ls -la\\\"\\nls -la\\ncd /\\necho \\\"ls -la after changing to /\\\"\\nls -la\\ntouch \\\"foo_was.here\\\"\\necho \\\"ls -la in root after touch foo_was.here - foo_was_not.here more like it\\\"\\nls -la\\n\"}}, \"help_text\": \"**What it Does**\\nShows what you can't do with a bash script\\nCheck the tool stderr - it isn't captured but should be. Send code.\\nResults vary - in a biocontainer, you are root so can do anything.\\nIn a normal Galaxy, not so much.\\nThis is a very interesting way to see what a tool can do on your machine.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"evil_script_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"sim_size:0.05\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Tries some naughty things\", \"tool_name\": \"evil_script_that_fails\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "2.00",
             "type": "tool",
-            "uuid": "4eaa146f-2d86-4295-a0e1-a21cd19f6f4e",
+            "uuid": "8f7eb11c-6c2b-4a1f-be54-bfaef7145961",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "606527a5-dc3b-4e1c-b481-9124e7a218af"
+                    "uuid": "ade5722c-30e9-4295-be3d-cda09b760cb8"
                 }
             ]
         },
@@ -231,14 +231,14 @@
                 }
             ],
             "position": {
-                "bottom": -485.8000030517578,
+                "bottom": -399.8000030517578,
                 "height": 82.19999694824219,
-                "left": 638.5,
-                "right": 838.5,
-                "top": -568,
+                "left": 558.5,
+                "right": 758.5,
+                "top": -482,
                 "width": 200,
-                "x": 638.5,
-                "y": -568
+                "x": 558.5,
+                "y": -482
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -256,7 +256,7 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "64a81bca-9e12-4de9-8533-36614d5fe5d2"
+                    "uuid": "2dc36647-7c6f-4532-8407-ed99242704b7"
                 }
             ]
         },
@@ -269,32 +269,32 @@
             "inputs": [
                 {
                     "description": "",
-                    "name": "bwa-mem-mt-genome.fa"
+                    "name": "phiX.fasta"
                 }
             ],
-            "label": "bwa-mem-mt-genome.fa",
+            "label": "phiX.fasta",
             "name": "Input dataset",
             "outputs": [],
             "position": {
-                "bottom": 238.1999969482422,
-                "height": 82.19999694824219,
-                "left": -1029.5,
-                "right": -829.5,
-                "top": 156,
+                "bottom": -162.1999969482422,
+                "height": 61.80000305175781,
+                "left": -1109.5,
+                "right": -909.5,
+                "top": -224,
                 "width": 200,
-                "x": -1029.5,
-                "y": 156
+                "x": -1109.5,
+                "y": -224
             },
             "tool_id": null,
             "tool_state": "{\"optional\": false}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "f92970ac-402f-4e50-908b-ae487c35fab9",
+            "uuid": "b89f2790-f736-49f1-a8ed-04c707122221",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output",
-                    "uuid": "8df5da79-2d84-4ed6-90b1-7f6f28c22750"
+                    "uuid": "66cda294-e2c8-4960-bf63-78faa17d327a"
                 }
             ]
         },
@@ -307,32 +307,32 @@
             "inputs": [
                 {
                     "description": "",
-                    "name": "bwa-mem-fastq1.fq"
+                    "name": "bwa-mem-mt-genome.fa"
                 }
             ],
-            "label": "bwa-mem-fastq1.fq",
+            "label": "bwa-mem-mt-genome.fa",
             "name": "Input dataset",
             "outputs": [],
             "position": {
-                "bottom": 358.1999969482422,
+                "bottom": 324.1999969482422,
                 "height": 82.19999694824219,
-                "left": -1029.5,
-                "right": -829.5,
-                "top": 276,
+                "left": -1109.5,
+                "right": -909.5,
+                "top": 242,
                 "width": 200,
-                "x": -1029.5,
-                "y": 276
+                "x": -1109.5,
+                "y": 242
             },
             "tool_id": null,
             "tool_state": "{\"optional\": false}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "3b343392-97c8-4372-8f94-b6cd11acab17",
+            "uuid": "f92970ac-402f-4e50-908b-ae487c35fab9",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output",
-                    "uuid": "6740a688-0481-41e0-94c4-e2cf99bcd9e1"
+                    "uuid": "806e3216-7fc8-4c93-bdcf-d7b36f216b28"
                 }
             ]
         },
@@ -345,32 +345,32 @@
             "inputs": [
                 {
                     "description": "",
-                    "name": "phiX.fasta"
+                    "name": "bwa-mem-fastq1.fq"
                 }
             ],
-            "label": "phiX.fasta",
+            "label": "bwa-mem-fastq1.fq",
             "name": "Input dataset",
             "outputs": [],
             "position": {
-                "bottom": -248.1999969482422,
-                "height": 61.80000305175781,
-                "left": -1029.5,
-                "right": -829.5,
-                "top": -310,
+                "bottom": 444.1999969482422,
+                "height": 82.19999694824219,
+                "left": -1109.5,
+                "right": -909.5,
+                "top": 362,
                 "width": 200,
-                "x": -1029.5,
-                "y": -310
+                "x": -1109.5,
+                "y": 362
             },
             "tool_id": null,
             "tool_state": "{\"optional\": false}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "b89f2790-f736-49f1-a8ed-04c707122221",
+            "uuid": "3b343392-97c8-4372-8f94-b6cd11acab17",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output",
-                    "uuid": "3057d825-7c7b-4ecf-b0f2-1d998c630ca8"
+                    "uuid": "4b32fc94-da86-48a8-9f1b-1ab42fd41338"
                 }
             ]
         },
@@ -390,14 +390,14 @@
                 }
             ],
             "position": {
-                "bottom": -485.8000030517578,
+                "bottom": -399.8000030517578,
                 "height": 82.19999694824219,
-                "left": -1029.5,
-                "right": -829.5,
-                "top": -568,
+                "left": -1109.5,
+                "right": -909.5,
+                "top": -482,
                 "width": 200,
-                "x": -1029.5,
-                "y": -568
+                "x": -1109.5,
+                "y": -482
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -415,7 +415,7 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "9d9c5667-fc32-4b44-bc32-77c3a4cae394"
+                    "uuid": "03ac75a3-646d-4548-957f-61c0af78176f"
                 }
             ]
         },
@@ -440,14 +440,14 @@
                 }
             ],
             "position": {
-                "bottom": -212,
+                "bottom": -126,
                 "height": 134,
-                "left": 82.5,
-                "right": 282.5,
-                "top": -346,
+                "left": 2.5,
+                "right": 202.5,
+                "top": -260,
                 "width": 200,
-                "x": 82.5,
-                "y": -346
+                "x": 2.5,
+                "y": -260
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -465,168 +465,18 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "41f0bb8d-4360-4985-8986-308a3997eb4e"
+                    "uuid": "846284aa-fc74-4290-b92e-7d5165bcc5fc"
                 }
             ]
         },
         "11": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
             "errors": null,
             "id": 11,
             "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 1,
-                    "output_name": "output"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 259,
-                "height": 134,
-                "left": 92.5,
-                "right": 292.5,
-                "top": 125,
-                "width": 200,
-                "x": 92.5,
-                "y": 125
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"tac | rev\"}}, \"help_text\": \"**What it Does**\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"0\", \"__current_case__\": 2, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"txt\"], \"input_label\": \"Input text file to be reversed\", \"input_help\": \"\", \"input_CL\": \"STDIN\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"tacrev_reversed_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"\", \"tool_name\": \"tacrev\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "df5f52b7-276e-40be-bbe5-e5a341f2a7e8",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "78d9e9b5-3d42-42bd-bfa8-0fb342a24794"
-                }
-            ]
-        },
-        "12": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "errors": null,
-            "id": 12,
-            "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 1,
-                    "output_name": "output"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 482,
-                "height": 134,
-                "left": 92.5,
-                "right": 292.5,
-                "top": 348,
-                "width": 200,
-                "x": 92.5,
-                "y": 348
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"python\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"python\", \"dynScript\": \"## reverse order of text by row\\n## ToolFactory demonstration\\n## positional parameters\\nimport sys\\ninp = sys.argv[1]\\noutp = sys.argv[2]\\ni = open(inp,'r').readlines()\\no = open(outp,'w')\\nfor row in i:\\n  rs = row.rstrip()\\n  rs = list(rs)\\n  rs.reverse()\\n  o.write(''.join(rs))\\n  o.write('\\\\n')\\no.close()\"}}, \"help_text\": \"**What it Does**\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"txt\"], \"input_label\": \"Input text file to be reversed\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"pyrev_positionalparse_output\", \"history_format\": \"txt\", \"history_CL\": \"2\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"\", \"tool_name\": \"pyrev_pos_test\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "9859db2a-b061-4b4a-8535-015f7c24972e",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "1c167882-5a9d-412c-8fcd-b601a6b88604"
-                }
-            ]
-        },
-        "13": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "errors": null,
-            "id": 13,
-            "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 1,
-                    "output_name": "output"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 705,
-                "height": 134,
-                "left": 92.5,
-                "right": 292.5,
-                "top": 571,
-                "width": 200,
-                "x": 92.5,
-                "y": 571
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"python\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"python\", \"dynScript\": \"# reverse order of text by row\\nimport argparse\\nparser = argparse.ArgumentParser()\\na = parser.add_argument\\na('--infile',default='')\\na('--pyrevargparse_outfile',default=None)\\nargs = parser.parse_args()\\ninp = args.infile\\noutp = args.pyrevargparse_outfile\\ni = open(inp,'r').readlines()\\no = open(outp,'w')\\nfor row in i:\\n  rs = row.rstrip()\\n  rs = list(rs)\\n  rs.reverse()\\n  o.write(''.join(rs))\\n  o.write('\\\\n')\\no.close()\"}}, \"help_text\": \"**What it Does**\\nDemonstrates argparse - script must correctly parse the names given on the form for this to work.\\nArgparse argument names your script should expect are constructed according to the parameter type - please read the tool form carefully.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"argparse\", \"__current_case__\": 0, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"txt\"], \"input_label\": \"input file to be reversed\", \"input_help\": \"\", \"input_CL\": \"infile\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"pyrevargparse_outfile\", \"history_format\": \"txt\", \"history_CL\": \"pyrevargparse_outfile\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"ToolFactory demonstration python script with argparse parameters\", \"tool_name\": \"pyrev_argparse_test\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "5d65cd5c-e83c-4087-b0fb-ded30c82f4d2",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "dd4a5c2d-bdc4-48aa-b8f2-9fa51e6ce3fb"
-                }
-            ]
-        },
-        "14": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
-            "errors": null,
-            "id": 14,
-            "input_connections": {
                 "ToolFactory_toolshed_XML_from_the_history_to_test": {
-                    "id": 2,
+                    "id": 1,
                     "output_name": "generated_xml"
                 }
             },
@@ -644,14 +494,14 @@
                 }
             ],
             "position": {
-                "bottom": -384.1999969482422,
+                "bottom": -298.1999969482422,
                 "height": 184.8000030517578,
-                "left": 360.5,
-                "right": 560.5,
-                "top": -569,
+                "left": 280.5,
+                "right": 480.5,
+                "top": -483,
                 "width": 200,
-                "x": 360.5,
-                "y": -569
+                "x": 280.5,
+                "y": -483
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -668,13 +518,163 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "152e2d86-f8e9-43f7-9c66-2db8c63eedf4"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "7771648d-8009-4edd-8c83-5ca27036064a"
                 },
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "ce414e22-45c3-4b78-bcdb-56528bc1bab1"
+                    "output_name": "testout",
+                    "uuid": "e5d87a6b-9bb4-4307-bbbb-30528bd88553"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 345,
+                "height": 134,
+                "left": 12.5,
+                "right": 212.5,
+                "top": 211,
+                "width": 200,
+                "x": 12.5,
+                "y": 211
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"tac | rev\"}}, \"help_text\": \"**What it Does**\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"0\", \"__current_case__\": 2, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"txt\"], \"input_label\": \"Input text file to be reversed\", \"input_help\": \"\", \"input_CL\": \"STDIN\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"tacrev_reversed_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"\", \"tool_name\": \"tacrev\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "df5f52b7-276e-40be-bbe5-e5a341f2a7e8",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "69cbee5d-07dc-4344-af8b-c4655cd51ebd"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 568,
+                "height": 134,
+                "left": 12.5,
+                "right": 212.5,
+                "top": 434,
+                "width": 200,
+                "x": 12.5,
+                "y": 434
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"python\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"python\", \"dynScript\": \"## reverse order of text by row\\n## ToolFactory demonstration\\n## positional parameters\\nimport sys\\ninp = sys.argv[1]\\noutp = sys.argv[2]\\ni = open(inp,'r').readlines()\\no = open(outp,'w')\\nfor row in i:\\n  rs = row.rstrip()\\n  rs = list(rs)\\n  rs.reverse()\\n  o.write(''.join(rs))\\n  o.write('\\\\n')\\no.close()\"}}, \"help_text\": \"**What it Does**\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"txt\"], \"input_label\": \"Input text file to be reversed\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"pyrev_positionalparse_output\", \"history_format\": \"txt\", \"history_CL\": \"2\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"\", \"tool_name\": \"pyrev_pos_test\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "9859db2a-b061-4b4a-8535-015f7c24972e",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "e2e52d04-b744-41c1-8509-7b04d3d754ac"
+                }
+            ]
+        },
+        "14": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "errors": null,
+            "id": 14,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 791,
+                "height": 134,
+                "left": 12.5,
+                "right": 212.5,
+                "top": 657,
+                "width": 200,
+                "x": 12.5,
+                "y": 657
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"python\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"python\", \"dynScript\": \"# reverse order of text by row\\nimport argparse\\nparser = argparse.ArgumentParser()\\na = parser.add_argument\\na('--infile',default='')\\na('--pyrevargparse_outfile',default=None)\\nargs = parser.parse_args()\\ninp = args.infile\\noutp = args.pyrevargparse_outfile\\ni = open(inp,'r').readlines()\\no = open(outp,'w')\\nfor row in i:\\n  rs = row.rstrip()\\n  rs = list(rs)\\n  rs.reverse()\\n  o.write(''.join(rs))\\n  o.write('\\\\n')\\no.close()\"}}, \"help_text\": \"**What it Does**\\nDemonstrates argparse - script must correctly parse the names given on the form for this to work.\\nArgparse argument names your script should expect are constructed according to the parameter type - please read the tool form carefully.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"argparse\", \"__current_case__\": 0, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"txt\"], \"input_label\": \"input file to be reversed\", \"input_help\": \"\", \"input_CL\": \"infile\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"pyrevargparse_outfile\", \"history_format\": \"txt\", \"history_CL\": \"pyrevargparse_outfile\", \"history_test\": \"diff:0\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"ToolFactory demonstration python script with argparse parameters\", \"tool_name\": \"pyrev_argparse_test\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "5d65cd5c-e83c-4087-b0fb-ded30c82f4d2",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "5018e056-773e-42ea-9028-be8b98fc14f4"
                 }
             ]
         },
@@ -703,14 +703,14 @@
                 }
             ],
             "position": {
-                "bottom": -384.1999969482422,
+                "bottom": 395.8000030517578,
                 "height": 184.8000030517578,
-                "left": -195.5,
-                "right": 4.5,
-                "top": -569,
+                "left": 846.5,
+                "right": 1046.5,
+                "top": 211,
                 "width": 200,
-                "x": -195.5,
-                "y": -569
+                "x": 846.5,
+                "y": 211
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -723,25 +723,125 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "7ad72ad9-bb2e-44cd-adc0-f1c2773aec7c",
+            "uuid": "50e11a0b-d59d-47ac-b2a8-3a32a7b03bc0",
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "9ea7bdc2-93c7-4616-8d31-0a0d2d47ef86"
+                    "output_name": "testout",
+                    "uuid": "c9300001-6873-438c-8eca-8fe598fab569"
                 },
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "dcd4808c-48f7-4e6d-a013-e80ab7000456"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "b91f0937-b206-4f61-b339-7c4c6b7baba1"
                 }
             ]
         },
         "16": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
             "errors": null,
             "id": 16,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 3,
+                    "output_name": "generated_xml"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 568,
+                "height": 134,
+                "left": 846.5,
+                "right": 1046.5,
+                "top": 434,
+                "width": 200,
+                "x": 846.5,
+                "y": 434
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"planemo=0.74.3\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"cp $1 ./testme.xml\\n# planemo will only lint a file with xml extension\\nplanemo lint \\\"./testme.xml\\\"  \\necho 'Lint report ends'\"}}, \"help_text\": \"**What it Does**\\nToolFactory demonstration script using bash to run planemo lint using bash\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"xml\"], \"input_label\": \"Toolshed XML to be linted\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"lint_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:4\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Runs Planemo lint on a ToolFactory generated XML file\", \"tool_name\": \"planemo_lint_bash\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "9d8868a3-5420-4629-95d3-cd8d723e90cf",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "8e9fdd79-239d-4bc7-bdeb-55a1d6aceb00"
+                }
+            ]
+        },
+        "17": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "errors": null,
+            "id": 17,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 3,
+                    "output_name": "generated_xml"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 791,
+                "height": 134,
+                "left": 846.5,
+                "right": 1046.5,
+                "top": 657,
+                "width": 200,
+                "x": 846.5,
+                "y": 657
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"planemo=0.74.3, python=3.7, lxml=4.6.3\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"python\", \"dynScript\": \"\\nimport lxml.etree as ET\\nimport os\\nimport shutil\\nimport subprocess\\nimport sys\\n\\ndef main():\\n    assert len(sys.argv) >= 2, 'Must have input xml on command line'\\n    xmlin = sys.argv[1]\\n    tree = ET.parse(xmlin)\\n    root = tree.getroot()\\n    toolname = root.get('id')\\n    xmlf = f\\\"{toolname}.xml\\\"\\n    shutil.copy(xmlin, xmlf)\\n    cl = ['planemo', 'lint', xmlf]\\n    p = subprocess.run(cl, shell=False)\\n    if p.returncode > 0:\\n         print('Planemo lint call returned error %d')\\n    else:\\n         print('Lint report ends')\\nmain()\"}}, \"help_text\": \"**What it Does**\\nToolFactory demonstration script using python to run planemo lint from a ToolFactory generated XML\\nCompare with the simpler bash version.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"RuntimeValue\"}, \"input_formats\": [\"xml\"], \"input_label\": \"Toolshed XML to be linted\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"lint_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:5\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Planemo lint using python on a ToolFactory generated XML\", \"tool_name\": \"planemo_lint_python\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "3e9e2e49-96df-44ae-94c9-992f27f80bd5",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "494d5aef-01f9-425f-85f4-5f7350cb95ad"
+                }
+            ]
+        },
+        "18": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
+            "errors": null,
+            "id": 18,
             "input_connections": {
                 "ToolFactory_toolshed_XML_from_the_history_to_test": {
                     "id": 4,
@@ -762,14 +862,14 @@
                 }
             ],
             "position": {
-                "bottom": 309.8000030517578,
+                "bottom": -298.1999969482422,
                 "height": 184.8000030517578,
-                "left": 926.5,
-                "right": 1126.5,
-                "top": 125,
+                "left": -275.5,
+                "right": -75.5,
+                "top": -483,
                 "width": 200,
-                "x": 926.5,
-                "y": 125
+                "x": -275.5,
+                "y": -483
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -782,117 +882,17 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "50e11a0b-d59d-47ac-b2a8-3a32a7b03bc0",
+            "uuid": "7ad72ad9-bb2e-44cd-adc0-f1c2773aec7c",
             "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "testout",
-                    "uuid": "b5d29dd5-e327-49ff-9c4e-dbf5fb0ed42b"
-                },
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "b5488130-f057-42f6-aef9-aaa825888d8c"
-                }
-            ]
-        },
-        "17": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "errors": null,
-            "id": 17,
-            "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 4,
-                    "output_name": "generated_xml"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 482,
-                "height": 134,
-                "left": 926.5,
-                "right": 1126.5,
-                "top": 348,
-                "width": 200,
-                "x": 926.5,
-                "y": 348
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"planemo=0.74.3\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"cp $1 ./testme.xml\\n# planemo will only lint a file with xml extension\\nplanemo lint \\\"./testme.xml\\\"  \\necho 'Lint report ends'\"}}, \"help_text\": \"**What it Does**\\nToolFactory demonstration script using bash to run planemo lint using bash\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"xml\"], \"input_label\": \"Toolshed XML to be linted\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"lint_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:4\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Runs Planemo lint on a ToolFactory generated XML file\", \"tool_name\": \"planemo_lint_bash\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "9d8868a3-5420-4629-95d3-cd8d723e90cf",
-            "workflow_outputs": [
+                    "uuid": "b5b49daa-999a-4386-8d40-71088a9da63f"
+                },
                 {
                     "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "f212b44a-d157-4c6e-bd32-ef1460f88d1c"
-                }
-            ]
-        },
-        "18": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "errors": null,
-            "id": 18,
-            "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 4,
-                    "output_name": "generated_xml"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 705,
-                "height": 134,
-                "left": 926.5,
-                "right": 1126.5,
-                "top": 571,
-                "width": 200,
-                "x": 926.5,
-                "y": 571
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"planemo=0.74.3, python=3.7, lxml=4.6.3\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"python\", \"dynScript\": \"def main():\\n    assert len(sys.argv) >= 2, 'Must have input xml on command line'\\n    xmlin = sys.argv[1]\\n    tree = ET.parse(xmlin)\\n    root = tree.getroot()\\n    toolname = root.get('id')\\n    txml = '%s.xml' % toolname\\n    shutil.copy(xmlin,txml)\\n    cl = ['planemo', 'lint', txml]\\n    print('Running', cl)\\n    p = subprocess.run(cl, shell=False)\\n    if p.returncode > 0:\\n         print('Planemo lint call returned error %d')\\n    else:\\n         print('Lint report ends')\\nmain()\\n\"}}, \"help_text\": \"**What it Does**\\nToolFactory demonstration script using python to run planemo lint from a ToolFactory generated XML\\nCompare with the simpler bash version.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"RuntimeValue\"}, \"input_formats\": [\"xml\"], \"input_label\": \"Toolshed XML to be linted\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"lint_output\", \"history_format\": \"txt\", \"history_CL\": \"STDOUT\", \"history_test\": \"diff:5\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Planemo lint using python on a ToolFactory generated XML\", \"tool_name\": \"planemo_lint_python\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "dd4827f3-ae73-4918-997b-0634da209778",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "c9c6f385-94ff-4302-8c99-bf74f9b0c947"
+                    "output_name": "testout",
+                    "uuid": "dbdd695c-bd21-487f-abbc-b1f3929d64e3"
                 }
             ]
         },
@@ -921,14 +921,14 @@
                 }
             ],
             "position": {
-                "bottom": -384.1999969482422,
+                "bottom": -298.1999969482422,
                 "height": 184.8000030517578,
-                "left": 916.5,
-                "right": 1116.5,
-                "top": -569,
+                "left": 836.5,
+                "right": 1036.5,
+                "top": -483,
                 "width": 200,
-                "x": 916.5,
-                "y": -569
+                "x": 836.5,
+                "y": -483
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -945,13 +945,13 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "0c44dff6-d39e-4afe-8033-8f30fefe0d69"
+                    "output_name": "testout",
+                    "uuid": "ebfc8f7f-cac0-4d5e-b504-d5b4c14a011e"
                 },
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "86ad5288-2418-46cb-a07f-e3c182761c73"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "28a0991d-1dac-43a9-9cb9-999fa0347a31"
                 }
             ]
         },
@@ -964,10 +964,6 @@
                 "io_param|ppass|io|history_inputs_0|input_files": {
                     "id": 6,
                     "output_name": "output"
-                },
-                "io_param|ppass|io|history_inputs_1|input_files": {
-                    "id": 7,
-                    "output_name": "output"
                 }
             },
             "inputs": [],
@@ -980,118 +976,14 @@
                 }
             ],
             "position": {
-                "bottom": 350.6000061035156,
-                "height": 225.60000610351562,
-                "left": -741.5,
-                "right": -541.5,
-                "top": 125,
-                "width": 200,
-                "x": -741.5,
-                "y": 125
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"bwa=0.7.15, samtools=1.3\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"REFFILE=$1\\nFASTQ=$2\\nBAMOUT=$3\\nrm -f \\\"refalias\\\"\\nln -s \\\"$REFFILE\\\" \\\"refalias\\\"\\nbwa index -a is \\\"refalias\\\"\\nbwa mem -t \\\"2\\\"  -v 1 \\\"refalias\\\" \\\"$FASTQ\\\"  > tempsam\\nsamtools view -Sb tempsam > temporary_bam_file.bam\\nsamtools sort -o \\\"$BAMOUT\\\" temporary_bam_file.bam\\n\"}}, \"help_text\": \"**What it Does**\\nSame thing as the command over-ride version but using a bash script and passing parameters.\\nProbably more familiar to many non-Galaxy developers.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fasta\"], \"input_label\": \"Reference sequence to map reads against\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}, {\"__index__\": 1, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fastq\"], \"input_label\": \"Reads to map\", \"input_help\": \"\", \"input_CL\": \"2\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"bwa_test_bash_output\", \"history_format\": \"bam\", \"history_CL\": \"3\", \"history_test\": \"sim_size:0.1\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Bash script equivalent of the bwa command over-ride.\", \"tool_name\": \"bwa_test_toolfactory_positional_bash\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "15e47969-da31-481b-974b-0ee3ba12c461",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "5c993584-51dd-49c1-8344-eff90092b34d"
-                }
-            ]
-        },
-        "21": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "errors": null,
-            "id": 21,
-            "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 6,
-                    "output_name": "output"
-                },
-                "io_param|ppass|io|history_inputs_1|input_files": {
-                    "id": 7,
-                    "output_name": "output"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 594.1999969482422,
-                "height": 205.1999969482422,
-                "left": -741.5,
-                "right": -541.5,
-                "top": 389,
-                "width": 200,
-                "x": -741.5,
-                "y": 389
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "tool_shed_repository": {
-                "changeset_revision": "5bf1cedca36c",
-                "name": "toolfactory",
-                "owner": "fubar_too",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"yes\", \"__current_case__\": 1, \"command_override\": \"## Build reference\\nln -s \\\"$ref_file\\\" \\\"localref.fa\\\" ;\\nbwa index -a is \\\"localref.fa\\\" ;\\nbwa mem -t 2 -v 1 \\\"localref.fa\\\" \\\"$fastq_input1\\\"  | samtools view -Sb - > temporary_bam_file.bam ;\\nsamtools sort -o \\\"$bwa_test_commover_bam_output\\\" temporary_bam_file.bam\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"bwa=0.7.15, samtools=1.3\", \"usescript\": {\"choosescript\": \"no\", \"__current_case__\": 0, \"dynScript\": \"\", \"scriptrunner\": \"\"}}, \"help_text\": \"**What it Does**\\nTrivial example from a Planemo documentation example\\nIt can be useful. It is sort of bash with substitutions from the tool form.\\nIf you need it, it's here.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"argparse\", \"__current_case__\": 0, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fasta\"], \"input_label\": \"Reference sequence to align reads\", \"input_help\": \"\", \"input_CL\": \"ref_file\", \"input_repeat\": \"false\"}, {\"__index__\": 1, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fastqsanger\"], \"input_label\": \"Fastqsanger file containing reads to be mapped against reference\", \"input_help\": \"\", \"input_CL\": \"fastq_input1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"bwa_test_commover_bam_output\", \"history_format\": \"bam\", \"history_CL\": \"\", \"history_test\": \"sim_size:0.1\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Command over-ride demonstration\", \"tool_name\": \"bwa_test_command_override\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "2.00",
-            "type": "tool",
-            "uuid": "8b8f609b-556f-4f2c-b30b-63502a05d27b",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "generated_xml",
-                    "uuid": "ec70a2ba-2707-4c48-b856-9e72ec9878a1"
-                }
-            ]
-        },
-        "22": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
-            "errors": null,
-            "id": 22,
-            "input_connections": {
-                "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 8,
-                    "output_name": "output"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "toolfactory",
-            "outputs": [
-                {
-                    "name": "generated_xml",
-                    "type": "xml"
-                }
-            ],
-            "position": {
-                "bottom": 11,
+                "bottom": 97,
                 "height": 134,
-                "left": -751.5,
-                "right": -551.5,
-                "top": -123,
+                "left": -831.5,
+                "right": -631.5,
+                "top": -37,
                 "width": 200,
-                "x": -751.5,
-                "y": -123
+                "x": -831.5,
+                "y": -37
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -1109,18 +1001,18 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "2754f593-6bf6-4ef2-a3b6-6a71fc0b15d4"
+                    "uuid": "c2768a3f-d36a-4d68-83a8-b4f635950a2b"
                 }
             ]
         },
-        "23": {
+        "21": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
             "errors": null,
-            "id": 23,
+            "id": 21,
             "input_connections": {
                 "io_param|ppass|io|history_inputs_0|input_files": {
-                    "id": 8,
+                    "id": 6,
                     "output_name": "output"
                 }
             },
@@ -1134,14 +1026,14 @@
                 }
             ],
             "position": {
-                "bottom": -212,
+                "bottom": -126,
                 "height": 134,
-                "left": -751.5,
-                "right": -551.5,
-                "top": -346,
+                "left": -831.5,
+                "right": -631.5,
+                "top": -260,
                 "width": 200,
-                "x": -751.5,
-                "y": -346
+                "x": -831.5,
+                "y": -260
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -1159,7 +1051,115 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "d065be6b-e5ed-466f-8e2b-1e239324d4ff"
+                    "uuid": "080ca72e-c3e3-469f-bf16-ce12db8059ac"
+                }
+            ]
+        },
+        "22": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "errors": null,
+            "id": 22,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 7,
+                    "output_name": "output"
+                },
+                "io_param|ppass|io|history_inputs_1|input_files": {
+                    "id": 8,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 436.6000061035156,
+                "height": 225.60000610351562,
+                "left": -821.5,
+                "right": -621.5,
+                "top": 211,
+                "width": 200,
+                "x": -821.5,
+                "y": 211
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"no\", \"__current_case__\": 0, \"command_override\": \"\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"bwa=0.7.15, samtools=1.3\", \"usescript\": {\"choosescript\": \"yes\", \"__current_case__\": 1, \"scriptrunner\": \"bash\", \"dynScript\": \"REFFILE=$1\\nFASTQ=$2\\nBAMOUT=$3\\nrm -f \\\"refalias\\\"\\nln -s \\\"$REFFILE\\\" \\\"refalias\\\"\\nbwa index -a is \\\"refalias\\\"\\nbwa mem -t \\\"2\\\"  -v 1 \\\"refalias\\\" \\\"$FASTQ\\\"  > tempsam\\nsamtools view -Sb tempsam > temporary_bam_file.bam\\nsamtools sort -o \\\"$BAMOUT\\\" temporary_bam_file.bam\\n\"}}, \"help_text\": \"**What it Does**\\nSame thing as the command over-ride version but using a bash script and passing parameters.\\nProbably more familiar to many non-Galaxy developers.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"positional\", \"__current_case__\": 1, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fasta\"], \"input_label\": \"Reference sequence to map reads against\", \"input_help\": \"\", \"input_CL\": \"1\", \"input_repeat\": \"false\"}, {\"__index__\": 1, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fastq\"], \"input_label\": \"Reads to map\", \"input_help\": \"\", \"input_CL\": \"2\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"bwa_test_bash_output\", \"history_format\": \"bam\", \"history_CL\": \"3\", \"history_test\": \"sim_size:0.1\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Bash script equivalent of the bwa command over-ride.\", \"tool_name\": \"bwa_test_toolfactory_positional_bash\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "15e47969-da31-481b-974b-0ee3ba12c461",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "8ae456c2-0951-4ec9-a9a4-4719894ee175"
+                }
+            ]
+        },
+        "23": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "errors": null,
+            "id": 23,
+            "input_connections": {
+                "io_param|ppass|io|history_inputs_0|input_files": {
+                    "id": 7,
+                    "output_name": "output"
+                },
+                "io_param|ppass|io|history_inputs_1|input_files": {
+                    "id": 8,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "toolfactory",
+            "outputs": [
+                {
+                    "name": "generated_xml",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 680.1999969482422,
+                "height": 205.1999969482422,
+                "left": -821.5,
+                "right": -621.5,
+                "top": 475,
+                "width": 200,
+                "x": -821.5,
+                "y": 475
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
+            "tool_shed_repository": {
+                "changeset_revision": "5bf1cedca36c",
+                "name": "toolfactory",
+                "owner": "fubar_too",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"__workflow_invocation_uuid__\": \"e33128e2c41f11ebbe140242ac160002\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"citations\": [], \"cl_suffix\": \"\", \"cover\": {\"commover\": \"yes\", \"__current_case__\": 1, \"command_override\": \"## Build reference\\nln -s \\\"$ref_file\\\" \\\"localref.fa\\\" ;\\nbwa index -a is \\\"localref.fa\\\" ;\\nbwa mem -t 2 -v 1 \\\"localref.fa\\\" \\\"$fastq_input1\\\"  | samtools view -Sb - > temporary_bam_file.bam ;\\nsamtools sort -o \\\"$bwa_test_commover_bam_output\\\" temporary_bam_file.bam\", \"test_override\": \"\"}, \"deps\": {\"packages\": \"bwa=0.7.15, samtools=1.3\", \"usescript\": {\"choosescript\": \"no\", \"__current_case__\": 0, \"dynScript\": \"\", \"scriptrunner\": \"\"}}, \"help_text\": \"**What it Does**\\nTrivial example from a Planemo documentation example\\nIt can be useful. It is sort of bash with substitutions from the tool form.\\nIf you need it, it's here.\", \"install\": \"true\", \"io_param\": {\"ppass\": {\"parampass\": \"argparse\", \"__current_case__\": 0, \"io\": {\"history_inputs\": [{\"__index__\": 0, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fasta\"], \"input_label\": \"Reference sequence to align reads\", \"input_help\": \"\", \"input_CL\": \"ref_file\", \"input_repeat\": \"false\"}, {\"__index__\": 1, \"input_files\": {\"__class__\": \"ConnectedValue\"}, \"input_formats\": [\"fastqsanger\"], \"input_label\": \"Fastqsanger file containing reads to be mapped against reference\", \"input_help\": \"\", \"input_CL\": \"fastq_input1\", \"input_repeat\": \"false\"}], \"history_outputs\": [{\"__index__\": 0, \"history_name\": \"bwa_test_commover_bam_output\", \"history_format\": \"bam\", \"history_CL\": \"\", \"history_test\": \"sim_size:0.1\"}], \"collection_outputs\": []}, \"addparam\": {\"edit_params\": \"yes\", \"additional_parameters\": []}}}, \"run_test\": \"true\", \"tool_desc\": \"Command over-ride demonstration\", \"tool_name\": \"bwa_test_command_override\", \"tool_version\": \"0.01\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.00",
+            "type": "tool",
+            "uuid": "8b8f609b-556f-4f2c-b30b-63502a05d27b",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "generated_xml",
+                    "uuid": "6a022146-941e-41d4-a812-82b6c89ec6f4"
                 }
             ]
         },
@@ -1188,14 +1188,14 @@
                 }
             ],
             "position": {
-                "bottom": -384.1999969482422,
+                "bottom": -298.1999969482422,
                 "height": 184.8000030517578,
-                "left": -751.5,
-                "right": -551.5,
-                "top": -569,
+                "left": -831.5,
+                "right": -631.5,
+                "top": -483,
                 "width": 200,
-                "x": -751.5,
-                "y": -569
+                "x": -831.5,
+                "y": -483
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1213,12 +1213,12 @@
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "39343f97-a342-46e1-85be-8f607c651ad9"
+                    "uuid": "40ddcae8-119c-4614-b004-d3cbfbd752ad"
                 },
                 {
                     "label": null,
                     "output_name": "testout",
-                    "uuid": "cefd9854-86c2-40fb-b3bb-b7de0046fb95"
+                    "uuid": "fa2e636b-7234-4c8e-8675-9b46e3b80361"
                 }
             ]
         },
@@ -1247,14 +1247,14 @@
                 }
             ],
             "position": {
-                "bottom": 10.800003051757812,
+                "bottom": 96.80000305175781,
                 "height": 184.8000030517578,
-                "left": 360.5,
-                "right": 560.5,
-                "top": -174,
+                "left": 280.5,
+                "right": 480.5,
+                "top": -88,
                 "width": 200,
-                "x": 360.5,
-                "y": -174
+                "x": 280.5,
+                "y": -88
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1271,13 +1271,13 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "fab9039b-bd52-4782-8086-59316d10291f"
+                    "output_name": "testout",
+                    "uuid": "a2596515-f6f8-4094-b2c4-7912d263ef1b"
                 },
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "cb907203-7c72-42ba-8481-5321494c553c"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "7d3d4b9f-8c12-4635-b635-ac293f37c9aa"
                 }
             ]
         },
@@ -1302,14 +1302,14 @@
                 }
             ],
             "position": {
-                "bottom": -212,
+                "bottom": -126,
                 "height": 134,
-                "left": 360.5,
-                "right": 560.5,
-                "top": -346,
+                "left": 280.5,
+                "right": 480.5,
+                "top": -260,
                 "width": 200,
-                "x": 360.5,
-                "y": -346
+                "x": 280.5,
+                "y": -260
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar_too/toolfactory/rgtf2/2.00",
@@ -1327,7 +1327,7 @@
                 {
                     "label": null,
                     "output_name": "generated_xml",
-                    "uuid": "47ccad16-6e18-49c5-a927-06cd55816772"
+                    "uuid": "ca291017-193f-4f65-a874-f60f4a2d0555"
                 }
             ]
         },
@@ -1336,65 +1336,6 @@
             "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
             "errors": null,
             "id": 27,
-            "input_connections": {
-                "ToolFactory_toolshed_XML_from_the_history_to_test": {
-                    "id": 11,
-                    "output_name": "generated_xml"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "planemo_test",
-            "outputs": [
-                {
-                    "name": "testout",
-                    "type": "input"
-                },
-                {
-                    "name": "new_tested_toolshed_archive",
-                    "type": "toolshed.gz"
-                }
-            ],
-            "position": {
-                "bottom": 334.8000030517578,
-                "height": 184.8000030517578,
-                "left": 370.5,
-                "right": 570.5,
-                "top": 150,
-                "width": 200,
-                "x": 370.5,
-                "y": 150
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
-            "tool_shed_repository": {
-                "changeset_revision": "0b622237ddfb",
-                "name": "planemo_test",
-                "owner": "fubar",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "0.01",
-            "type": "tool",
-            "uuid": "acd55019-6c02-4ff9-95c2-9cfaa74ced0d",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "testout",
-                    "uuid": "4aa312f4-cf74-46aa-b116-184569b8c567"
-                },
-                {
-                    "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "3534b591-5db9-4da2-bb46-f5d3af4d0670"
-                }
-            ]
-        },
-        "28": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
-            "errors": null,
-            "id": 28,
             "input_connections": {
                 "ToolFactory_toolshed_XML_from_the_history_to_test": {
                     "id": 12,
@@ -1415,14 +1356,14 @@
                 }
             ],
             "position": {
-                "bottom": 557.8000030517578,
+                "bottom": 420.8000030517578,
                 "height": 184.8000030517578,
-                "left": 370.5,
-                "right": 570.5,
-                "top": 373,
+                "left": 290.5,
+                "right": 490.5,
+                "top": 236,
                 "width": 200,
-                "x": 370.5,
-                "y": 373
+                "x": 290.5,
+                "y": 236
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1435,25 +1376,25 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "d3e02d75-b0bb-4d56-ab6e-c830e55bf2fb",
+            "uuid": "acd55019-6c02-4ff9-95c2-9cfaa74ced0d",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "5d69805b-f3df-434c-95b5-e53a88c96e83"
+                    "uuid": "26a5b3fe-4f16-4178-8167-8f71a301a06e"
                 },
                 {
                     "label": null,
                     "output_name": "testout",
-                    "uuid": "4bf7b2dd-65d3-4864-9d5f-25e64d5cbbce"
+                    "uuid": "b68bba24-f1bc-4ff1-8227-459ed309fe3e"
                 }
             ]
         },
-        "29": {
+        "28": {
             "annotation": "",
             "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
             "errors": null,
-            "id": 29,
+            "id": 28,
             "input_connections": {
                 "ToolFactory_toolshed_XML_from_the_history_to_test": {
                     "id": 13,
@@ -1474,14 +1415,73 @@
                 }
             ],
             "position": {
-                "bottom": 780.8000030517578,
+                "bottom": 643.8000030517578,
                 "height": 184.8000030517578,
-                "left": 370.5,
-                "right": 570.5,
-                "top": 596,
+                "left": 290.5,
+                "right": 490.5,
+                "top": 459,
                 "width": 200,
-                "x": 370.5,
-                "y": 596
+                "x": 290.5,
+                "y": 459
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
+            "tool_shed_repository": {
+                "changeset_revision": "0b622237ddfb",
+                "name": "planemo_test",
+                "owner": "fubar",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.01",
+            "type": "tool",
+            "uuid": "d3e02d75-b0bb-4d56-ab6e-c830e55bf2fb",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "7d3f29bd-343b-48b1-8bac-bdbd0fc89623"
+                },
+                {
+                    "label": null,
+                    "output_name": "testout",
+                    "uuid": "44e69114-b233-4096-8f8f-0c9ceaa21cd9"
+                }
+            ]
+        },
+        "29": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
+            "errors": null,
+            "id": 29,
+            "input_connections": {
+                "ToolFactory_toolshed_XML_from_the_history_to_test": {
+                    "id": 14,
+                    "output_name": "generated_xml"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "planemo_test",
+            "outputs": [
+                {
+                    "name": "testout",
+                    "type": "input"
+                },
+                {
+                    "name": "new_tested_toolshed_archive",
+                    "type": "toolshed.gz"
+                }
+            ],
+            "position": {
+                "bottom": 866.8000030517578,
+                "height": 184.8000030517578,
+                "left": 290.5,
+                "right": 490.5,
+                "top": 682,
+                "width": 200,
+                "x": 290.5,
+                "y": 682
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1499,12 +1499,12 @@
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "f06f4f72-659b-4459-8df4-b3d2dc0b8550"
+                    "uuid": "ebadaba2-8b5f-491f-a161-2fbb2912c757"
                 },
                 {
                     "label": null,
                     "output_name": "testout",
-                    "uuid": "45af27b1-5f8a-433b-ae93-94f8386ec954"
+                    "uuid": "16b7f338-90dd-4f11-8a21-1d9da06a7c4b"
                 }
             ]
         },
@@ -1513,6 +1513,65 @@
             "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
             "errors": null,
             "id": 30,
+            "input_connections": {
+                "ToolFactory_toolshed_XML_from_the_history_to_test": {
+                    "id": 16,
+                    "output_name": "generated_xml"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "planemo_test",
+            "outputs": [
+                {
+                    "name": "testout",
+                    "type": "input"
+                },
+                {
+                    "name": "new_tested_toolshed_archive",
+                    "type": "toolshed.gz"
+                }
+            ],
+            "position": {
+                "bottom": 643.8000030517578,
+                "height": 184.8000030517578,
+                "left": 1124.5,
+                "right": 1324.5,
+                "top": 459,
+                "width": 200,
+                "x": 1124.5,
+                "y": 459
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
+            "tool_shed_repository": {
+                "changeset_revision": "0b622237ddfb",
+                "name": "planemo_test",
+                "owner": "fubar",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.01",
+            "type": "tool",
+            "uuid": "c275887f-1cea-47c8-98be-ee4bb1804d4d",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "ee3b70e2-6a4e-4563-9649-03a48a0e792b"
+                },
+                {
+                    "label": null,
+                    "output_name": "testout",
+                    "uuid": "3957d5d0-0a4e-490b-95bd-9129d67b0fb0"
+                }
+            ]
+        },
+        "31": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
+            "errors": null,
+            "id": 31,
             "input_connections": {
                 "ToolFactory_toolshed_XML_from_the_history_to_test": {
                     "id": 17,
@@ -1533,73 +1592,14 @@
                 }
             ],
             "position": {
-                "bottom": 557.8000030517578,
+                "bottom": 866.8000030517578,
                 "height": 184.8000030517578,
-                "left": 1204.5,
-                "right": 1404.5,
-                "top": 373,
+                "left": 1124.5,
+                "right": 1324.5,
+                "top": 682,
                 "width": 200,
-                "x": 1204.5,
-                "y": 373
-            },
-            "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
-            "tool_shed_repository": {
-                "changeset_revision": "0b622237ddfb",
-                "name": "planemo_test",
-                "owner": "fubar",
-                "tool_shed": "toolshed.g2.bx.psu.edu"
-            },
-            "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "0.01",
-            "type": "tool",
-            "uuid": "c275887f-1cea-47c8-98be-ee4bb1804d4d",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "3f676055-feee-40f9-aee8-702dd242a201"
-                },
-                {
-                    "label": null,
-                    "output_name": "testout",
-                    "uuid": "82c437fb-d6ef-454a-8901-f1a542c4d36e"
-                }
-            ]
-        },
-        "31": {
-            "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
-            "errors": null,
-            "id": 31,
-            "input_connections": {
-                "ToolFactory_toolshed_XML_from_the_history_to_test": {
-                    "id": 18,
-                    "output_name": "generated_xml"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "planemo_test",
-            "outputs": [
-                {
-                    "name": "testout",
-                    "type": "input"
-                },
-                {
-                    "name": "new_tested_toolshed_archive",
-                    "type": "toolshed.gz"
-                }
-            ],
-            "position": {
-                "bottom": 780.8000030517578,
-                "height": 184.8000030517578,
-                "left": 1204.5,
-                "right": 1404.5,
-                "top": 596,
-                "width": 200,
-                "x": 1204.5,
-                "y": 596
+                "x": 1124.5,
+                "y": 682
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1617,12 +1617,12 @@
                 {
                     "label": null,
                     "output_name": "testout",
-                    "uuid": "e6c50b81-0e87-441b-821c-dae443679359"
+                    "uuid": "108cead2-fcd2-4de8-9062-283d164a4337"
                 },
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "e4e3cbd6-2d37-4967-84e1-f95ed34963a6"
+                    "uuid": "6da9f3b3-3005-4827-bbd6-11539998c0c9"
                 }
             ]
         },
@@ -1651,14 +1651,14 @@
                 }
             ],
             "position": {
-                "bottom": 380.8000030517578,
+                "bottom": 172.8000030517578,
                 "height": 184.8000030517578,
-                "left": -463.5,
-                "right": -263.5,
-                "top": 196,
+                "left": -553.5,
+                "right": -353.5,
+                "top": -12,
                 "width": 200,
-                "x": -463.5,
-                "y": 196
+                "x": -553.5,
+                "y": -12
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1671,17 +1671,17 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "c25a61c6-0d5a-4a86-b10f-48f1899cf24c",
+            "uuid": "5fedc351-b6b4-45da-88bb-e18edaf21bb8",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "e0d18d19-0aeb-42f2-8adf-c066a67b6701"
+                    "uuid": "9125a85c-6ebb-4321-9af3-c81672f46e14"
                 },
                 {
                     "label": null,
                     "output_name": "testout",
-                    "uuid": "9e213a03-7a32-4b29-a995-29ce04d3a7a7"
+                    "uuid": "3e858e43-c721-44c8-85af-fe35f2c29c08"
                 }
             ]
         },
@@ -1710,14 +1710,14 @@
                 }
             ],
             "position": {
-                "bottom": 634.8000030517578,
+                "bottom": -50.19999694824219,
                 "height": 184.8000030517578,
-                "left": -463.5,
-                "right": -263.5,
-                "top": 450,
+                "left": -553.5,
+                "right": -353.5,
+                "top": -235,
                 "width": 200,
-                "x": -463.5,
-                "y": 450
+                "x": -553.5,
+                "y": -235
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1730,17 +1730,17 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "e72b9c46-8ba8-4f33-abac-1c96545a4f63",
+            "uuid": "8aaaf5a1-f298-4dbf-ab59-97bf6d4503b0",
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "caa74483-e646-4a59-9fba-cc7702541c91"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "a0912566-3835-4012-9507-a1157408c68f"
                 },
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "87055c28-0daf-4e9b-b5b9-45d3bff33cb1"
+                    "output_name": "testout",
+                    "uuid": "0c128a9e-e53a-4fd5-b536-54ee1e4e5834"
                 }
             ]
         },
@@ -1769,14 +1769,14 @@
                 }
             ],
             "position": {
-                "bottom": 86.80000305175781,
+                "bottom": 466.8000030517578,
                 "height": 184.8000030517578,
-                "left": -473.5,
-                "right": -273.5,
-                "top": -98,
+                "left": -543.5,
+                "right": -343.5,
+                "top": 282,
                 "width": 200,
-                "x": -473.5,
-                "y": -98
+                "x": -543.5,
+                "y": 282
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1789,17 +1789,17 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "5fedc351-b6b4-45da-88bb-e18edaf21bb8",
+            "uuid": "c25a61c6-0d5a-4a86-b10f-48f1899cf24c",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "testout",
-                    "uuid": "748fd387-ab6c-4b75-8ccb-0674848117c5"
+                    "uuid": "1b9c00f2-8e80-480c-8d38-c11f4f15c755"
                 },
                 {
                     "label": null,
                     "output_name": "new_tested_toolshed_archive",
-                    "uuid": "44c8e4c9-a6fd-4d0c-b1c0-fb0dc056bef4"
+                    "uuid": "a9ccf776-ef66-4157-b14a-d036d4d33df6"
                 }
             ]
         },
@@ -1828,14 +1828,14 @@
                 }
             ],
             "position": {
-                "bottom": -136.1999969482422,
+                "bottom": 720.8000030517578,
                 "height": 184.8000030517578,
-                "left": -473.5,
-                "right": -273.5,
-                "top": -321,
+                "left": -543.5,
+                "right": -343.5,
+                "top": 536,
                 "width": 200,
-                "x": -473.5,
-                "y": -321
+                "x": -543.5,
+                "y": 536
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1848,17 +1848,17 @@
             "tool_state": "{\"ToolFactory_toolshed_XML_from_the_history_to_test\": {\"__class__\": \"ConnectedValue\"}, \"__input_ext\": \"xml\", \"chromInfo\": \"/galaxy-central/tool-data/shared/ucsc/chrom/?.len\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "0.01",
             "type": "tool",
-            "uuid": "8aaaf5a1-f298-4dbf-ab59-97bf6d4503b0",
+            "uuid": "e72b9c46-8ba8-4f33-abac-1c96545a4f63",
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "9b0f6c2b-a353-43ff-af4f-3a12dda0fd19"
+                    "output_name": "testout",
+                    "uuid": "db64108e-75b8-454f-b959-3099cf7b6396"
                 },
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "64f705f4-ab43-41ea-a898-40cd80ac6edd"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "85dd599f-6d38-43f0-82ca-effddd677ef6"
                 }
             ]
         },
@@ -1887,14 +1887,14 @@
                 }
             ],
             "position": {
-                "bottom": -136.1999969482422,
+                "bottom": -50.19999694824219,
                 "height": 184.8000030517578,
-                "left": 638.5,
-                "right": 838.5,
-                "top": -321,
+                "left": 558.5,
+                "right": 758.5,
+                "top": -235,
                 "width": 200,
-                "x": 638.5,
-                "y": -321
+                "x": 558.5,
+                "y": -235
             },
             "post_job_actions": {},
             "tool_id": "toolshed.g2.bx.psu.edu/repos/fubar/planemo_test/planemo_test/0.01",
@@ -1911,18 +1911,18 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "testout",
-                    "uuid": "3b02da20-533a-4d36-a211-43f594e8badd"
+                    "output_name": "new_tested_toolshed_archive",
+                    "uuid": "c4560308-89b8-4760-b7ca-c313880d47a2"
                 },
                 {
                     "label": null,
-                    "output_name": "new_tested_toolshed_archive",
-                    "uuid": "8bb5cbdc-2eee-4065-b478-c663dfd4b086"
+                    "output_name": "testout",
+                    "uuid": "30007a36-7c13-447a-9114-9b028ad98aa2"
                 }
             ]
         }
     },
     "tags": [],
-    "uuid": "92df08d4-9020-4b85-a07b-e424447217d9",
+    "uuid": "97896b36-4bf0-4128-9e5e-3632c557d19d",
     "version": 1
 }
