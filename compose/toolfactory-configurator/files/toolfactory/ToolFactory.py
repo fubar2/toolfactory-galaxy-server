@@ -851,7 +851,7 @@ def main():
     a("--bad_user", default=None)
     a("--help_text", default=None)
     a("--tool_desc", default=None)
-    a("--tool_version", default=None)
+    a("--tool_version", default="0.01")
     a("--citations", default=None)
     a("--command_override", default=None)
     a("--test_override", default=None)

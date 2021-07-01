@@ -39,7 +39,6 @@ to unwelcome security risk.
 The Appliance runs as two composed Docker containers, so it is secured to that extent from the host system. ToolFactory and other related source code is
 included in this repository for the curious or the dubious. Specific security disclosure details are discussed in the compose documentation. The mechanisms described offer a
 convenient way for tools to remotely execute tasks outside the Galaxy job execution environment in suitably private environments such as this Appliance.
-This may open up interesting uses for Galaxy on the desktop with specialised tools accessing GPU or other local resources.
 
 ## Tutorial and documentation
 

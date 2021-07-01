@@ -143,12 +143,8 @@
         </section>
      </xml>
      <xml name="additparam">
-     <section name="addparam" title="Arguments" help="Executable or script settings passed on the command line other than I/O files" expanded="true">
-        <param name="edit_params" type="hidden" display="radio" label="Make these settings on the generated tool form user editable?"
-             help="If no, users will NOT be able to alter any additional parameters. If yes, these will appear on the tool form as text fields with no validation or sanitizing">
-            <option value="yes" selected="true">Yes, allow user to edit all additional parameters on the generated tool form</option>
-            <option value="no">No - use the fixed values for all additional parameters - no user editing</option>
-        </param>
+     <section name="addparam" title="Executable or script settings passed on the command line other than I/O files" expanded="true">
+        <param name="edit_params" type="hidden" />
         <repeat name="additional_parameters" title="User supplied parameters" min="0"
              help="Settings for the user to adjust. Passed to the executable on the command line. See examples below to see how these can be parsed by scripts in various languages">
           <param name="param_name" type="text" value="" label="Choose the name for this parameter - MUST not be blank!">
@@ -363,7 +359,6 @@ ${help_text}
             <expand macro="additparam" />
         </when>
         <when value="0">
-             <expand macro="io"/>
         </when>
     </conditional>
     </section>

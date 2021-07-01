@@ -36,8 +36,8 @@ that server code running in the toolfactory-configurator container.
 
 This technique is completely unsupported by the Galaxy developers. It is handy for integrating the ToolFactory but not recommended for
 public internet exposure. It offers interesting and generalisable models for other possible private desktop Galaxy appliances. These might use
-locally generated ToolFactory tools modelled on the included `planemo_test` tool, but with rpyc functions that expose a GPU or other
-hardware or specialised services such as data acquisition and preprocessing to calling tools that are not otherwise readily available to a tool in a normal Galaxy server.
+locally generated ToolFactory tools modelled on the included `planemo_test` tool, but with rpyc functions that exposes hardware or specialised services
+such as data acquisition and preprocessing to calling tools that are not otherwise readily available to a tool in a normal Galaxy server.
 
 ## Details: Remote command execution for Galaxy tools in a private environment.
 
@@ -86,12 +86,6 @@ It was not designed to work as a Galaxy tool and is difficult to manage when cal
 It was designed for command line use and works without problems in the dedicated container when called by the testing tool as if it had
 been called on a command line.
 
-There may be other situations where the model used here may be useful on a private desktop. Any desired function can be exposed by the
-rpyc server as shown below. Exposed functions are named with the prefix `exposed_` and can make use of more generalised and dangerous
-code like the command line runner, but that function is not visible to any calling tools.
-
-A desktop GPU might be used by a new generated tool using the rpyc model, to create a new, specialised Galaxy Appliance for example. There may be
-many applications where this flexibility is useful to add to all of the framework's existing features for developing complex analyses on a desktop.
 
 ### rpyc makes RPC trivially easy to implement using python functions.
 
