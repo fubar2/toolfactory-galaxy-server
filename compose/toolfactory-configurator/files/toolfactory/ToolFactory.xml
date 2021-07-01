@@ -359,6 +359,7 @@ ${help_text}
             <expand macro="additparam" />
         </when>
         <when value="0">
+            <expand macro="io" />
         </when>
     </conditional>
     </section>

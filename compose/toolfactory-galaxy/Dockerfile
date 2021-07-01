@@ -25,7 +25,8 @@ RUN $GALAXY_VIRTUAL_ENV/bin/python -m pip install --upgrade pip \
     && chown -R galaxy:galaxy $GALAXY_ROOT/tools \
     && ansible localhost -m lineinfile -a "path=${GALAXY_CONFIG_FILE} regexp='^  master:' line='  master: true'" \
     && ansible localhost -m lineinfile -a "path=${GALAXY_CONFIG_FILE} regexp='^  watch-tools:' line='  watch_tools: true'" \
-    && ansible localhost -m lineinfile -a "path=${GALAXY_CONFIG_FILE} regexp='^  #conda_auto_install:' line='  conda_auto_install: true'"
+    && ansible localhost -m lineinfile -a "path=${GALAXY_CONFIG_FILE} regexp='^  #conda_auto_install:' line='  conda_auto_install: true'" \
+    && ansible localhost -m lineinfile -a "path=${GALAXY_CONFIG_FILE} regexp='^  #require_login:' line='  require_login: true'"
 
 COPY ./files/base.css $GALAXY_ROOT/static/dist
 COPY ./files/tool_conf.xml $GALAXY_CONFIG_DIR/tool_conf.xml
